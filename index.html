@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trading Psychology Assessment | Discover Your Emotional Trading Weaknesses</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -311,6 +312,25 @@
             box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
         }
         
+        .pdf-download {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+            display: inline-block;
+        }
+        
+        .pdf-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(39, 174, 96, 0.3);
+        }
+        
         @media (max-width: 480px) {
             .container {
                 padding: 20px;
@@ -323,6 +343,11 @@
             
             .email-form {
                 flex-direction: column;
+            }
+            
+            .pdf-download {
+                display: block;
+                margin: 10px 0;
             }
         }
     </style>
@@ -347,7 +372,7 @@
                     <li>✅ Your emotional risk profile (1-100 points)</li>
                     <li>✅ Your biggest psychological weaknesses</li>
                     <li>✅ Concrete solution recommendations</li>
-                    <li>✅ Personalized tips for better discipline</li>
+                    <li>✅ Personalized PDF report with action plan</li>
                 </ul>
             </div>
             
@@ -466,12 +491,16 @@
                 <!-- Content will be filled by JavaScript -->
             </div>
             
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="pdf-download" onclick="generatePersonalizedReport()">📄 Download Your Personalized Report</button>
+            </div>
+            
             <div class="email-capture">
-                <h4>🎁 Get Your Free Trading Psychology Report!</h4>
-                <p>Detailed analysis + 3-step plan for better trading discipline</p>
+                <h4>🎁 Want More Trading Psychology Tips?</h4>
+                <p>Join our community for advanced strategies and insights</p>
                 <div class="email-form">
                     <input type="email" class="email-input" placeholder="Your email address" id="emailInput">
-                    <button class="email-btn" onclick="submitEmail()">Get Report</button>
+                    <button class="email-btn" onclick="submitEmail()">Join Community</button>
                 </div>
             </div>
         </div>
@@ -480,6 +509,8 @@
     <script>
         let currentQuestion = 0;
         let answers = {};
+        let userScore = 0;
+        let userAnalysis = null;
         const totalQuestions = 8;
         
         function startAssessment() {
@@ -647,6 +678,82 @@
             }
         }
         
+        function getDetailedAnalysis(score) {
+            if (score >= 80) {
+                return {
+                    title: "Trading Discipline Champion",
+                    category: "🏆 Elite Trader (80-100 Points)",
+                    description: "Exceptional emotional control and discipline",
+                    strengths: ["Advanced Risk Management", "Emotional Stability", "Strategic Execution", "Consistent Performance"],
+                    weaknesses: ["Over-Analysis Tendency", "Missing Opportunity Windows"],
+                    emotionalControl: 9,
+                    riskManagement: 9,
+                    discipline: 9,
+                    decisionMaking: 8,
+                    recommendations: [
+                        "Focus on opportunity optimization rather than risk avoidance",
+                        "Share knowledge with other traders for additional income streams",
+                        "Consider advanced strategies like options or forex",
+                        "Develop systematic approach to capturing market inefficiencies"
+                    ]
+                };
+            } else if (score >= 60) {
+                return {
+                    title: "Solid Trader with Potential",
+                    category: "📈 Developing Trader (60-79 Points)",
+                    description: "Good foundation with specific areas for improvement",
+                    strengths: ["Loss Management", "Strategic Thinking", "Risk Awareness"],
+                    weaknesses: ["Portfolio Checking Frequency", "Profit-Taking Timing", "Social Media Influence"],
+                    emotionalControl: 7,
+                    riskManagement: 6,
+                    discipline: 7,
+                    decisionMaking: 6,
+                    recommendations: [
+                        "Implement structured portfolio checking times (max 3x daily)",
+                        "Create clear profit-taking rules based on technical levels",
+                        "Limit social media exposure during trading hours",
+                        "Develop written trading plan with specific entry/exit criteria"
+                    ]
+                };
+            } else if (score >= 40) {
+                return {
+                    title: "Emotional Trader",
+                    category: "⚠️ High Risk Pattern (40-59 Points)",
+                    description: "Emotions significantly impact trading decisions",
+                    strengths: ["Market Interest", "Learning Motivation"],
+                    weaknesses: ["FOMO Trading", "Revenge Trading", "Poor Risk Management", "Emotional Decision Making"],
+                    emotionalControl: 4,
+                    riskManagement: 4,
+                    discipline: 5,
+                    decisionMaking: 4,
+                    recommendations: [
+                        "Reduce position sizes by 50% immediately",
+                        "Implement mandatory cooling-off periods after losses",
+                        "Create detailed trading journal to track emotional patterns",
+                        "Set strict daily loss limits and walk away when hit"
+                    ]
+                };
+            } else {
+                return {
+                    title: "High Emotional Vulnerability",
+                    category: "🚨 Critical Risk Level (0-39 Points)",
+                    description: "Immediate intervention required",
+                    strengths: ["Willingness to Assess", "Potential for Growth"],
+                    weaknesses: ["Panic Selling", "Overtrading", "No Risk Controls", "Emotional Volatility"],
+                    emotionalControl: 2,
+                    riskManagement: 2,
+                    discipline: 3,
+                    decisionMaking: 2,
+                    recommendations: [
+                        "STOP active trading until psychological issues addressed",
+                        "Start with paper trading only for minimum 30 days",
+                        "Seek professional trading psychology support",
+                        "Begin with micro-positions when ready to return (max $100 risk per trade)"
+                    ]
+                };
+            }
+        }
+        
         function showResults() {
             // Hide questions and navigation
             document.querySelectorAll('.question-container').forEach(q => {
@@ -656,10 +763,11 @@
             document.querySelector('.progress-bar').style.display = 'none';
             
             // Calculate and show results
-            const score = calculateScore();
-            const interpretation = getScoreInterpretation(score);
+            userScore = calculateScore();
+            const interpretation = getScoreInterpretation(userScore);
+            userAnalysis = getDetailedAnalysis(userScore);
             
-            document.getElementById('scoreCircle').textContent = score;
+            document.getElementById('scoreCircle').textContent = userScore;
             document.getElementById('scoreCircle').style.background = interpretation.color;
             document.getElementById('scoreTitle').textContent = interpretation.title;
             
@@ -676,23 +784,157 @@
             document.getElementById('results').classList.add('active');
         }
         
+        function generatePersonalizedReport() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Get user email for personalization
+            const userEmail = document.getElementById('emailInput').value || 'Trader';
+            const userName = userEmail.split('@')[0] || 'Trader';
+            
+            // Set up PDF styling
+            const pageWidth = doc.internal.pageSize.width;
+            const margin = 20;
+            const maxWidth = pageWidth - (margin * 2);
+            
+            // Header
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 0, pageWidth, 40, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('Trading Psychology Report', pageWidth/2, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Personal Analysis for ${userName}`, pageWidth/2, 30, { align: 'center' });
+            
+            // Reset text color
+            doc.setTextColor(0, 0, 0);
+            
+            let yPosition = 60;
+            
+            // Score Section
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Your Score: ${userScore}/100`, margin, yPosition);
+            
+            yPosition += 10;
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'normal');
+            doc.text(userAnalysis.category, margin, yPosition);
+            
+            yPosition += 15;
+            doc.setFontSize(12);
+            doc.text(userAnalysis.description, margin, yPosition);
+            
+            yPosition += 25;
+            
+            // Performance Breakdown
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Performance Breakdown', margin, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Emotional Control: ${userAnalysis.emotionalControl}/10`, margin, yPosition);
+            yPosition += 8;
+            doc.text(`Risk Management: ${userAnalysis.riskManagement}/10`, margin, yPosition);
+            yPosition += 8;
+            doc.text(`Discipline: ${userAnalysis.discipline}/10`, margin, yPosition);
+            yPosition += 8;
+            doc.text(`Decision Making: ${userAnalysis.decisionMaking}/10`, margin, yPosition);
+            yPosition += 20;
+            
+            // Strengths
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Your Strengths', margin, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            userAnalysis.strengths.forEach(strength => {
+                doc.text(`• ${strength}`, margin + 5, yPosition);
+                yPosition += 8;
+            });
+            yPosition += 10;
+            
+            // Weaknesses
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Key Weaknesses Identified', margin, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            userAnalysis.weaknesses.forEach(weakness => {
+                doc.text(`• ${weakness}`, margin + 5, yPosition);
+                yPosition += 8;
+            });
+            yPosition += 15;
+            
+            // Check if we need a new page
+            if (yPosition > 250) {
+                doc.addPage();
+                yPosition = 20;
+            }
+            
+            // Action Plan
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Personalized Action Plan', margin, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            userAnalysis.recommendations.forEach((rec, index) => {
+                const lines = doc.splitTextToSize(`${index + 1}. ${rec}`, maxWidth - 10);
+                lines.forEach(line => {
+                    doc.text(line, margin + 5, yPosition);
+                    yPosition += 6;
+                });
+                yPosition += 5;
+            });
+            
+            yPosition += 15;
+            
+            // Footer
+            doc.setFillColor(248, 249, 250);
+            doc.rect(margin, yPosition, maxWidth, 30, 'F');
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Expert Insight', margin + 5, yPosition + 10);
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text('Based on 10+ years of market experience', margin + 5, yPosition + 18);
+            doc.text('This analysis reflects your current trading psychology patterns.', margin + 5, yPosition + 25);
+            
+            // Save the PDF
+            const fileName = `Trading-Psychology-Report-${userName}-Score-${userScore}.pdf`;
+            doc.save(fileName);
+            
+            // Show success message
+            alert(`🎉 Your personalized report has been downloaded!\n\nScore: ${userScore}/100\nReport: ${fileName}\n\nCheck your Downloads folder.`);
+        }
+        
         function submitEmail() {
             const email = document.getElementById('emailInput').value;
             if (email && email.includes('@')) {
                 // Here you would typically send the email to your backend
-                alert('Perfect! You will receive your Trading Psychology Report within the next few minutes via email.');
+                alert('Perfect! Welcome to our trading psychology community. You\'ll receive advanced tips and strategies via email.');
                 
                 // You can add tracking/analytics here
                 console.log('Email captured:', email);
+                console.log('User score:', userScore);
             } else {
                 alert('Please enter a valid email address.');
             }
         }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Any initialization code here
-        });
     </script>
 </body>
 </html>
