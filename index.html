@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Psychology Assessment | Discover Your Emotional Trading Weaknesses</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .intro-stats {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .intro-stats h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .intro-stats p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar {
+            background: #ecf0f1;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+        }
+        
+        .question h3 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .results.active {
+            display: block;
+        }
+        
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .score-interpretation {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .score-interpretation h4 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .recommendations {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .recommendations li {
+            background: white;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-size: 14px;
+        }
+        
+        .email-capture {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        
+        .email-capture h4 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .email-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .email-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .email-btn {
+            background: white;
+            color: #f5576c;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .intro {
+            display: block;
+            text-align: center;
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .email-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🧠</div>
+            <h1>Trading Psychology Assessment</h1>
+            <p class="subtitle">Discover your emotional trading weaknesses in just 5 minutes</p>
+        </div>
+        
+        <div class="intro">
+            <div class="intro-stats">
+                <h3>🎯 Based on 10+ Years of Market Expertise</h3>
+                <p>Professional analysis of your emotional trading patterns</p>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 30px; text-align: left;">
+                <h4 style="color: #2c3e50; margin-bottom: 15px;">You'll discover:</h4>
+                <ul style="color: #6c757d; line-height: 1.6;">
+                    <li>✅ Your emotional risk profile (1-100 points)</li>
+                    <li>✅ Your biggest psychological weaknesses</li>
+                    <li>✅ Concrete solution recommendations</li>
+                    <li>✅ Personalized tips for better discipline</li>
+                </ul>
+            </div>
+            
+            <button class="start-btn" onclick="startAssessment()">Start Assessment Now</button>
+        </div>
+        
+        <div class="progress-bar" style="display: none;">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        
+        <div class="question-container" id="question1">
+            <div class="question">
+                <h3>1. How do you react to an unexpected 5% loss in your portfolio?</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(1, 1, this)">I sell everything immediately to prevent further losses</div>
+                    <div class="option" onclick="selectAnswer(1, 2, this)">I get nervous but stick to my plan</div>
+                    <div class="option" onclick="selectAnswer(1, 3, this)">I analyze the situation objectively and act accordingly</div>
+                    <div class="option" onclick="selectAnswer(1, 4, this)">I buy more, seeing the dip as an opportunity</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question2">
+            <div class="question">
+                <h3>2. You see a stock that has risen 20%. What do you think?</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(2, 1, this)">"I missed a huge opportunity!"</div>
+                    <div class="option" onclick="selectAnswer(2, 2, this)">"Too bad, but there are other opportunities"</div>
+                    <div class="option" onclick="selectAnswer(2, 3, this)">"I'll analyze if there's still potential"</div>
+                    <div class="option" onclick="selectAnswer(2, 4, this)">"That wasn't part of my strategy"</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question3">
+            <div class="question">
+                <h3>3. How often do you check your portfolio during a trading day?</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(3, 1, this)">Constantly - every few minutes</div>
+                    <div class="option" onclick="selectAnswer(3, 2, this)">Several times per hour</div>
+                    <div class="option" onclick="selectAnswer(3, 3, this)">2-3 times daily at fixed times</div>
+                    <div class="option" onclick="selectAnswer(3, 4, this)">Only once at the end of the day</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question4">
+            <div class="question">
+                <h3>4. After a series of losses...</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(4, 1, this)">I increase my position sizes to recover losses</div>
+                    <div class="option" onclick="selectAnswer(4, 2, this)">I trade more emotionally and impulsively</div>
+                    <div class="option" onclick="selectAnswer(4, 3, this)">I take a break and analyze my strategy</div>
+                    <div class="option" onclick="selectAnswer(4, 4, this)">I temporarily reduce my position sizes</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question5">
+            <div class="question">
+                <h3>5. Your biggest enemy when trading is...</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(5, 1, this)">FOMO (Fear of Missing Out)</div>
+                    <div class="option" onclick="selectAnswer(5, 2, this)">Greed for quick profits</div>
+                    <div class="option" onclick="selectAnswer(5, 3, this)">Fear of losses</div>
+                    <div class="option" onclick="selectAnswer(5, 4, this)">Impatience with my strategy</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question6">
+            <div class="question">
+                <h3>6. How do you handle profits?</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(6, 1, this)">I sell too early out of fear of losing the profit</div>
+                    <div class="option" onclick="selectAnswer(6, 2, this)">I become overconfident and risk more</div>
+                    <div class="option" onclick="selectAnswer(6, 3, this)">I follow my predefined exit plan</div>
+                    <div class="option" onclick="selectAnswer(6, 4, this)">I let profits run and cut losses short</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question7">
+            <div class="question">
+                <h3>7. Social media and trading news influence my decisions...</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(7, 1, this)">Very strongly - I often trade based on posts/news</div>
+                    <div class="option" onclick="selectAnswer(7, 2, this)">Sometimes I let myself be influenced</div>
+                    <div class="option" onclick="selectAnswer(7, 3, this)">Rarely - I use them as additional information</div>
+                    <div class="option" onclick="selectAnswer(7, 4, this)">Never - I rely only on my analysis</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question8">
+            <div class="question">
+                <h3>8. Your risk management is based on...</h3>
+                <div class="options">
+                    <div class="option" onclick="selectAnswer(8, 1, this)">Gut feeling depending on market conditions</div>
+                    <div class="option" onclick="selectAnswer(8, 2, this)">Rough guidelines that I sometimes follow</div>
+                    <div class="option" onclick="selectAnswer(8, 3, this)">Clear rules that I usually follow</div>
+                    <div class="option" onclick="selectAnswer(8, 4, this)">Strict mathematical formulas</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-buttons" style="display: none;">
+            <button class="btn btn-secondary" onclick="previousQuestion()">Back</button>
+            <button class="btn btn-primary" onclick="nextQuestion()" disabled id="nextBtn">Next</button>
+        </div>
+        
+        <div class="results" id="results">
+            <div class="score-circle" id="scoreCircle">0</div>
+            <h2 id="scoreTitle">Your Trading Psychology Score</h2>
+            <div class="score-interpretation" id="scoreInterpretation">
+                <!-- Content will be filled by JavaScript -->
+            </div>
+            
+            <div class="email-capture">
+                <h4>🎁 Get Your Free Trading Psychology Report!</h4>
+                <p>Detailed analysis + 3-step plan for better trading discipline</p>
+                <div class="email-form">
+                    <input type="email" class="email-input" placeholder="Your email address" id="emailInput">
+                    <button class="email-btn" onclick="submitEmail()">Get Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentQuestion = 0;
+        let answers = {};
+        const totalQuestions = 8;
+        
+        function startAssessment() {
+            document.querySelector('.intro').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'block';
+            document.querySelector('.nav-buttons').style.display = 'flex';
+            currentQuestion = 1;
+            showQuestion(1);
+            updateProgress();
+        }
+        
+        function showQuestion(questionNum) {
+            // Hide all questions
+            document.querySelectorAll('.question-container').forEach(q => {
+                q.classList.remove('active');
+            });
+            
+            // Show current question
+            document.getElementById(`question${questionNum}`).classList.add('active');
+        }
+        
+        function selectAnswer(questionNum, answerValue, element) {
+            // Remove selection from other options
+            element.parentElement.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Select this option
+            element.classList.add('selected');
+            
+            // Store answer
+            answers[questionNum] = answerValue;
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+                updateProgress();
+                document.getElementById('nextBtn').disabled = true;
+                
+                // Check if answer already exists for this question
+                if (answers[currentQuestion]) {
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            } else {
+                showResults();
+            }
+        }
+        
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+                updateProgress();
+                document.getElementById('nextBtn').disabled = false;
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Update button text
+            if (currentQuestion === totalQuestions) {
+                document.getElementById('nextBtn').textContent = 'Show Results';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next';
+            }
+        }
+        
+        function calculateScore() {
+            let totalScore = 0;
+            
+            // Scoring logic (higher score = better emotional control)
+            for (let q = 1; q <= totalQuestions; q++) {
+                const answer = answers[q];
+                let questionScore = 0;
+                
+                switch(q) {
+                    case 1: // Reaction to losses
+                        questionScore = answer === 1 ? 2 : answer === 2 ? 6 : answer === 3 ? 10 : 8;
+                        break;
+                    case 2: // FOMO reactions
+                        questionScore = answer === 1 ? 2 : answer === 2 ? 6 : answer === 3 ? 8 : 10;
+                        break;
+                    case 3: // Portfolio checking frequency
+                        questionScore = answer === 1 ? 2 : answer === 2 ? 4 : answer === 3 ? 8 : 10;
+                        break;
+                    case 4: // After losses
+                        questionScore = answer === 1 ? 1 : answer === 2 ? 3 : answer === 3 ? 9 : 10;
+                        break;
+                    case 5: // Biggest enemy
+                        questionScore = answer === 1 ? 4 : answer === 2 ? 5 : answer === 3 ? 6 : 7;
+                        break;
+                    case 6: // Handling profits
+                        questionScore = answer === 1 ? 4 : answer === 2 ? 3 : answer === 3 ? 9 : 10;
+                        break;
+                    case 7: // Social media influence
+                        questionScore = answer === 1 ? 2 : answer === 2 ? 5 : answer === 3 ? 8 : 10;
+                        break;
+                    case 8: // Risk management
+                        questionScore = answer === 1 ? 2 : answer === 2 ? 5 : answer === 3 ? 8 : 10;
+                        break;
+                }
+                
+                totalScore += questionScore;
+            }
+            
+            return Math.round((totalScore / 80) * 100); // Convert to percentage
+        }
+        
+        function getScoreInterpretation(score) {
+            if (score >= 80) {
+                return {
+                    title: "🏆 Trading Discipline Champion (80-100 Points)",
+                    description: "Impressive! You already have very good emotional control developed.",
+                    recommendations: [
+                        "Refine your strategies for even more consistent results",
+                        "Share your knowledge with other traders",
+                        "Focus on advanced risk management techniques",
+                        "Work on optimizing your profit-taking strategies"
+                    ],
+                    color: "#27ae60"
+                };
+            } else if (score >= 60) {
+                return {
+                    title: "📈 Solid Trader with Potential (60-79 Points)",
+                    description: "You're on the right track! With some adjustments, you'll become even more successful.",
+                    recommendations: [
+                        "Develop clearer rules for emotional situations",
+                        "Implement a structured trading journal",
+                        "Work on your discipline during losing streaks",
+                        "Reduce the frequency of portfolio checks"
+                    ],
+                    color: "#f39c12"
+                };
+            } else if (score >= 40) {
+                return {
+                    title: "⚠️ Emotional Trader (40-59 Points)",
+                    description: "Your emotions strongly influence your trading decisions. Time for changes!",
+                    recommendations: [
+                        "Create a detailed trading plan and stick to it",
+                        "Implement strict stop-loss rules",
+                        "Temporarily reduce your position sizes",
+                        "Avoid social media during trading hours"
+                    ],
+                    color: "#e67e22"
+                };
+            } else {
+                return {
+                    title: "🚨 High Emotional Vulnerability (0-39 Points)",
+                    description: "Your emotions control your trading. Immediate action required!",
+                    recommendations: [
+                        "Take a trading break and work on your psychology",
+                        "Start with very small position sizes",
+                        "Implement a strict risk management system",
+                        "Seek professional support for trading psychology"
+                    ],
+                    color: "#e74c3c"
+                };
+            }
+        }
+        
+        function showResults() {
+            // Hide questions and navigation
+            document.querySelectorAll('.question-container').forEach(q => {
+                q.classList.remove('active');
+            });
+            document.querySelector('.nav-buttons').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            
+            // Calculate and show results
+            const score = calculateScore();
+            const interpretation = getScoreInterpretation(score);
+            
+            document.getElementById('scoreCircle').textContent = score;
+            document.getElementById('scoreCircle').style.background = interpretation.color;
+            document.getElementById('scoreTitle').textContent = interpretation.title;
+            
+            const interpretationHtml = `
+                <h4>${interpretation.title}</h4>
+                <p style="margin-bottom: 20px; color: #6c757d;">${interpretation.description}</p>
+                <h5 style="color: #2c3e50; margin-bottom: 15px;">🎯 Your Next Steps:</h5>
+                <ul class="recommendations">
+                    ${interpretation.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+            `;
+            
+            document.getElementById('scoreInterpretation').innerHTML = interpretationHtml;
+            document.getElementById('results').classList.add('active');
+        }
+        
+        function submitEmail() {
+            const email = document.getElementById('emailInput').value;
+            if (email && email.includes('@')) {
+                // Here you would typically send the email to your backend
+                alert('Perfect! You will receive your Trading Psychology Report within the next few minutes via email.');
+                
+                // You can add tracking/analytics here
+                console.log('Email captured:', email);
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Any initialization code here
+        });
+    </script>
+</body>
+</html>
