@@ -888,12 +888,12 @@
             yPosition += 15;
             
             // Check if we need a new page for weaknesses
-            if (yPosition > 200) {
+            if (yPosition + (userAnalysis.weaknesses.length * 10) > 240) {
                 doc.addPage();
                 yPosition = 30;
             }
             
-            // Weaknesses Section (moved to page 2)
+            // Weaknesses Section
             doc.setFontSize(18);
             doc.setFont(undefined, 'bold');
             doc.setTextColor(231, 76, 60);
