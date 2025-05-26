@@ -755,3 +755,26 @@
                 <ul class="recommendations">
                     ${interpretation.recommendations.map(rec => `<li>${rec}</li>`).join('')}
                 </ul>
+            `;
+            
+            document.getElementById('scoreInterpretation').innerHTML = interpretationHtml;
+            document.getElementById('results').classList.add('active');
+        }
+        
+        function generatePersonalizedReport() {
+            // Check if email is provided first
+            const email = document.getElementById('emailInput').value;
+            if (!email || !email.includes('@')) {
+                alert('Please enter your email address first to receive your personalized report!');
+                document.getElementById('emailInput').focus();
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Get user info
+            const userName = email.split('@')[0] || 'Trader';
+            
+            // Set up PDF styling
+            const pageWidth = doc.internal.pageSize
