@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trading Psychology Assessment | Discover Your Emotional Trading Weaknesses</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Test if jsPDF loads
+        console.log('jsPDF loaded:', typeof window.jspdf !== 'undefined');
+    </script>
     <style>
         * {
             margin: 0;
@@ -978,9 +982,11 @@
             }
         }
         
-        // Initialize
+        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            // Any initialization code here
+            // Add event listener to start button
+            document.getElementById('startBtn').addEventListener('click', startAssessment);
+            console.log('Assessment initialized successfully');
         });
     </script>
 </body>
