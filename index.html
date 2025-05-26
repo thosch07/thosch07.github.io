@@ -882,7 +882,13 @@
             });
             yPosition += 15;
             
-            // Weaknesses Section
+            // Check if we need a new page for weaknesses
+            if (yPosition > 200) {
+                doc.addPage();
+                yPosition = 30;
+            }
+            
+            // Weaknesses Section (moved to page 2)
             doc.setFontSize(18);
             doc.setFont(undefined, 'bold');
             doc.setTextColor(231, 76, 60);
@@ -900,12 +906,6 @@
                 yPosition += 10;
             });
             yPosition += 20;
-            
-            // Check if we need a new page
-            if (yPosition > 240) {
-                doc.addPage();
-                yPosition = 30;
-            }
             
             // Action Plan Section
             doc.setFontSize(18);
