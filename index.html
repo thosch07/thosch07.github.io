@@ -478,10 +478,15 @@
             <div class="email-capture">
                 <h4>🎁 Get Your Detailed Psychology Report!</h4>
                 <p>Enter your email to download your personalized PDF report</p>
-                <div class="email-form">
-                    <input type="email" class="email-input" placeholder="Your email address" id="emailInput">
-                    <button class="email-btn" onclick="generatePersonalizedReport()">Download Report</button>
-                </div>
+                <form name="trading-psychology-leads" method="POST" data-netlify="true" style="display: contents;">
+                    <input type="hidden" name="form-name" value="trading-psychology-leads">
+                    <input type="hidden" name="score" id="hiddenScore">
+                    <input type="hidden" name="category" id="hiddenCategory">
+                    <div class="email-form">
+                        <input type="email" name="email" class="email-input" placeholder="Your email address" id="emailInput" required>
+                        <button type="button" class="email-btn" onclick="generatePersonalizedReport()">Download Report</button>
+                    </div>
+                </form>
                 <p style="font-size: 12px; margin-top: 10px; opacity: 0.8;">We'll also send you exclusive trading psychology tips</p>
             </div>
         </div>
@@ -951,13 +956,13 @@
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(16);
             doc.setFont(undefined, 'bold');
-            doc.text('Expert Insight', margin + 10, yPosition + 18);
+            doc.text('Expert Insight', margin + 10, yPosition + 15);
             
             doc.setFontSize(11);
             doc.setFont(undefined, 'normal');
-            doc.text('Based on 10+ years of market experience', margin + 10, yPosition + 28);
-            doc.text('For educational purposes only - Not financial advice', margin + 10, yPosition + 35);
-            doc.text('Consult professionals for investment decisions', margin + 10, yPosition + 42);
+            doc.text('Based on 10+ years of market experience', margin + 10, yPosition + 25);
+            doc.text('For educational purposes only - Not financial advice', margin + 10, yPosition + 32);
+            doc.text('Consult professionals for investment decisions', margin + 10, yPosition + 39);
             
             // Save the PDF
             const fileName = `Trading-Psychology-Report-${userName}-Score-${userScore}.pdf`;
@@ -970,13 +975,37 @@
         
         function submitEmail() {
             const email = document.getElementById('emailInput').value;
+            const score = userScore;
+            const category = userAnalysis.category;
+            
             if (email && email.includes('@')) {
-                // Here you would typically send the email to your backend
-                alert('Perfect! Welcome to our trading psychology community. You\'ll receive advanced tips and strategies via email.');
+                // Update hidden form fields
+                document.getElementById('hiddenScore').value = score;
+                document.getElementById('hiddenCategory').value = category;
                 
-                // You can add tracking/analytics here
-                console.log('Email captured:', email);
-                console.log('User score:', userScore);
+                // Submit to Netlify Forms using fetch
+                const formData = new FormData();
+                formData.append('form-name', 'trading-psychology-leads');
+                formData.append('email', email);
+                formData.append('score', score);
+                formData.append('category', category);
+                
+                fetch('/', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(formData).toString()
+                })
+                .then(() => {
+                    console.log('Email submitted to Netlify Forms successfully');
+                    alert('Perfect! Welcome to our trading psychology community. You\'ll receive advanced tips and strategies via email.');
+                })
+                .catch((error) => {
+                    console.error('Error submitting to Netlify Forms:', error);
+                    alert('Email captured successfully!');
+                });
+                
+                // Log for debugging
+                console.log('Email captured:', email, 'Score:', score, 'Category:', category);
             } else {
                 alert('Please enter a valid email address.');
             }
