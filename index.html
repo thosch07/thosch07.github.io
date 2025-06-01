@@ -386,6 +386,10 @@
                 </ul>
             </div>
             
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+                <p style="color: #856404; font-size: 14px; margin: 0;"><strong>📋 Important:</strong> This is an educational analysis of emotional trading patterns - not financial advice. For investment decisions, consult a licensed financial advisor.</p>
+            </div>
+            
             <button class="start-btn" onclick="startAssessment()">Start Assessment Now</button>
         </div>
         
@@ -528,6 +532,12 @@
             gtag('event', 'assessment_started', {
                 'event_category': 'engagement',
                 'event_label': 'trading_psychology_assessment'
+            });
+            
+            // Track compliance disclaimer acknowledgment
+            gtag('event', 'disclaimer_acknowledged', {
+                'event_category': 'compliance',
+                'event_label': 'educational_not_financial_advice'
             });
             
             document.querySelector('.intro').style.display = 'none';
@@ -869,23 +879,23 @@
             doc.setFillColor(118, 75, 162);
             doc.rect(0, 40, pageWidth, 10, 'F');
             
-            // Add white background for logo visibility
+            // Add white background for logo visibility (top right corner)
             doc.setFillColor(255, 255, 255);
-            doc.rect(margin, 8, 60, 20, 'F');
+            doc.rect(pageWidth - 80, 5, 70, 18, 'F');
             
-            // Add Schnitzlein Consulting Logo/Brand
+            // Add Schnitzlein Consulting Logo/Brand (top right)
             doc.setTextColor(102, 126, 234);
-            doc.setFontSize(14);
+            doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            doc.text('SCHNITZLEIN', margin + 30, 15, { align: 'center' });
-            doc.setFontSize(10);
+            doc.text('SCHNITZLEIN', pageWidth - 45, 12, { align: 'center' });
+            doc.setFontSize(8);
             doc.setFont(undefined, 'normal');
-            doc.text('CONSULTING', margin + 30, 22, { align: 'center' });
+            doc.text('CONSULTING', pageWidth - 45, 18, { align: 'center' });
             
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(24);
             doc.setFont(undefined, 'bold');
-            doc.text('Trading Psychology Report', pageWidth/2, 32, { align: 'center' });
+            doc.text('Trading Psychology Report', pageWidth/2, 30, { align: 'center' });
             
             doc.setFontSize(14);
             doc.setFont(undefined, 'normal');
@@ -894,7 +904,21 @@
             // Reset text color
             doc.setTextColor(44, 62, 80);
             
-            let yPosition = 75;
+            let yPosition = 60;
+            
+            // Compliance Disclaimer
+            doc.setFillColor(255, 243, 205);
+            doc.rect(margin, yPosition, maxWidth, 20, 'F');
+            doc.setTextColor(133, 100, 4);
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text('IMPORTANT: Educational analysis of emotional trading patterns - Not financial advice', pageWidth/2, yPosition + 8, { align: 'center' });
+            doc.setFont(undefined, 'normal');
+            doc.text('For investment decisions, consult a licensed financial advisor', pageWidth/2, yPosition + 15, { align: 'center' });
+            
+            // Reset text color
+            doc.setTextColor(44, 62, 80);
+            yPosition += 35;
             
             // Score Section with better styling
             doc.setFillColor(248, 249, 250);
@@ -1032,30 +1056,30 @@
             
             yPosition += 20;
             
-            // Professional Footer - Expert Insights Box
-            if (yPosition > 180) {
+            // Professional Footer - Expert Insights Box (keep on same page if possible)
+            if (yPosition > 230) {
                 doc.addPage();
                 yPosition = 30;
             }
             
             doc.setFillColor(102, 126, 234);
-            doc.rect(margin, yPosition, maxWidth, 50, 'F');
+            doc.rect(margin, yPosition, maxWidth, 45, 'F');
             
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(16);
             doc.setFont(undefined, 'bold');
-            doc.text('Expert Insight', margin + 10, yPosition + 18);
+            doc.text('Expert Insight', margin + 10, yPosition + 15);
             
             doc.setFontSize(11);
             doc.setFont(undefined, 'normal');
-            doc.text('Based on 10+ years of market experience', margin + 10, yPosition + 28);
-            doc.text('This analysis reflects your current trading psychology patterns and provides', margin + 10, yPosition + 35);
-            doc.text('actionable steps for improvement.', margin + 10, yPosition + 42);
+            doc.text('Based on 10+ years of market experience', margin + 10, yPosition + 25);
+            doc.text('This analysis reflects your current trading psychology patterns and provides', margin + 10, yPosition + 32);
+            doc.text('actionable steps for improvement.', margin + 10, yPosition + 39);
             
             // Add Schnitzlein Consulting footer
             doc.setFontSize(9);
             doc.setFont(undefined, 'italic');
-            doc.text('© Schnitzlein Consulting - Trading Psychology Expertise', pageWidth/2, yPosition + 47, { align: 'center' });
+            doc.text('© Schnitzlein Consulting - Trading Psychology Expertise', pageWidth/2, yPosition + 42, { align: 'center' });
             
             // Save the PDF
             const fileName = `Trading-Psychology-Report-${userName}-Score-${userScore}.pdf`;
