@@ -844,10 +844,11 @@
             document.getElementById('results').classList.add('active');
         }
         
-        function generatePersonalizedReport() {
-            // Check if email is provided first
-            const email = document.getElementById('emailInput').value;
-            if (!email || !email.includes('@')) {
+        function generatePersonalizedReport(fromEmailSubmit = false) {
+            let email = document.getElementById('emailInput').value;
+            
+            // Check if email is provided (only if not called from submitEmail)
+            if (!fromEmailSubmit && (!email || !email.includes('@'))) {
                 alert('Please enter your email address first to receive your personalized report!');
                 document.getElementById('emailInput').focus();
                 return;
@@ -879,12 +880,8 @@
             doc.setFillColor(118, 75, 162);
             doc.rect(0, 40, pageWidth, 10, 'F');
             
-            // Add white background for logo visibility (top right corner)
-            doc.setFillColor(255, 255, 255);
-            doc.rect(pageWidth - 80, 5, 70, 18, 'F');
-            
-            // Add Schnitzlein Consulting Logo/Brand (top right)
-            doc.setTextColor(102, 126, 234);
+            // Add Schnitzlein Consulting Logo/Brand (top right, no background)
+            doc.setTextColor(255, 255, 255);
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
             doc.text('SCHNITZLEIN', pageWidth - 45, 12, { align: 'center' });
@@ -892,7 +889,6 @@
             doc.setFont(undefined, 'normal');
             doc.text('CONSULTING', pageWidth - 45, 18, { align: 'center' });
             
-            doc.setTextColor(255, 255, 255);
             doc.setFontSize(24);
             doc.setFont(undefined, 'bold');
             doc.text('Trading Psychology Report', pageWidth/2, 30, { align: 'center' });
@@ -976,6 +972,12 @@
             });
             yPosition += 15;
             
+            // Check if we need a new page for strengths
+            if (yPosition > 160) {
+                doc.addPage();
+                yPosition = 30;
+            }
+            
             // Strengths Section
             doc.setFontSize(18);
             doc.setFont(undefined, 'bold');
@@ -993,10 +995,10 @@
                 doc.text(`✓ ${strength}`, margin + 10, yPosition + 5);
                 yPosition += 10;
             });
-            yPosition += 15;
+            yPosition += 20;
             
             // Check if we need a new page for weaknesses
-            if (yPosition > 180) {
+            if (yPosition > 160) {
                 doc.addPage();
                 yPosition = 30;
             }
@@ -1085,9 +1087,10 @@
             const fileName = `Trading-Psychology-Report-${userName}-Score-${userScore}.pdf`;
             doc.save(fileName);
             
-            // Show success message and capture email
-            submitEmail();
-            alert(`🎉 Your personalized report has been downloaded!\n\nScore: ${userScore}/100\nReport: ${fileName}\n\nCheck your Downloads folder.`);
+            // Show success message (no need to call submitEmail again if called from submitEmail)
+            if (!fromEmailSubmit) {
+                alert(`🎉 Your personalized report has been downloaded!\n\nScore: ${userScore}/100\nReport: ${fileName}\n\nCheck your Downloads folder.`);
+            }
         }
         
         function submitEmail() {
@@ -1099,13 +1102,17 @@
                     'event_label': 'newsletter_signup'
                 });
                 
-                alert('Perfect! Welcome to our trading psychology community. You\'ll receive advanced tips and strategies via email.');
+                // Auto-start PDF download
+                generatePersonalizedReport(true);
+                
+                alert('Perfect! Your personalized report is downloading now. You\'ll also receive advanced trading psychology tips via email.');
                 
                 // You can add tracking/analytics here
                 console.log('Email captured:', email);
                 console.log('User score:', userScore);
             } else {
-                alert('Please enter a valid email address.');
+                alert('Please enter a valid email address to receive your free report and tips.');
+                document.getElementById('emailInput').focus();
             }
         }
     </script>
