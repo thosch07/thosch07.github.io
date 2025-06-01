@@ -869,15 +869,20 @@
             doc.setFillColor(118, 75, 162);
             doc.rect(0, 40, pageWidth, 10, 'F');
             
+            // Add white background for logo visibility
+            doc.setFillColor(255, 255, 255);
+            doc.rect(margin, 8, 60, 20, 'F');
+            
             // Add Schnitzlein Consulting Logo/Brand
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(102, 126, 234);
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
-            doc.text('SCHNITZLEIN', pageWidth/2, 15, { align: 'center' });
+            doc.text('SCHNITZLEIN', margin + 30, 15, { align: 'center' });
             doc.setFontSize(10);
             doc.setFont(undefined, 'normal');
-            doc.text('CONSULTING', pageWidth/2, 22, { align: 'center' });
+            doc.text('CONSULTING', margin + 30, 22, { align: 'center' });
             
+            doc.setTextColor(255, 255, 255);
             doc.setFontSize(24);
             doc.setFont(undefined, 'bold');
             doc.text('Trading Psychology Report', pageWidth/2, 32, { align: 'center' });
@@ -966,6 +971,12 @@
             });
             yPosition += 15;
             
+            // Check if we need a new page for weaknesses
+            if (yPosition > 180) {
+                doc.addPage();
+                yPosition = 30;
+            }
+            
             // Weaknesses Section
             doc.setFontSize(18);
             doc.setFont(undefined, 'bold');
@@ -985,8 +996,8 @@
             });
             yPosition += 25;
             
-            // Check if we need a new page
-            if (yPosition > 200) {
+            // Check if we need a new page for action plan
+            if (yPosition > 160) {
                 doc.addPage();
                 yPosition = 30;
             }
@@ -1021,30 +1032,30 @@
             
             yPosition += 20;
             
-            // Professional Footer
-            if (yPosition > 220) {
+            // Professional Footer - Expert Insights Box
+            if (yPosition > 180) {
                 doc.addPage();
                 yPosition = 30;
             }
             
             doc.setFillColor(102, 126, 234);
-            doc.rect(margin, yPosition, maxWidth, 45, 'F');
+            doc.rect(margin, yPosition, maxWidth, 50, 'F');
             
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(16);
             doc.setFont(undefined, 'bold');
-            doc.text('Expert Insight', margin + 10, yPosition + 15);
+            doc.text('Expert Insight', margin + 10, yPosition + 18);
             
             doc.setFontSize(11);
             doc.setFont(undefined, 'normal');
-            doc.text('Based on 10+ years of market experience', margin + 10, yPosition + 25);
-            doc.text('This analysis reflects your current trading psychology patterns and provides', margin + 10, yPosition + 32);
-            doc.text('actionable steps for improvement.', margin + 10, yPosition + 39);
+            doc.text('Based on 10+ years of market experience', margin + 10, yPosition + 28);
+            doc.text('This analysis reflects your current trading psychology patterns and provides', margin + 10, yPosition + 35);
+            doc.text('actionable steps for improvement.', margin + 10, yPosition + 42);
             
             // Add Schnitzlein Consulting footer
             doc.setFontSize(9);
             doc.setFont(undefined, 'italic');
-            doc.text('© Schnitzlein Consulting - Trading Psychology Expertise', pageWidth/2, yPosition + 42, { align: 'center' });
+            doc.text('© Schnitzlein Consulting - Trading Psychology Expertise', pageWidth/2, yPosition + 47, { align: 'center' });
             
             // Save the PDF
             const fileName = `Trading-Psychology-Report-${userName}-Score-${userScore}.pdf`;
