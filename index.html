@@ -626,11 +626,11 @@
                         var sentence = strengthsSentences[i].trim();
                         if (i < strengthsSentences.length - 1) sentence += '.';
                         doc.text(sentence, margin + 5, strengthsY);
-                        strengthsY += 4;
+                        strengthsY += 4.5; // Better line spacing for readability
                     }
                 }
                 
-                yPos = strengthsY + 10;
+                yPos = strengthsY + 6; // Reduced section spacing
                 
                 // KEY AREAS FOR IMPROVEMENT (optimized spacing)
                 drawSectionBox(margin, yPos, pageWidth - 2 * margin, 30, [255, 235, 215]);
@@ -652,11 +652,11 @@
                         var sentence = improvementsSentences[i].trim();
                         if (i < improvementsSentences.length - 1) sentence += '.';
                         doc.text(sentence, margin + 5, improvementsY);
-                        improvementsY += 4;
+                        improvementsY += 4.5; // Better line spacing for readability
                     }
                 }
                 
-                yPos = improvementsY + 10;
+                yPos = improvementsY + 6; // Reduced section spacing
                 
                 // CHECK FOR NEW PAGE
                 if (yPos > 200) {
@@ -682,11 +682,11 @@
                 for (var i = 0; i < actionItems.length; i++) {
                     if (actionItems[i].trim()) {
                         doc.text(actionItems[i].trim(), margin + 5, actionY);
-                        actionY += 4;
+                        actionY += 4.5; // Better line spacing for readability
                     }
                 }
                 
-                yPos = actionY + 10;
+                yPos = actionY + 6; // Reduced section spacing
                 
                 // CHECK FOR NEW PAGE
                 if (yPos > pageHeight - 60) {
@@ -706,15 +706,15 @@
                 doc.setTextColor(0, 100, 200);
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "bold");
-                doc.text("Expert Insight", margin + 5, yPos + 12);
+                doc.text("Expert Insight", margin + 5, yPos + 8); // Moved up
                 
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(9);
                 doc.setFont("helvetica", "normal");
-                doc.text("Based on 10+ years of market experience", margin + 5, yPos + 20);
-                doc.text("This analysis reflects common patterns seen in", margin + 5, yPos + 26);
-                doc.text("successful traders who have overcome similar", margin + 5, yPos + 30);
-                doc.text("psychological challenges.", margin + 5, yPos + 34);
+                doc.text("Based on 10+ years of market experience", margin + 5, yPos + 15); // Moved up
+                doc.text("This analysis reflects common patterns seen in", margin + 5, yPos + 20); // Moved up
+                doc.text("successful traders who have overcome similar", margin + 5, yPos + 25); // Moved up
+                doc.text("psychological challenges.", margin + 5, yPos + 30); // Moved up
                 
                 // FOOTER
                 doc.setTextColor(100, 100, 100);
