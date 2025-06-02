@@ -557,50 +557,92 @@
                 var margin = 20;
                 var yPos = 30;
                 
-                // Header
+                // ENHANCED HEADER with gradient effect
                 doc.setFillColor(102, 126, 234);
-                doc.rect(0, 0, pageWidth, 40, 'F');
+                doc.rect(0, 0, pageWidth, 45, 'F');
+                
+                // Header shadow
+                doc.setFillColor(240, 240, 240);
+                doc.rect(0, 45, pageWidth, 2, 'F');
                 
                 doc.setTextColor(255, 255, 255);
-                doc.setFontSize(11);
-                doc.text("SCHNITZLEIN CONSULTING", pageWidth - 85, 12);
-                doc.setFontSize(20);
-                doc.text("Trading Psychology Report", margin, 25);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text("SCHNITZLEIN CONSULTING", pageWidth - 85, 15);
                 
-                // Disclaimer
+                doc.setFontSize(22);
+                doc.setFont("helvetica", "bold");
+                doc.text("Trading Psychology Report", margin, 28);
+                
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "normal");
+                doc.text("Discover Your Emotional Trading Weaknesses", margin, 38);
+                
+                // ENHANCED DISCLAIMER with better styling
                 doc.setTextColor(0, 0, 0);
                 doc.setFillColor(255, 248, 220);
-                doc.rect(margin, 50, pageWidth - 2 * margin, 15, 'F');
+                doc.rect(margin, 55, pageWidth - 2 * margin, 16, 'F');
+                doc.setDrawColor(255, 193, 7);
+                doc.setLineWidth(0.5);
+                doc.rect(margin, 55, pageWidth - 2 * margin, 16, 'S');
+                
                 doc.setFontSize(9);
-                doc.text("IMPORTANT: Educational analysis of emotional trading patterns - Not financial advice", margin + 5, 60);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(133, 100, 4);
+                doc.text("IMPORTANT:", margin + 3, 63);
+                doc.setFont("helvetica", "normal");
+                doc.text("Educational analysis of emotional trading patterns - Not financial advice", margin + 25, 63);
+                doc.text("For investment decisions, consult a licensed financial advisor", margin + 3, 68);
                 
-                yPos = 80;
+                doc.setDrawColor(0, 0, 0);
+                doc.setLineWidth(0.2);
+                yPos = 85;
                 
-                // Assessment Results
+                // ENHANCED ASSESSMENT RESULTS with visual score
+                doc.setFillColor(248, 249, 250);
+                doc.rect(margin, yPos - 5, pageWidth - 2 * margin, 50, 'F');
+                
+                doc.setTextColor(51, 51, 51);
                 doc.setFontSize(16);
                 doc.setFont("helvetica", "bold");
-                doc.text("Your Assessment Results", margin, yPos);
-                yPos += 15;
+                doc.text("Your Assessment Results", margin + 5, yPos + 8);
                 
-                doc.setFontSize(12);
-                doc.setFont("helvetica", "normal");
-                doc.text("Overall Score: " + assessmentData.totalScore + "/320", margin, yPos);
-                yPos += 8;
-                doc.text("Category: " + assessmentData.category.replace('_', ' ').toUpperCase(), margin, yPos);
-                yPos += 20;
+                // VISUAL SCORE CIRCLE
+                var scoreColor = getScoreColorRGB(assessmentData.totalScore);
+                doc.setFillColor(scoreColor.r, scoreColor.g, scoreColor.b);
+                doc.circle(margin + 25, yPos + 30, 12, 'F');
                 
-                // Your Strengths
+                doc.setTextColor(255, 255, 255);
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
-                doc.text("Your Strengths", margin, yPos);
-                yPos += 10;
+                doc.text(assessmentData.totalScore.toString(), margin + 20, yPos + 33);
+                
+                // Score details with better spacing
+                doc.setTextColor(51, 51, 51);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "normal");
+                doc.text("Overall Score: " + assessmentData.totalScore + "/320", margin + 45, yPos + 25);
+                doc.text("Category: " + assessmentData.category.replace('_', ' ').toUpperCase(), margin + 45, yPos + 35);
+                
+                yPos += 65;
+                
+                // ENHANCED YOUR STRENGTHS section
+                doc.setFillColor(240, 253, 244);
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 12, 'F');
+                
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(34, 139, 34);
+                doc.text("✓  Your Strengths", margin + 5, yPos + 8);
+                yPos += 18;
                 
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "normal");
+                doc.setTextColor(51, 51, 51);
                 var strengths = getStrengthsForCategory(assessmentData.category);
-                var strengthLines = doc.splitTextToSize(strengths, pageWidth - 2 * margin);
-                doc.text(strengthLines, margin, yPos);
-                yPos += strengthLines.length * 5 + 15;
+                var strengthLines = doc.splitTextToSize(strengths, pageWidth - 2 * margin - 5);
+                doc.text(strengthLines, margin + 3, yPos);
+                yPos += strengthLines.length * 5 + 20;
                 
                 // Check for new page
                 if (yPos > 200) {
@@ -608,18 +650,23 @@
                     yPos = 30;
                 }
                 
-                // Areas for Improvement
+                // ENHANCED IMPROVEMENTS section
+                doc.setFillColor(255, 243, 224);
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 12, 'F');
+                
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
-                doc.text("Key Areas for Improvement", margin, yPos);
-                yPos += 10;
+                doc.setTextColor(255, 140, 0);
+                doc.text("⚡  Key Areas for Improvement", margin + 5, yPos + 8);
+                yPos += 18;
                 
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "normal");
+                doc.setTextColor(51, 51, 51);
                 var improvements = getImprovementsForCategory(assessmentData.category);
-                var improvementLines = doc.splitTextToSize(improvements, pageWidth - 2 * margin);
-                doc.text(improvementLines, margin, yPos);
-                yPos += improvementLines.length * 5 + 15;
+                var improvementLines = doc.splitTextToSize(improvements, pageWidth - 2 * margin - 5);
+                doc.text(improvementLines, margin + 3, yPos);
+                yPos += improvementLines.length * 5 + 20;
                 
                 // Check for new page
                 if (yPos > 180) {
@@ -627,18 +674,23 @@
                     yPos = 30;
                 }
                 
-                // Action Plan
+                // ENHANCED ACTION PLAN section
+                doc.setFillColor(240, 248, 255);
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 12, 'F');
+                
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
-                doc.text("Personalized Action Plan", margin, yPos);
-                yPos += 10;
+                doc.setTextColor(102, 126, 234);
+                doc.text("🎯  Personalized Action Plan", margin + 5, yPos + 8);
+                yPos += 18;
                 
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "normal");
+                doc.setTextColor(51, 51, 51);
                 var actionPlan = getActionPlanForCategory(assessmentData.category);
-                var actionLines = doc.splitTextToSize(actionPlan, pageWidth - 2 * margin);
-                doc.text(actionLines, margin, yPos);
-                yPos += actionLines.length * 5 + 15;
+                var actionLines = doc.splitTextToSize(actionPlan, pageWidth - 2 * margin - 5);
+                doc.text(actionLines, margin + 3, yPos);
+                yPos += actionLines.length * 5 + 20;
                 
                 // Check for new page
                 if (yPos > 200) {
@@ -646,21 +698,32 @@
                     yPos = 30;
                 }
                 
-                // Expert Insight Box
-                doc.setFillColor(240, 240, 240);
-                doc.rect(margin, yPos, pageWidth - 2 * margin, 40, 'F');
+                // ENHANCED EXPERT INSIGHT BOX
+                doc.setFillColor(248, 249, 250);
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 45, 'F');
+                doc.setDrawColor(102, 126, 234);
+                doc.setLineWidth(1);
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 45, 'S');
                 
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "bold");
-                doc.text("Expert Insight", margin + 5, yPos + 12);
+                doc.setTextColor(102, 126, 234);
+                doc.text("💡  Expert Insight", margin + 5, yPos + 15);
                 
                 doc.setFontSize(9);
-                doc.setFont("helvetica", "normal");
-                doc.text("Based on 10+ years of market experience", margin + 5, yPos + 20);
-                doc.text("This analysis reflects common patterns seen in successful traders", margin + 5, yPos + 28);
-                doc.text("who have overcome similar psychological challenges.", margin + 5, yPos + 36);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(108, 117, 125);
+                doc.text("Based on 10+ years of market experience", margin + 5, yPos + 24);
                 
-                // Footer
+                doc.setFont("helvetica", "normal");
+                doc.text("This analysis reflects common patterns seen in successful traders", margin + 5, yPos + 32);
+                doc.text("who have overcome similar psychological challenges.", margin + 5, yPos + 39);
+                
+                // Reset drawing settings
+                doc.setDrawColor(0, 0, 0);
+                doc.setLineWidth(0.2);
+                
+                // ENHANCED FOOTER
                 doc.setFontSize(8);
                 doc.setTextColor(128, 128, 128);
                 doc.text("© 2025 Schnitzlein Consulting - Trading Psychology Assessment", margin, pageHeight - 10);
@@ -680,6 +743,13 @@
                 console.error('PDF generation failed:', error);
                 alert('PDF generation failed, but your results have been saved.');
             }
+        }
+
+        function getScoreColorRGB(score) {
+            if (score >= 280) return {r: 76, g: 175, b: 80}; // Green
+            if (score >= 200) return {r: 33, g: 150, b: 243}; // Blue
+            if (score >= 120) return {r: 255, g: 152, b: 0}; // Orange
+            return {r: 244, g: 67, b: 54}; // Red
         }
 
         function getStrengthsForCategory(category) {
