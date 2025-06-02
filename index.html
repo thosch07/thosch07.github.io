@@ -604,7 +604,7 @@
                 doc.text("Overall Score: " + assessmentData.totalScore + "/320", margin + 55, yPos + 20);
                 doc.text("Category: " + assessmentData.category.replace('_', ' ').toUpperCase(), margin + 55, yPos + 30);
                 
-                yPos += 50; // More spacing after score circle
+                yPos += 40; // Reduced spacing after score circle
                 
                 // YOUR STRENGTHS (dynamic height)
                 drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [230, 255, 230]); // Increased height
