@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Psychology Assessment - Schnitzlein Consulting</title>
+    <title>Trading Psychology Assessment | Discover Your Emotional Trading Weaknesses</title>
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7ZVV3LY8MS"></script>
@@ -23,7 +23,6 @@
         })(window, document, "clarity", "script", "rt0249zmhv");
     </script>
     
-    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
@@ -32,9 +31,9 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -42,455 +41,510 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
             max-width: 800px;
             width: 100%;
-            text-align: center;
+            overflow: hidden;
         }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-        
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.2em;
-        }
-        
-        .question-container {
-            display: none;
-            text-align: left;
-            margin-bottom: 30px;
-        }
-        
-        .question {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-        
-        .options {
-            display: grid;
-            gap: 15px;
-        }
-        
-        .option {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 15px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-        }
-        
-        .option:hover {
-            background: #e9ecef;
-            border-color: #667eea;
-        }
-        
-        .option.selected {
+
+        .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-color: #667eea;
+            padding: 40px;
+            text-align: center;
         }
-        
-        .btn {
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .intro h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .intro p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .start-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: 600;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            margin: 10px;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            font-weight: 600;
         }
-        
-        .btn:hover {
+
+        .start-button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
-        
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .progress {
-            background: #e9ecef;
-            border-radius: 10px;
-            height: 8px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-        
-        .results {
+
+        .question-container {
             display: none;
             text-align: center;
         }
-        
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .answers {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .answer {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .answer:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .answer.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
         .score-circle {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 20px auto;
-            color: white;
-            font-size: 2em;
+            font-size: 2.5rem;
             font-weight: bold;
+            color: white;
         }
-        
-        .category {
-            font-size: 1.5em;
-            font-weight: 700;
-            margin: 20px 0;
-            color: #333;
-        }
-        
+
         .email-section {
             background: #f8f9fa;
-            border-radius: 15px;
             padding: 30px;
+            border-radius: 12px;
             margin-top: 30px;
-            border: 2px solid #e9ecef;
         }
-        
+
+        .email-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
         .email-input {
-            width: 100%;
-            padding: 15px;
+            flex: 1;
+            padding: 12px;
             border: 2px solid #e9ecef;
-            border-radius: 10px;
-            font-size: 1.1em;
-            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 1rem;
         }
-        
-        .email-input:focus {
-            outline: none;
-            border-color: #667eea;
+
+        .email-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
         }
-        
+
         .disclaimer {
-            font-size: 0.9em;
+            font-size: 0.85rem;
             color: #666;
+            text-align: center;
             margin-top: 20px;
             line-height: 1.4;
         }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-            
-            .question {
-                font-size: 1.1em;
-            }
-            
-            .option {
-                padding: 12px 15px;
-                font-size: 1em;
-            }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .content { padding: 20px; }
+            .email-form { flex-direction: column; }
+            .email-input { margin-bottom: 10px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Start Screen -->
-        <div id="start-screen">
+        <div class="header">
             <h1>Trading Psychology Assessment</h1>
-            <p class="subtitle">Discover your emotional trading patterns and psychological weaknesses</p>
-            <button class="btn" onclick="startAssessment()">Start Assessment</button>
-            <p class="disclaimer">This assessment analyzes your trading psychology patterns. Results are for educational purposes and not financial advice.</p>
+            <p>Discover Your Emotional Trading Weaknesses</p>
         </div>
 
-        <!-- Question Screen -->
-        <div id="question-screen" style="display: none;">
-            <div class="progress">
-                <div class="progress-bar" id="progress-bar"></div>
+        <div class="content">
+            <div class="intro" id="intro">
+                <h2>Master Your Trading Psychology</h2>
+                <p>Take our comprehensive assessment to identify emotional patterns that impact your trading performance. Get personalized insights and actionable strategies to improve your trading discipline.</p>
+                
+                <button class="start-button" onclick="startAssessment()">Start Assessment Now</button>
+                
+                <div class="disclaimer">
+                    Educational analysis of emotional trading patterns - not financial advice. 
+                    For investment decisions, consult a licensed financial advisor. 
+                    By using this tool, you consent to analytics cookies for website improvement.
+                </div>
             </div>
-            
-            <div class="question-container" id="question-container" style="display: block;">
+
+            <div class="question-container" id="question-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                
                 <div class="question" id="question-text"></div>
-                <div class="options" id="options-container"></div>
+                <div class="answers" id="answers"></div>
             </div>
-            
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>Next Question</button>
-            </div>
-        </div>
 
-        <!-- Results Screen -->
-        <div id="results-screen" class="results">
-            <h2>Your Assessment Results</h2>
-            <div class="score-circle" id="score-circle"></div>
-            <div class="category" id="category-result"></div>
-            
-            <div class="email-section">
-                <h3>Get Your Personalized Trading Psychology Report</h3>
-                <p>Enter your email to receive detailed insights and actionable recommendations:</p>
-                <input type="email" class="email-input" id="email-input" placeholder="Enter your email address">
-                <button class="btn" onclick="submitEmail()">Get Tips</button>
+            <div class="results-container" id="results-container">
+                <h2>Your Trading Psychology Results</h2>
+                <div class="score-circle" id="score-circle">0</div>
+                <div id="results-content"></div>
+                
+                <div class="email-section">
+                    <h3>Get Advanced Strategies and Insights</h3>
+                    <p>Get advanced strategies and insights delivered to your inbox</p>
+                    <div class="email-form">
+                        <input type="email" class="email-input" id="email-input" placeholder="Enter your email address" required>
+                        <button class="email-button" onclick="submitEmail()">Get Tips</button>
+                    </div>
+                    <div class="disclaimer">
+                        By using this tool, you consent to anonymous analytics cookies (Google Analytics, Microsoft Clarity) for website improvement.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Assessment Questions
+        // Assessment Data Collection (in-memory storage)
+        var assessmentData = {
+            sessionId: 'session_' + Date.now(),
+            startTime: null,
+            endTime: null,
+            answers: {},
+            totalScore: 0,
+            category: '',
+            completed: false,
+            emailProvided: false,
+            pdfDownloaded: false
+        };
+
+        // In-memory database
+        var aiDatabase = [];
+
+        // Trading Psychology Questions
         var questions = [
             {
-                question: "When you see a potential trade opportunity, how do you typically react?",
-                options: [
-                    "I carefully analyze the setup and wait for confirmation",
-                    "I take some time to think but usually enter fairly quickly", 
-                    "I often enter immediately when I see the pattern",
-                    "I jump in right away - I don't want to miss out"
+                text: "When you experience a losing trade, what's your typical first reaction?",
+                answers: [
+                    "I immediately want to place a larger trade to recover losses",
+                    "I feel frustrated but stick to my trading plan", 
+                    "I analyze what went wrong before making another trade",
+                    "I take a break from trading to clear my head"
                 ]
             },
             {
-                question: "How do you handle losing trades?",
-                options: [
-                    "I review what went wrong and adjust my strategy",
-                    "I feel frustrated but stick to my trading plan",
-                    "I often increase position size to 'win back' losses",
-                    "I immediately look for the next trade to recover quickly"
+                text: "How do you typically feel when you're in a winning position?",
+                answers: [
+                    "Excited and eager to increase my position size",
+                    "Satisfied but focused on my exit strategy",
+                    "Nervous about when to take profits",
+                    "Confident in my analysis and plan"
                 ]
             },
             {
-                question: "When you're in a winning trade, what's your usual approach?",
-                options: [
-                    "I stick to my predetermined exit strategy",
-                    "I sometimes take profits early to secure gains",
-                    "I often hold too long hoping for bigger profits",
-                    "I frequently add to winning positions impulsively"
+                text: "What happens when the market moves against your analysis?",
+                answers: [
+                    "I hold on hoping it will turn around",
+                    "I immediately exit according to my stop loss",
+                    "I add to my position to average down",
+                    "I feel stressed and have trouble deciding what to do"
                 ]
             },
             {
-                question: "How do you feel during periods of consecutive losses?",
-                options: [
-                    "I remain calm and trust my long-term strategy",
-                    "I feel concerned but continue following my plan",
-                    "I start doubting my strategy and consider major changes",
-                    "I become very stressed and often stop trading temporarily"
+                text: "How do you handle periods of consecutive losses?",
+                answers: [
+                    "I increase my position sizes to recover faster",
+                    "I reduce my position sizes until I find my rhythm",
+                    "I take a break from trading completely",
+                    "I review and adjust my strategy"
                 ]
             },
             {
-                question: "What's your approach to position sizing?",
-                options: [
-                    "I always use calculated position sizes based on risk management",
-                    "I usually stick to standard sizes but occasionally vary them",
-                    "I often trade larger when I'm confident about a setup",
-                    "I frequently change position sizes based on recent results"
+                text: "When you see other traders making profits, you typically:",
+                answers: [
+                    "Feel like I'm missing out and rush into trades",
+                    "Feel motivated to improve my own strategy",
+                    "Compare my performance and feel discouraged",
+                    "Stay focused on my own trading plan"
                 ]
             },
             {
-                question: "How do you handle high-volatility market conditions?",
-                options: [
-                    "I reduce position sizes and stick to my proven strategies",
-                    "I trade more cautiously but continue with my approach",
-                    "I sometimes take advantage but often get caught off guard",
-                    "I either avoid trading completely or take excessive risks"
+                text: "Your approach to risk management is:",
+                answers: [
+                    "I risk more when I'm confident about a trade",
+                    "I use the same risk percentage on every trade",
+                    "I adjust risk based on recent performance",
+                    "I often forget to set stop losses"
                 ]
             },
             {
-                question: "When you have a strong conviction about a trade, how do you proceed?",
-                options: [
-                    "I still follow my normal risk management rules",
-                    "I might take a slightly larger position but stay disciplined",
-                    "I often increase my position size significantly",
-                    "I sometimes risk much more than usual"
+                text: "How do you typically prepare for a trading session?",
+                answers: [
+                    "I jump right in when I see opportunities",
+                    "I review my plan and check market conditions",
+                    "I set daily profit/loss targets",
+                    "I meditate or do mental preparation exercises"
                 ]
             },
             {
-                question: "How do you typically feel after a trading session?",
-                options: [
-                    "Satisfied with following my process regardless of outcome",
-                    "Generally content but sometimes second-guess decisions",
-                    "Often stressed about missed opportunities or poor timing",
-                    "Frequently emotional - either very happy or very frustrated"
+                text: "When you're stressed during trading, you tend to:",
+                answers: [
+                    "Make impulsive decisions",
+                    "Step away from the computer",
+                    "Overtrade to relieve tension", 
+                    "Stick rigidly to my rules"
                 ]
             }
         ];
 
-        // Global variables
         var currentQuestion = 0;
         var userAnswers = [];
-        var totalScore = 0;
-        var startTime = Date.now();
-        var aiDatabase = []; // In-memory storage
 
-        // Start Assessment
         function startAssessment() {
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('question-screen').style.display = 'block';
-            
-            // Track start in analytics
             gtag('event', 'assessment_started', {
-                'event_category': 'engagement',
-                'event_label': 'trading_psychology_assessment'
+                event_category: 'assessment',
+                event_label: 'user_started_assessment'
             });
+
+            assessmentData.startTime = new Date().toISOString();
             
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('question-container').classList.add('active');
             showQuestion();
         }
 
-        // Show Question
         function showQuestion() {
             if (currentQuestion < questions.length) {
-                document.getElementById('question-text').textContent = questions[currentQuestion].question;
+                var question = questions[currentQuestion];
+                document.getElementById('question-text').textContent = question.text;
                 
-                var optionsContainer = document.getElementById('options-container');
-                optionsContainer.innerHTML = '';
+                var answersContainer = document.getElementById('answers');
+                answersContainer.innerHTML = '';
                 
-                questions[currentQuestion].options.forEach(function(option, index) {
-                    var optionDiv = document.createElement('div');
-                    optionDiv.className = 'option';
-                    optionDiv.textContent = option;
-                    optionDiv.onclick = function() { selectOption(index); };
-                    optionsContainer.appendChild(optionDiv);
-                });
+                for (var i = 0; i < question.answers.length; i++) {
+                    var answerDiv = document.createElement('div');
+                    answerDiv.className = 'answer';
+                    answerDiv.textContent = question.answers[i];
+                    answerDiv.onclick = function(index) {
+                        return function() { selectAnswer(index); };
+                    }(i);
+                    answersContainer.appendChild(answerDiv);
+                }
                 
                 updateProgress();
-                document.getElementById('next-btn').disabled = true;
+
+                gtag('event', 'question_viewed', {
+                    event_category: 'assessment',
+                    event_label: 'question_' + (currentQuestion + 1)
+                });
             } else {
-                calculateResults();
+                showResults();
             }
         }
 
-        // Select Option
-        function selectOption(index) {
-            var options = document.querySelectorAll('.option');
-            options.forEach(function(option) {
-                option.classList.remove('selected');
-            });
-            options[index].classList.add('selected');
+        function selectAnswer(answerIndex) {
+            assessmentData.answers[currentQuestion] = {
+                question: currentQuestion,
+                answer: answerIndex,
+                timestamp: new Date().toISOString()
+            };
+
+            userAnswers[currentQuestion] = answerIndex;
             
-            userAnswers[currentQuestion] = index;
-            document.getElementById('next-btn').disabled = false;
-        }
-
-        // Next Question
-        function nextQuestion() {
+            gtag('event', 'answer_selected', {
+                event_category: 'assessment',
+                event_label: 'q' + (currentQuestion + 1) + '_a' + (answerIndex + 1)
+            });
+            
             currentQuestion++;
-            showQuestion();
+            setTimeout(showQuestion, 300);
         }
 
-        // Update Progress
         function updateProgress() {
             var progress = (currentQuestion / questions.length) * 100;
-            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-fill').style.width = progress + '%';
         }
 
-        // Calculate Results
-        function calculateResults() {
-            userAnswers.forEach(function(answer) {
-                totalScore += (answer + 1) * 10;
-            });
+        function showResults() {
+            assessmentData.endTime = new Date().toISOString();
+            assessmentData.completed = true;
 
-            var category = getCategory(totalScore);
-            var completionTime = Math.round((Date.now() - startTime) / 1000);
+            // Calculate score
+            var totalScore = 0;
+            for (var i = 0; i < userAnswers.length; i++) {
+                totalScore += (userAnswers[i] + 1) * 10;
+            }
+            
+            assessmentData.totalScore = totalScore;
+            
+            // Determine category
+            var category;
+            if (totalScore >= 280) {
+                category = 'champion_trader';
+            } else if (totalScore >= 200) {
+                category = 'solid_trader';
+            } else if (totalScore >= 120) {
+                category = 'developing_trader';
+            } else {
+                category = 'vulnerable_trader';
+            }
+            
+            assessmentData.category = category;
 
-            // Store in AI Database (in-memory)
-            var sessionData = {
-                timestamp: new Date().toISOString(),
-                answers: userAnswers,
-                totalScore: totalScore,
-                category: category,
-                completionTime: completionTime,
-                emailProvided: false,
-                pdfDownloaded: false
-            };
-            
-            aiDatabase.push(sessionData);
-            
-            // Keep only last 50 sessions
+            // Store data in memory
+            aiDatabase.push(assessmentData);
             if (aiDatabase.length > 50) {
                 aiDatabase = aiDatabase.slice(-50);
             }
 
-            showResults(totalScore, category);
-        }
-
-        // Get Category
-        function getCategory(score) {
-            if (score >= 280) return "CHAMPION TRADER";
-            if (score >= 200) return "SOLID TRADER";
-            if (score >= 120) return "DEVELOPING TRADER";
-            return "VULNERABLE TRADER";
-        }
-
-        // Show Results
-        function showResults(score, category) {
-            document.getElementById('question-screen').style.display = 'none';
-            document.getElementById('results-screen').style.display = 'block';
+            document.getElementById('question-container').classList.remove('active');
+            document.getElementById('results-container').classList.add('active');
             
-            document.getElementById('score-circle').textContent = score;
-            document.getElementById('category-result').textContent = category;
+            var scoreCircle = document.getElementById('score-circle');
+            scoreCircle.textContent = totalScore;
+            scoreCircle.style.background = getScoreColor(totalScore);
             
-            // Track completion in analytics
+            var resultsContent = document.getElementById('results-content');
+            resultsContent.innerHTML = getResultsText(category);
+
             gtag('event', 'assessment_completed', {
-                'event_category': 'engagement',
-                'event_label': 'trading_psychology_assessment',
-                'value': score
+                event_category: 'assessment',
+                event_label: category,
+                value: totalScore
             });
         }
 
-        // Submit Email
+        function getScoreColor(score) {
+            if (score >= 280) return 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+            if (score >= 200) return 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)';
+            if (score >= 120) return 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)';
+            return 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)';
+        }
+
+        function getResultsText(category) {
+            var texts = {
+                champion_trader: '<h3>Champion Trader 🏆</h3><p>You demonstrate excellent emotional control and disciplined trading psychology. You have strong risk management skills and maintain composure under pressure.</p>',
+                solid_trader: '<h3>Solid Trader 💪</h3><p>You have good trading psychology fundamentals with some areas for improvement. You generally maintain discipline but may struggle in high-stress situations.</p>',
+                developing_trader: '<h3>Developing Trader 📈</h3><p>You show promise but need to work on emotional control and discipline. Focus on developing consistent risk management and stress management techniques.</p>',
+                vulnerable_trader: '<h3>Vulnerable Trader ⚠️</h3><p>Your emotions significantly impact your trading decisions. Consider taking a break to focus on psychology training and developing a solid trading plan before risking more capital.</p>'
+            };
+            return texts[category];
+        }
+
         function submitEmail() {
             var email = document.getElementById('email-input').value;
-            if (!email || !email.includes('@')) {
-                alert('Please enter a valid email address');
-                return;
+            if (email && email.includes('@')) {
+                assessmentData.emailProvided = true;
+
+                gtag('event', 'email_signup', {
+                    event_category: 'conversion',
+                    event_label: 'email_captured'
+                });
+
+                alert('Thank you! Your personalized insights will be sent to your email. PDF report is generating...');
+                
+                generatePDF();
+            } else {
+                alert('Please enter a valid email address.');
             }
-            
-            // Track email capture
-            gtag('event', 'email_captured', {
-                'event_category': 'conversion',
-                'event_label': 'trading_psychology_assessment'
-            });
-            
-            // Update AI Database
-            if (aiDatabase.length > 0) {
-                aiDatabase[aiDatabase.length - 1].emailProvided = true;
-                aiDatabase[aiDatabase.length - 1].email = email;
-            }
-            
-            // Generate and download PDF
-            generatePersonalizedReport();
-            
-            alert('Your personalized report is downloading now! Check your downloads folder.');
         }
 
-        // Generate PDF Report
-        function generatePersonalizedReport() {
+        function generatePDF() {
             try {
-                var { jsPDF } = window.jspdf;
+                var jsPDF = window.jspdf.jsPDF;
                 var doc = new jsPDF();
+                var pageWidth = doc.internal.pageSize.getWidth();
+                var pageHeight = doc.internal.pageSize.getHeight();
+                var margin = 20;
+                var yPos = 30;
                 
                 // Helper function for section boxes
                 function drawSectionBox(x, y, w, h, color) {
@@ -498,241 +552,240 @@
                     doc.rect(x, y, w, h, 'F');
                 }
                 
-                // Header
+                // ENHANCED HEADER
                 doc.setFillColor(102, 126, 234);
-                doc.rect(0, 0, 210, 50, 'F');
+                doc.rect(0, 0, pageWidth, 45, 'F');
+                
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(24);
-                doc.text('SCHNITZLEIN CONSULTING', 105, 20, { align: 'center' });
-                doc.setFontSize(18);
-                doc.text('Trading Psychology Report', 105, 30, { align: 'center' });
-                doc.setFontSize(12);
-                doc.text('Discover Your Emotional Trading Weaknesses', 105, 40, { align: 'center' });
+                doc.setFont("helvetica", "bold");
+                doc.text("SCHNITZLEIN CONSULTING", pageWidth/2, 20, { align: 'center' });
                 
-                // Disclaimer
-                var yPos = 60;
+                doc.setFontSize(18);
+                doc.text("Trading Psychology Report", pageWidth/2, 30, { align: 'center' });
+                
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "normal");
+                doc.text("Discover Your Emotional Trading Weaknesses", pageWidth/2, 38, { align: 'center' });
+                
+                // ENHANCED DISCLAIMER
+                yPos = 55;
                 doc.setFillColor(255, 248, 220);
                 doc.setDrawColor(255, 193, 7);
                 doc.setLineWidth(1);
-                doc.rect(15, yPos, 180, 16, 'FD');
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 16, 'FD');
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(10);
-                doc.setFont(undefined, 'bold');
-                doc.text('IMPORTANT:', 20, yPos + 6);
-                doc.setFont(undefined, 'normal');
-                doc.text('Educational analysis of emotional trading patterns - Not financial advice', 45, yPos + 6);
-                doc.text('For investment decisions, consult a licensed financial advisor', 20, yPos + 12);
+                doc.setFont("helvetica", "bold");
+                doc.text("IMPORTANT:", margin + 3, yPos + 6);
+                doc.setFont("helvetica", "normal");
+                doc.text("Educational analysis of emotional trading patterns - Not financial advice", margin + 25, yPos + 6);
+                doc.text("For investment decisions, consult a licensed financial advisor", margin + 3, yPos + 12);
                 
-                // Results Section
-                yPos += 25;
+                // ASSESSMENT RESULTS
+                yPos = 85;
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(16);
-                doc.setFont(undefined, 'bold');
-                doc.text('Your Assessment Results', 20, yPos);
+                doc.setFont("helvetica", "bold");
+                doc.text("Your Assessment Results", margin, yPos);
                 
-                // Score Circle
-                var category = getCategory(totalScore);
-                var circleColor = [52, 152, 219]; // Default blue
-                if (totalScore >= 280) circleColor = [46, 204, 113]; // Green for Champion
-                else if (totalScore >= 200) circleColor = [52, 152, 219]; // Blue for Solid
-                else if (totalScore >= 120) circleColor = [230, 126, 34]; // Orange for Developing
-                else circleColor = [231, 76, 60]; // Red for Vulnerable
+                // VISUAL SCORE CIRCLE
+                var scoreColor = getScoreColorRGB(assessmentData.totalScore);
+                doc.setFillColor(scoreColor.r, scoreColor.g, scoreColor.b);
+                doc.circle(margin + 25, yPos + 25, 20, 'F');
                 
-                doc.setFillColor(circleColor[0], circleColor[1], circleColor[2]);
-                doc.circle(50, yPos + 25, 20, 'F');
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(18);
-                doc.setFont(undefined, 'bold');
-                doc.text(totalScore.toString(), 50, yPos + 30, { align: 'center' });
+                doc.setFont("helvetica", "bold");
+                doc.text(assessmentData.totalScore.toString(), margin + 25, yPos + 30, { align: 'center' });
                 
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(14);
-                doc.text('Overall Score: ' + totalScore + '/320', 80, yPos + 20);
-                doc.text('Category: ' + category, 80, yPos + 30);
+                doc.text("Overall Score: " + assessmentData.totalScore + "/320", margin + 55, yPos + 20);
+                doc.text("Category: " + assessmentData.category.replace('_', ' ').toUpperCase(), margin + 55, yPos + 30);
                 
-                // Strengths section
                 yPos += 50;
-                drawSectionBox(15, yPos, 180, 35, [230, 255, 230]); // Light green
+                
+                // YOUR STRENGTHS (optimized spacing)
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 30, [230, 255, 230]);
                 doc.setTextColor(0, 120, 0);
                 doc.setFontSize(14);
-                doc.setFont(undefined, 'bold');
-                doc.text('Your Strengths', 20, yPos + 10);
+                doc.setFont("helvetica", "bold");
+                doc.text("Your Strengths", margin + 5, yPos + 10);
                 
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
-                var strengthsText = getStrengthsText(category);
+                doc.setFont("helvetica", "normal");
+                
+                var strengthsText = getStrengthsForCategory(assessmentData.category);
                 var strengthsSentences = strengthsText.split('. ');
-                var strengthsY = yPos + 20;
+                var strengthsY = yPos + 18;
+                
                 for (var i = 0; i < strengthsSentences.length; i++) {
                     if (strengthsSentences[i].trim()) {
-                        doc.text(strengthsSentences[i].trim() + (i < strengthsSentences.length - 1 ? '.' : ''), 20, strengthsY);
-                        strengthsY += 5;
+                        var sentence = strengthsSentences[i].trim();
+                        if (i < strengthsSentences.length - 1) sentence += '.';
+                        doc.text(sentence, margin + 5, strengthsY);
+                        strengthsY += 4;
                     }
                 }
                 
-                yPos = strengthsY + 8;
+                yPos = strengthsY + 10;
                 
-                // Improvements section
-                drawSectionBox(15, yPos, 180, 35, [255, 235, 215]); // Light orange
+                // KEY AREAS FOR IMPROVEMENT (optimized spacing)
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 30, [255, 235, 215]);
                 doc.setTextColor(180, 100, 0);
                 doc.setFontSize(14);
-                doc.setFont(undefined, 'bold');
-                doc.text('Key Areas for Improvement', 20, yPos + 10);
+                doc.setFont("helvetica", "bold");
+                doc.text("Key Areas for Improvement", margin + 5, yPos + 10);
                 
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
-                var improvementsText = getImprovementsText(category);
+                doc.setFont("helvetica", "normal");
+                
+                var improvementsText = getImprovementsForCategory(assessmentData.category);
                 var improvementsSentences = improvementsText.split('. ');
-                var improvementsY = yPos + 20;
+                var improvementsY = yPos + 18;
+                
                 for (var i = 0; i < improvementsSentences.length; i++) {
                     if (improvementsSentences[i].trim()) {
-                        doc.text(improvementsSentences[i].trim() + (i < improvementsSentences.length - 1 ? '.' : ''), 20, improvementsY);
-                        improvementsY += 5;
+                        var sentence = improvementsSentences[i].trim();
+                        if (i < improvementsSentences.length - 1) sentence += '.';
+                        doc.text(sentence, margin + 5, improvementsY);
+                        improvementsY += 4;
                     }
                 }
                 
                 yPos = improvementsY + 10;
                 
-                // Action Plan section
-                drawSectionBox(15, yPos, 180, 45, [230, 240, 255]); // Light blue
+                // CHECK FOR NEW PAGE
+                if (yPos > 200) {
+                    doc.addPage();
+                    yPos = 30;
+                }
+                
+                // PERSONALIZED ACTION PLAN (compact formatting)
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [230, 240, 255]);
                 doc.setTextColor(0, 100, 200);
                 doc.setFontSize(14);
-                doc.setFont(undefined, 'bold');
-                doc.text('Personalized Action Plan', 20, yPos + 10);
+                doc.setFont("helvetica", "bold");
+                doc.text("Personalized Action Plan", margin + 5, yPos + 10);
                 
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
-                var actionPlan = getActionPlan(category);
-                var actionY = yPos + 20;
-                for (var i = 0; i < actionPlan.length; i++) {
-                    doc.text((i + 1) + '. ' + actionPlan[i], 20, actionY);
-                    actionY += 5;
+                doc.setFont("helvetica", "normal");
+                
+                var actionPlan = getActionPlanForCategory(assessmentData.category);
+                var actionItems = actionPlan.split('\n');
+                var actionY = yPos + 18;
+                
+                for (var i = 0; i < actionItems.length; i++) {
+                    if (actionItems[i].trim()) {
+                        doc.text(actionItems[i].trim(), margin + 5, actionY);
+                        actionY += 4;
+                    }
                 }
                 
-                yPos = actionY + 8;
+                yPos = actionY + 10;
                 
-                // Expert Insights Box
+                // CHECK FOR NEW PAGE
+                if (yPos > pageHeight - 60) {
+                    doc.addPage();
+                    yPos = 30;
+                }
+                
+                // EXPERT INSIGHT BOX (ensure it fits)
                 doc.setDrawColor(0, 100, 200);
                 doc.setLineWidth(1);
-                doc.rect(15, yPos, 180, 30);
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 35);
                 doc.setFillColor(245, 248, 255);
-                doc.rect(15, yPos, 180, 30, 'F');
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 35, 'F');
                 doc.setDrawColor(0, 100, 200);
-                doc.rect(15, yPos, 180, 30);
+                doc.rect(margin, yPos, pageWidth - 2 * margin, 35);
                 
                 doc.setTextColor(0, 100, 200);
                 doc.setFontSize(12);
-                doc.setFont(undefined, 'bold');
-                doc.text('Expert Insight', 20, yPos + 10);
+                doc.setFont("helvetica", "bold");
+                doc.text("Expert Insight", margin + 5, yPos + 12);
                 
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(9);
-                doc.setFont(undefined, 'normal');
-                doc.text('Based on 10+ years of market experience', 20, yPos + 16);
-                doc.text('This analysis reflects common patterns seen in', 20, yPos + 21);
-                doc.text('successful traders who have overcome similar', 20, yPos + 25);
-                doc.text('psychological challenges.', 20, yPos + 29);
+                doc.setFont("helvetica", "normal");
+                doc.text("Based on 10+ years of market experience", margin + 5, yPos + 20);
+                doc.text("This analysis reflects common patterns seen in", margin + 5, yPos + 26);
+                doc.text("successful traders who have overcome similar", margin + 5, yPos + 30);
+                doc.text("psychological challenges.", margin + 5, yPos + 34);
                 
-                // Footer
+                // FOOTER
                 doc.setTextColor(100, 100, 100);
                 doc.setFontSize(8);
-                doc.text('© 2025 Schnitzlein Consulting - Trading Psychology Assessment', 105, 285, { align: 'center' });
+                doc.text("© 2025 Schnitzlein Consulting - Trading Psychology Assessment", pageWidth/2, pageHeight - 10, { align: 'center' });
                 
-                // Update AI Database with PDF download
-                if (aiDatabase.length > 0) {
-                    aiDatabase[aiDatabase.length - 1].pdfDownloaded = true;
-                }
+                // Download
+                doc.save("Trading_Psychology_Report_" + Date.now() + ".pdf");
                 
-                // Track PDF download
-                gtag('event', 'pdf_downloaded', {
-                    'event_category': 'conversion',
-                    'event_label': 'trading_psychology_report',
-                    'value': totalScore
+                assessmentData.pdfDownloaded = true;
+                
+                gtag('event', 'pdf_download', {
+                    event_category: 'conversion',
+                    event_label: 'report_downloaded'
                 });
-                
-                // Download PDF
-                doc.save('Trading_Psychology_Report_Schnitzlein_Consulting.pdf');
                 
             } catch (error) {
                 console.error('PDF generation failed:', error);
-                alert('PDF generation failed. Please try again.');
+                alert('PDF generation failed, but your results have been saved.');
             }
         }
 
-        // Get category-specific content
-        function getStrengthsText(category) {
-            switch(category) {
-                case "CHAMPION TRADER":
-                    return "You demonstrate exceptional emotional control and mental resilience in your trading approach. Your discipline in following predetermined strategies is exemplary and serves as a model for other traders. You maintain composure even during challenging market conditions and have developed sophisticated psychological frameworks for decision-making.";
-                case "SOLID TRADER":
-                    return "You have developed good foundational trading psychology skills and generally maintain composure during normal market conditions. Your approach to risk management is sound and you typically stick to your predetermined strategies. You show good self-awareness about your emotional triggers.";
-                case "DEVELOPING TRADER":
-                    return "You recognize the importance of trading psychology and are working to improve your emotional control. You have periods of good discipline but still struggle with consistency. Your awareness of psychological factors puts you ahead of many traders at your level.";
-                default:
-                    return "You show motivation to improve your trading psychology, which is an excellent first step. You demonstrate self-awareness about emotional challenges in trading. Your willingness to take this assessment shows commitment to developing better trading habits.";
-            }
+        function getScoreColorRGB(score) {
+            if (score >= 280) return {r: 76, g: 175, b: 80}; // Green
+            if (score >= 200) return {r: 33, g: 150, b: 243}; // Blue
+            if (score >= 120) return {r: 255, g: 152, b: 0}; // Orange
+            return {r: 244, g: 67, b: 54}; // Red
         }
 
-        function getImprovementsText(category) {
-            switch(category) {
-                case "CHAMPION TRADER":
-                    return "Focus on advanced risk management techniques and consider mentoring other traders. Explore sophisticated position sizing strategies and develop systems for extremely volatile market conditions. Consider documenting your psychological frameworks for future reference.";
-                case "SOLID TRADER":
-                    return "Work on maintaining discipline during high-stress market conditions and consecutive losses. Develop better recovery strategies after emotional trading episodes. Consider implementing additional safeguards during volatile market periods.";
-                case "DEVELOPING TRADER":
-                    return "Establish more consistent pre-trading routines and develop better emotional awareness during trades. Work on reducing impulsive decision-making and strengthen your adherence to predetermined exit strategies. Focus on building systematic approaches to handle losses.";
-                default:
-                    return "Consider taking a break from active trading to focus on education and psychological preparation. Develop strict position sizing rules and practice with paper trading. Work with a mentor or trading psychology coach to address fundamental emotional challenges.";
-            }
+        function getStrengthsForCategory(category) {
+            var strengths = {
+                champion_trader: "You demonstrate exceptional emotional control and maintain discipline even during market volatility. Your risk management approach is consistent and you rarely let emotions override your trading plan. You have developed strong mental resilience and can handle both winning and losing streaks professionally.",
+                solid_trader: "You have developed good foundational trading psychology skills and generally maintain composure during normal market conditions. Your approach to risk management is sound and you typically stick to your predetermined strategies. You show good self-awareness about your emotional triggers.",
+                developing_trader: "You recognize the importance of trading psychology and are working to improve your emotional control. You have periods of good discipline but still struggle with consistency. Your awareness of psychological factors puts you ahead of many traders at your level.",
+                vulnerable_trader: "You have the motivation to improve your trading psychology, which is the first crucial step. Your honesty in the assessment shows good self-awareness about areas that need work. This recognition is essential for developing better trading habits."
+            };
+            return strengths[category] || strengths.developing_trader;
         }
 
-        function getActionPlan(category) {
-            switch(category) {
-                case "CHAMPION TRADER":
-                    return [
-                        "Develop advanced position sizing algorithms",
-                        "Create systems for extreme market volatility",
-                        "Document your trading psychology framework",
-                        "Consider mentoring developing traders",
-                        "Explore institutional-level risk management"
-                    ];
-                case "SOLID TRADER":
-                    return [
-                        "Implement a daily pre-trading mental checklist",
-                        "Set up automated stop-losses to reduce emotional decisions",
-                        "Keep a detailed trading journal focusing on emotional states",
-                        "Practice stress-reduction techniques",
-                        "Review and adjust your trading plan quarterly"
-                    ];
-                case "DEVELOPING TRADER":
-                    return [
-                        "Start each day with a written trading plan",
-                        "Use smaller position sizes while building discipline",
-                        "Set maximum daily loss limits",
-                        "Practice mindfulness techniques",
-                        "Join a trading psychology support group"
-                    ];
-                default:
-                    return [
-                        "Take a 30-day break from live trading",
-                        "Complete a comprehensive trading education course",
-                        "Practice with paper trading for 3 months",
-                        "Work with a trading psychology coach",
-                        "Develop a strict risk management system"
-                    ];
-            }
+        function getImprovementsForCategory(category) {
+            var improvements = {
+                champion_trader: "Continue to refine your edge case management and consider mentoring other traders. Focus on scaling your successful approaches while maintaining your current discipline levels. Consider advanced risk management techniques for larger position sizes.",
+                solid_trader: "Work on maintaining discipline during high-stress market conditions and consecutive losses. Develop better recovery strategies after emotional trading episodes. Consider implementing additional safeguards during volatile market periods.",
+                developing_trader: "Focus on building consistent pre-trading routines and stick to predetermined position sizing rules. Develop better emotional awareness techniques and implement cooling-off periods after losses. Practice stress management techniques during trading hours.",
+                vulnerable_trader: "Implement strict position sizing rules and never trade when emotionally compromised. Consider taking a break to focus on education and paper trading. Develop a comprehensive trading plan with clear rules for entry, exit, and risk management."
+            };
+            return improvements[category] || improvements.developing_trader;
         }
 
-        // AI Database Console Functions
-        function exportAssessmentData() {
-            console.log('Assessment Data Export:', aiDatabase);
+        function getActionPlanForCategory(category) {
+            var actionPlans = {
+                champion_trader: "1. Document your successful strategies for future reference\n2. Consider advanced risk management courses\n3. Explore mentoring opportunities\n4. Test new strategies with small position sizes\n5. Maintain regular performance reviews",
+                solid_trader: "1. Implement a daily pre-trading mental checklist\n2. Set up automated stop-losses to reduce emotional decisions\n3. Keep a detailed trading journal focusing on emotional states\n4. Practice stress-reduction techniques\n5. Review and adjust your trading plan quarterly",
+                developing_trader: "1. Start each day with a clear trading plan and stick to it\n2. Use position sizing calculator to maintain consistency\n3. Implement mandatory cooling-off periods after losses\n4. Join a trading psychology course or support group\n5. Practice mindfulness and emotional awareness exercises",
+                vulnerable_trader: "1. Reduce position sizes to amounts that don't cause stress\n2. Take a 2-week break to focus on education\n3. Practice with paper trading only for the next month\n4. Read 'Trading in the Zone' by Mark Douglas\n5. Consider working with a trading psychology coach"
+            };
+            return actionPlans[category] || actionPlans.developing_trader;
+        }
+
+        // Admin functions
+        window.exportAssessmentData = function() {
+            console.log('Trading Psychology Data:', aiDatabase);
             return aiDatabase;
-        }
+        };
 
-        function getAIInsights() {
+        window.clearAllData = function() {
+            aiDatabase = [];
+            console.log('All data cleared');
+        };
+
+        window.getAIInsights = function() {
             if (aiDatabase.length === 0) {
                 console.log('No assessment data available yet.');
                 return;
@@ -742,7 +795,7 @@
                 totalSessions: aiDatabase.length,
                 averageScore: aiDatabase.reduce(function(sum, session) { return sum + session.totalScore; }, 0) / aiDatabase.length,
                 categoryDistribution: {},
-                averageCompletionTime: aiDatabase.reduce(function(sum, session) { return sum + session.completionTime; }, 0) / aiDatabase.length,
+                averageCompletionTime: 0,
                 emailCaptureRate: (aiDatabase.filter(function(session) { return session.emailProvided; }).length / aiDatabase.length) * 100,
                 pdfDownloadRate: (aiDatabase.filter(function(session) { return session.pdfDownloaded; }).length / aiDatabase.length) * 100
             };
@@ -753,17 +806,7 @@
 
             console.log('AI Insights:', insights);
             return insights;
-        }
-
-        function clearAllData() {
-            aiDatabase = [];
-            console.log('All assessment data cleared (session data reset)');
-        }
-
-        // Make functions available globally
-        window.exportAssessmentData = exportAssessmentData;
-        window.getAIInsights = getAIInsights;
-        window.clearAllData = clearAllData;
+        };
     </script>
 </body>
 </html>
