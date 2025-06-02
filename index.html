@@ -583,7 +583,7 @@
                 doc.text("For investment decisions, consult a licensed financial advisor", margin + 3, yPos + 12);
                 
                 // ASSESSMENT RESULTS
-                yPos = 85;
+                yPos = 80; // Reduced spacing after disclaimer
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(16);
                 doc.setFont("helvetica", "bold");
@@ -604,10 +604,10 @@
                 doc.text("Overall Score: " + assessmentData.totalScore + "/320", margin + 55, yPos + 20);
                 doc.text("Category: " + assessmentData.category.replace('_', ' ').toUpperCase(), margin + 55, yPos + 30);
                 
-                yPos += 50;
+                yPos += 40; // Reduced spacing after score circle
                 
-                // YOUR STRENGTHS (optimized spacing)
-                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 30, [230, 255, 230]);
+                // YOUR STRENGTHS (dynamic height)
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [230, 255, 230]); // Increased height
                 doc.setTextColor(0, 120, 0);
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
@@ -625,15 +625,20 @@
                     if (strengthsSentences[i].trim()) {
                         var sentence = strengthsSentences[i].trim();
                         if (i < strengthsSentences.length - 1) sentence += '.';
-                        doc.text(sentence, margin + 5, strengthsY);
-                        strengthsY += 4.5; // Better line spacing for readability
+                        
+                        // Use splitTextToSize for proper text wrapping
+                        var wrappedLines = doc.splitTextToSize(sentence, pageWidth - 2 * margin - 15);
+                        for (var j = 0; j < wrappedLines.length; j++) {
+                            doc.text(wrappedLines[j], margin + 5, strengthsY);
+                            strengthsY += 5; // Line spacing for wrapped text
+                        }
                     }
                 }
                 
-                yPos = strengthsY + 6; // Reduced section spacing
+                yPos = strengthsY + 3; // Minimal section spacing
                 
-                // KEY AREAS FOR IMPROVEMENT (optimized spacing)
-                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 30, [255, 235, 215]);
+                // KEY AREAS FOR IMPROVEMENT (dynamic height)
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [255, 235, 215]); // Increased height
                 doc.setTextColor(180, 100, 0);
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
@@ -651,12 +656,17 @@
                     if (improvementsSentences[i].trim()) {
                         var sentence = improvementsSentences[i].trim();
                         if (i < improvementsSentences.length - 1) sentence += '.';
-                        doc.text(sentence, margin + 5, improvementsY);
-                        improvementsY += 4.5; // Better line spacing for readability
+                        
+                        // Use splitTextToSize for proper text wrapping
+                        var wrappedLines = doc.splitTextToSize(sentence, pageWidth - 2 * margin - 15);
+                        for (var j = 0; j < wrappedLines.length; j++) {
+                            doc.text(wrappedLines[j], margin + 5, improvementsY);
+                            improvementsY += 5; // Line spacing for wrapped text
+                        }
                     }
                 }
                 
-                yPos = improvementsY + 6; // Reduced section spacing
+                yPos = improvementsY + 3; // Minimal section spacing
                 
                 // CHECK FOR NEW PAGE
                 if (yPos > 200) {
@@ -664,8 +674,8 @@
                     yPos = 30;
                 }
                 
-                // PERSONALIZED ACTION PLAN (compact formatting)
-                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [230, 240, 255]);
+                // PERSONALIZED ACTION PLAN (dynamic height)
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 50, [230, 240, 255]); // Increased height
                 doc.setTextColor(0, 100, 200);
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
@@ -681,12 +691,16 @@
                 
                 for (var i = 0; i < actionItems.length; i++) {
                     if (actionItems[i].trim()) {
-                        doc.text(actionItems[i].trim(), margin + 5, actionY);
-                        actionY += 4.5; // Better line spacing for readability
+                        // Use splitTextToSize for proper text wrapping
+                        var wrappedLines = doc.splitTextToSize(actionItems[i].trim(), pageWidth - 2 * margin - 15);
+                        for (var j = 0; j < wrappedLines.length; j++) {
+                            doc.text(wrappedLines[j], margin + 5, actionY);
+                            actionY += 5; // Line spacing for wrapped text
+                        }
                     }
                 }
                 
-                yPos = actionY + 6; // Reduced section spacing
+                yPos = actionY + 3; // Minimal section spacing
                 
                 // CHECK FOR NEW PAGE
                 if (yPos > pageHeight - 60) {
