@@ -626,7 +626,7 @@
                 
                 yPos += 65;
                 
-                // YOUR STRENGTHS (clean formatting)
+                // YOUR STRENGTHS (better line formatting)
                 doc.setFillColor(240, 253, 244);
                 doc.rect(margin, yPos, pageWidth - 2 * margin, 12, 'F');
                 
@@ -639,12 +639,22 @@
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "normal");
                 doc.setTextColor(51, 51, 51);
-                var strengths = getStrengthsForCategory(assessmentData.category);
-                var strengthLines = doc.splitTextToSize(strengths, pageWidth - 2 * margin - 10);
-                for (var i = 0; i < strengthLines.length; i++) {
-                    doc.text(strengthLines[i], margin + 5, yPos + (i * 5));
+                
+                // Split strengths into separate lines
+                var strengthsText = getStrengthsForCategory(assessmentData.category);
+                var strengthSentences = strengthsText.split('. ');
+                for (var i = 0; i < strengthSentences.length; i++) {
+                    if (strengthSentences[i].trim()) {
+                        var sentence = strengthSentences[i].trim();
+                        if (i < strengthSentences.length - 1) sentence += '.';
+                        var sentenceLines = doc.splitTextToSize(sentence, pageWidth - 2 * margin - 10);
+                        for (var j = 0; j < sentenceLines.length; j++) {
+                            doc.text(sentenceLines[j], margin + 5, yPos + (j * 5));
+                        }
+                        yPos += sentenceLines.length * 5 + 3;
+                    }
                 }
-                yPos += strengthLines.length * 5 + 20;
+                yPos += 12; // Reduced spacing
                 
                 // Check for new page
                 if (yPos > 200) {
@@ -652,7 +662,7 @@
                     yPos = 30;
                 }
                 
-                // KEY AREAS FOR IMPROVEMENT (clean formatting)
+                // KEY AREAS FOR IMPROVEMENT (better line formatting)
                 doc.setFillColor(255, 243, 224);
                 doc.rect(margin, yPos, pageWidth - 2 * margin, 12, 'F');
                 
@@ -665,12 +675,22 @@
                 doc.setFontSize(10);
                 doc.setFont("helvetica", "normal");
                 doc.setTextColor(51, 51, 51);
-                var improvements = getImprovementsForCategory(assessmentData.category);
-                var improvementLines = doc.splitTextToSize(improvements, pageWidth - 2 * margin - 10);
-                for (var i = 0; i < improvementLines.length; i++) {
-                    doc.text(improvementLines[i], margin + 5, yPos + (i * 5));
+                
+                // Split improvements into separate lines
+                var improvementsText = getImprovementsForCategory(assessmentData.category);
+                var improvementSentences = improvementsText.split('. ');
+                for (var i = 0; i < improvementSentences.length; i++) {
+                    if (improvementSentences[i].trim()) {
+                        var sentence = improvementSentences[i].trim();
+                        if (i < improvementSentences.length - 1) sentence += '.';
+                        var sentenceLines = doc.splitTextToSize(sentence, pageWidth - 2 * margin - 10);
+                        for (var j = 0; j < sentenceLines.length; j++) {
+                            doc.text(sentenceLines[j], margin + 5, yPos + (j * 5));
+                        }
+                        yPos += sentenceLines.length * 5 + 3;
+                    }
                 }
-                yPos += improvementLines.length * 5 + 20;
+                yPos += 15;
                 
                 // Check for new page
                 if (yPos > 180) {
