@@ -537,6 +537,115 @@
         let userAnalysis = null;
         const totalQuestions = 8;
         
+        // AI Database Foundation - Data Structure
+        let assessmentSession = {
+            sessionId: generateSessionId(),
+            timestamp: new Date().toISOString(),
+            userId: generateAnonymousUserId(),
+            startTime: null,
+            endTime: null,
+            answers: {},
+            questionTimings: {},
+            scores: {
+                total: 0,
+                emotional: 0,
+                risk: 0,
+                discipline: 0,
+                decision: 0
+            },
+            category: "",
+            email_provided: false,
+            pdf_downloaded: false,
+            userAgent: navigator.userAgent,
+            referrer: document.referrer,
+            completionRate: 0
+        };
+        
+        // Generate unique session ID
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        // Generate anonymous user ID (DSGVO-compliant)
+        function generateAnonymousUserId() {
+            let userId = localStorage.getItem('trading_psych_user_id');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('trading_psych_user_id', userId);
+            }
+            return userId;
+        }
+        
+        // Save assessment data (client-side only)
+        function saveAssessmentData() {
+            try {
+                let assessmentHistory = JSON.parse(localStorage.getItem('assessment_history') || '[]');
+                assessmentHistory.push(assessmentSession);
+                
+                // Keep only last 50 sessions for privacy
+                if (assessmentHistory.length > 50) {
+                    assessmentHistory = assessmentHistory.slice(-50);
+                }
+                
+                localStorage.setItem('assessment_history', JSON.stringify(assessmentHistory));
+                
+                // Track successful data save
+                gtag('event', 'data_saved', {
+                    'event_category': 'ai_database',
+                    'event_label': 'assessment_session_saved'
+                });
+            } catch (error) {
+                console.log('Data save failed:', error);
+            }
+        }
+        
+        // Get AI insights from collected data
+        function getAIInsights() {
+            try {
+                let assessmentHistory = JSON.parse(localStorage.getItem('assessment_history') || '[]');
+                
+                if (assessmentHistory.length < 2) return null;
+                
+                // Basic AI pattern recognition
+                let insights = {
+                    totalSessions: assessmentHistory.length,
+                    averageScore: assessmentHistory.reduce((sum, session) => sum + session.scores.total, 0) / assessmentHistory.length,
+                    mostCommonCategory: getMostFrequentCategory(assessmentHistory),
+                    improvementTrend: calculateImprovementTrend(assessmentHistory),
+                    averageCompletionTime: calculateAverageCompletionTime(assessmentHistory)
+                };
+                
+                return insights;
+            } catch (error) {
+                return null;
+            }
+        }
+        
+        function getMostFrequentCategory(sessions) {
+            let categories = {};
+            sessions.forEach(session => {
+                categories[session.category] = (categories[session.category] || 0) + 1;
+            });
+            return Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b, '');
+        }
+        
+        function calculateImprovementTrend(sessions) {
+            if (sessions.length < 3) return 0;
+            let recent = sessions.slice(-3).map(s => s.scores.total);
+            return recent[recent.length - 1] - recent[0];
+        }
+        
+        function calculateAverageCompletionTime(sessions) {
+            let completedSessions = sessions.filter(s => s.endTime && s.startTime);
+            if (completedSessions.length === 0) return 0;
+            
+            let totalTime = completedSessions.reduce((sum, session) => {
+                return sum + (new Date(session.endTime) - new Date(session.startTime));
+            }, 0);
+            
+            return Math.round(totalTime / completedSessions.length / 1000); // seconds
+        }
+        
         function startAssessment() {
             // Track assessment start
             gtag('event', 'assessment_started', {
@@ -549,6 +658,10 @@
                 'event_category': 'compliance',
                 'event_label': 'educational_not_financial_advice'
             });
+            
+            // Initialize AI database session
+            assessmentSession.startTime = new Date().toISOString();
+            assessmentSession.timestamp = new Date().toISOString();
             
             document.querySelector('.intro').style.display = 'none';
             document.querySelector('.progress-bar').style.display = 'block';
@@ -566,6 +679,14 @@
                 'value': questionNum
             });
             
+            // AI Database: Track question timing
+            if (!assessmentSession.questionTimings[questionNum]) {
+                assessmentSession.questionTimings[questionNum] = {
+                    startTime: Date.now(),
+                    answered: false
+                };
+            }
+            
             // Hide all questions
             document.querySelectorAll('.question-container').forEach(q => {
                 q.classList.remove('active');
@@ -582,6 +703,20 @@
                 'event_label': `question_${questionNum}_answer_${answerValue}`,
                 'value': answerValue
             });
+            
+            // AI Database: Store answer and timing
+            assessmentSession.answers[questionNum] = answerValue;
+            if (!assessmentSession.questionTimings[questionNum]) {
+                assessmentSession.questionTimings[questionNum] = {
+                    startTime: Date.now(),
+                    answered: false
+                };
+            }
+            assessmentSession.questionTimings[questionNum].endTime = Date.now();
+            assessmentSession.questionTimings[questionNum].answered = true;
+            assessmentSession.questionTimings[questionNum].duration = 
+                assessmentSession.questionTimings[questionNum].endTime - 
+                assessmentSession.questionTimings[questionNum].startTime;
             
             // Remove selection from other options
             element.parentElement.querySelectorAll('.option').forEach(opt => {
@@ -808,6 +943,21 @@
             // Track assessment completion
             userScore = calculateScore();
             userAnalysis = getDetailedAnalysis(userScore);
+            
+            // AI Database: Complete session data
+            assessmentSession.endTime = new Date().toISOString();
+            assessmentSession.scores = {
+                total: userScore,
+                emotional: userAnalysis.emotionalControl,
+                risk: userAnalysis.riskManagement,
+                discipline: userAnalysis.discipline,
+                decision: userAnalysis.decisionMaking
+            };
+            assessmentSession.category = userAnalysis.title.toLowerCase().replace(/\s+/g, '_');
+            assessmentSession.completionRate = 100;
+            
+            // Save to local database
+            saveAssessmentData();
             
             gtag('event', 'assessment_completed', {
                 'event_category': 'engagement',
@@ -1097,10 +1247,60 @@
             const fileName = `Trading-Psychology-Report-${userName}-Score-${userScore}.pdf`;
             doc.save(fileName);
             
+            // AI Database: Mark PDF downloaded
+            assessmentSession.pdf_downloaded = true;
+            saveAssessmentData();
+            
             // Show success message (no need to call submitEmail again if called from submitEmail)
             if (!fromEmailSubmit) {
                 alert(`🎉 Your personalized report has been downloaded!\n\nScore: ${userScore}/100\nReport: ${fileName}\n\nCheck your Downloads folder.`);
             }
+        }
+        
+        // ADMIN FUNCTION: Export all assessment data for analysis
+        function exportAssessmentData() {
+            try {
+                let assessmentHistory = JSON.parse(localStorage.getItem('assessment_history') || '[]');
+                let insights = getAIInsights();
+                
+                let exportData = {
+                    exportDate: new Date().toISOString(),
+                    totalSessions: assessmentHistory.length,
+                    insights: insights,
+                    sessions: assessmentHistory
+                };
+                
+                // Create download
+                let dataStr = JSON.stringify(exportData, null, 2);
+                let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                let exportFileDefaultName = `trading-psychology-data-${new Date().toISOString().split('T')[0]}.json`;
+                
+                let linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                console.log('AI Insights:', insights);
+                
+            } catch (error) {
+                console.log('Export failed:', error);
+            }
+        }
+        
+        // ADMIN FUNCTION: Clear all data (for DSGVO compliance)
+        function clearAllData() {
+            if (confirm('Are you sure you want to delete all assessment data? This cannot be undone.')) {
+                localStorage.removeItem('assessment_history');
+                localStorage.removeItem('trading_psych_user_id');
+                alert('All data has been cleared.');
+            }
+        }
+        
+        // Console commands for admin (type in browser console):
+        // exportAssessmentData() - Export all data
+        // clearAllData() - Clear all data
+        // getAIInsights() - Get current AI insights
         }
         
         function submitEmail() {
@@ -1111,6 +1311,10 @@
                     'event_category': 'conversion',
                     'event_label': 'newsletter_signup'
                 });
+                
+                // AI Database: Mark email provided
+                assessmentSession.email_provided = true;
+                saveAssessmentData();
                 
                 // Auto-start PDF download
                 generatePersonalizedReport(true);
