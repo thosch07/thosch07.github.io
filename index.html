@@ -593,14 +593,15 @@
                 });
 
                 alert('Your personalized report is downloading now! Check your email for advanced strategies.');
-                generatePersonalizedReport(email, true);
+                
+                // AUTO-START PDF DOWNLOAD
+                generatePersonalizedReport(email);
             } else {
                 alert('Please enter a valid email address.');
             }
         }
 
-        function generatePersonalizedReport(email, autoDownload = false) {
-            // This would generate the PDF - keeping existing PDF functionality
+        function generatePersonalizedReport(email) {
             // Mark in AI data that PDF was downloaded
             assessmentData.pdfDownloaded = true;
             storeAssessmentData();
@@ -611,8 +612,170 @@
                 event_label: 'report_downloaded'
             });
 
-            // PDF generation code would go here...
-            console.log('PDF Report generated for', email);
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const pageWidth = doc.internal.pageSize.getWidth();
+                const pageHeight = doc.internal.pageSize.getHeight();
+                const margin = 20;
+                let yPosition = 30;
+
+                // HEADER WITH BRANDING
+                doc.setFillColor(102, 126, 234);
+                doc.rect(0, 0, pageWidth, 35, 'F');
+                
+                // Logo/Brand - top right
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text("SCHNITZLEIN CONSULTING", pageWidth - 80, 15);
+
+                // Main title
+                doc.setFontSize(24);
+                doc.setFont("helvetica", "bold");
+                doc.text("Trading Psychology Report", margin, 25);
+
+                // Reset text color
+                doc.setTextColor(0, 0, 0);
+                yPosition = 50;
+
+                // COMPLIANCE DISCLAIMER
+                doc.setFillColor(255, 255, 200);
+                doc.rect(margin, yPosition - 5, pageWidth - 2 * margin, 15, 'F');
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.text("IMPORTANT: Educational analysis of emotional trading patterns - Not financial advice", margin + 5, yPosition + 5);
+                yPosition += 25;
+
+                // ASSESSMENT RESULTS
+                doc.setFontSize(18);
+                doc.setFont("helvetica", "bold");
+                doc.text("Your Assessment Results", margin, yPosition);
+                yPosition += 15;
+
+                // Score display
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Overall Score: ${assessmentData.totalScore}/320`, margin, yPosition);
+                doc.text(`Category: ${assessmentData.category.replace('_', ' ').toUpperCase()}`, margin, yPosition + 10);
+                yPosition += 30;
+
+                // PERSONALIZED INSIGHTS based on category
+                doc.setFontSize(16);
+                doc.setFont("helvetica", "bold");
+                doc.text("Your Strengths", margin, yPosition);
+                yPosition += 10;
+
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "normal");
+                const strengths = getStrengthsText(assessmentData.category);
+                const strengthsLines = doc.splitTextToSize(strengths, pageWidth - 2 * margin);
+                doc.text(strengthsLines, margin, yPosition);
+                yPosition += strengthsLines.length * 6 + 15;
+
+                // Check if we need a new page
+                if (yPosition > 200) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+
+                // KEY AREAS FOR IMPROVEMENT
+                doc.setFontSize(16);
+                doc.setFont("helvetica", "bold");
+                doc.text("Key Areas for Improvement", margin, yPosition);
+                yPosition += 10;
+
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "normal");
+                const improvements = getImprovementsText(assessmentData.category);
+                const improvementLines = doc.splitTextToSize(improvements, pageWidth - 2 * margin);
+                doc.text(improvementLines, margin, yPosition);
+                yPosition += improvementLines.length * 6 + 15;
+
+                // Check if we need a new page for action plan
+                if (yPosition > 180) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+
+                // ACTION PLAN
+                doc.setFontSize(16);
+                doc.setFont("helvetica", "bold");
+                doc.text("Personalized Action Plan", margin, yPosition);
+                yPosition += 10;
+
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "normal");
+                const actionPlan = getActionPlanText(assessmentData.category);
+                const actionLines = doc.splitTextToSize(actionPlan, pageWidth - 2 * margin);
+                doc.text(actionLines, margin, yPosition);
+                yPosition += actionLines.length * 6 + 15;
+
+                // Check if we need a new page for expert insights
+                if (yPosition > 200) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+
+                // EXPERT INSIGHTS BOX
+                doc.setFillColor(240, 240, 240);
+                doc.rect(margin, yPosition, pageWidth - 2 * margin, 45, 'F');
+                
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text("Expert Insight", margin + 5, yPosition + 12);
+                
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.text("Based on 10+ years of market experience", margin + 5, yPosition + 22);
+                doc.text("This analysis reflects common patterns seen in", margin + 5, yPosition + 30);
+                doc.text("successful traders who've overcome similar challenges.", margin + 5, yPosition + 38);
+
+                // FOOTER
+                doc.setFontSize(8);
+                doc.setTextColor(128, 128, 128);
+                doc.text("© 2025 Schnitzlein Consulting - Trading Psychology Assessment", margin, pageHeight - 10);
+
+                // GENERATE AND DOWNLOAD
+                const reportFileName = `Trading_Psychology_Report_${Date.now()}.pdf`;
+                doc.save(reportFileName);
+
+                console.log('PDF Report successfully generated and downloaded!');
+
+            } catch (error) {
+                console.error('PDF generation failed:', error);
+                alert('PDF generation failed. Please try again.');
+            }
+        }
+
+        function getStrengthsText(category) {
+            const texts = {
+                champion_trader: "You demonstrate exceptional emotional control and maintain discipline even during market volatility. Your risk management approach is consistent and you rarely let emotions override your trading plan. You have developed strong mental resilience and can handle both winning and losing streaks professionally.",
+                solid_trader: "You have developed good foundational trading psychology skills and generally maintain composure during normal market conditions. Your approach to risk management is sound and you typically stick to your predetermined strategies. You show good self-awareness about your emotional triggers.",
+                developing_trader: "You recognize the importance of trading psychology and are working to improve your emotional control. You have periods of good discipline but still struggle with consistency. Your awareness of psychological factors puts you ahead of many traders at your level.",
+                vulnerable_trader: "You have the motivation to improve your trading psychology, which is the first crucial step. Your honesty in the assessment shows good self-awareness about areas that need work. This recognition is essential for developing better trading habits."
+            };
+            return texts[category] || texts.developing_trader;
+        }
+
+        function getImprovementsText(category) {
+            const texts = {
+                champion_trader: "Continue to refine your edge case management and consider mentoring other traders. Focus on scaling your successful approaches while maintaining your current discipline levels. Consider advanced risk management techniques for larger position sizes.",
+                solid_trader: "Work on maintaining discipline during high-stress market conditions and consecutive losses. Develop better recovery strategies after emotional trading episodes. Consider implementing additional safeguards during volatile market periods.",
+                developing_trader: "Focus on building consistent pre-trading routines and stick to predetermined position sizing rules. Develop better emotional awareness techniques and implement cooling-off periods after losses. Practice stress management techniques during trading hours.",
+                vulnerable_trader: "Implement strict position sizing rules and never trade when emotionally compromised. Consider taking a break to focus on education and paper trading. Develop a comprehensive trading plan with clear rules for entry, exit, and risk management."
+            };
+            return texts[category] || texts.developing_trader;
+        }
+
+        function getActionPlanText(category) {
+            const texts = {
+                champion_trader: "1. Document your successful strategies for future reference\n2. Consider advanced risk management courses\n3. Explore mentoring opportunities\n4. Test new strategies with small position sizes\n5. Maintain regular performance reviews",
+                solid_trader: "1. Implement a daily pre-trading mental checklist\n2. Set up automated stop-losses to reduce emotional decisions\n3. Keep a detailed trading journal focusing on emotional states\n4. Practice stress-reduction techniques\n5. Review and adjust your trading plan quarterly",
+                developing_trader: "1. Start each day with a clear trading plan and stick to it\n2. Use position sizing calculator to maintain consistency\n3. Implement mandatory cooling-off periods after losses\n4. Join a trading psychology course or support group\n5. Practice mindfulness and emotional awareness exercises",
+                vulnerable_trader: "1. Reduce position sizes to amounts that don't cause stress\n2. Take a 2-week break to focus on education\n3. Practice with paper trading only for the next month\n4. Read 'Trading in the Zone' by Mark Douglas\n5. Consider working with a trading psychology coach"
+            };
+            return texts[category] || texts.developing_trader;
         }
 
         // Global functions for console access
