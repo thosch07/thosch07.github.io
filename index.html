@@ -142,6 +142,7 @@
             height: 100%;
             border-radius: 10px;
             transition: width 0.3s ease;
+            width: 0%;
         }
         
         .results {
@@ -235,7 +236,7 @@
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
             
-            <div class="question-container" id="question-container">
+            <div class="question-container" id="question-container" style="display: block;">
                 <div class="question" id="question-text"></div>
                 <div class="options" id="options-container"></div>
             </div>
@@ -342,7 +343,7 @@
         var userAnswers = [];
         var totalScore = 0;
         var startTime = Date.now();
-        var aiDatabase = []; // In-memory storage instead of localStorage
+        var aiDatabase = []; // In-memory storage
 
         // Start Assessment
         function startAssessment() {
@@ -414,7 +415,7 @@
             var category = getCategory(totalScore);
             var completionTime = Math.round((Date.now() - startTime) / 1000);
 
-            // Store in AI Database (in-memory only)
+            // Store in AI Database (in-memory)
             var sessionData = {
                 timestamp: new Date().toISOString(),
                 answers: userAnswers,
@@ -427,7 +428,7 @@
             
             aiDatabase.push(sessionData);
             
-            // Keep only last 50 sessions (memory management)
+            // Keep only last 50 sessions
             if (aiDatabase.length > 50) {
                 aiDatabase = aiDatabase.slice(-50);
             }
@@ -473,7 +474,7 @@
                 'event_label': 'trading_psychology_assessment'
             });
             
-            // Update AI Database (in-memory)
+            // Update AI Database
             if (aiDatabase.length > 0) {
                 aiDatabase[aiDatabase.length - 1].emailProvided = true;
                 aiDatabase[aiDatabase.length - 1].email = email;
@@ -640,7 +641,7 @@
                 doc.setFontSize(8);
                 doc.text('© 2025 Schnitzlein Consulting - Trading Psychology Assessment', 105, 285, { align: 'center' });
                 
-                // Update AI Database with PDF download (in-memory)
+                // Update AI Database with PDF download
                 if (aiDatabase.length > 0) {
                     aiDatabase[aiDatabase.length - 1].pdfDownloaded = true;
                 }
