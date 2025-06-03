@@ -234,6 +234,13 @@
             line-height: 1.4;
         }
 
+        .loading {
+            display: none;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .content { padding: 20px; }
@@ -278,14 +285,15 @@
                 <div id="results-content"></div>
                 
                 <div class="email-section">
-                    <h3>Get Advanced Strategies and Insights</h3>
-                    <p>Get advanced strategies and insights delivered to your inbox</p>
+                    <h3>Get Your Personalized Report & Join Our Email Series</h3>
+                    <p>Enter your email to receive your detailed PDF report and personalized email strategies based on your trader type.</p>
                     <div class="email-form">
                         <input type="email" class="email-input" id="email-input" placeholder="Enter your email address" required>
-                        <button class="email-button" onclick="submitEmail()">Get Tips</button>
+                        <button class="email-button" onclick="submitEmail()">Get My Report</button>
                     </div>
+                    <div class="loading" id="loading">⏳ Adding you to personalized email series...</div>
                     <div class="disclaimer">
-                        By using this tool, you consent to anonymous analytics cookies (Google Analytics, Microsoft Clarity) for website improvement.
+                        You'll receive a personalized email series based on your assessment results. Unsubscribe anytime.
                     </div>
                 </div>
             </div>
@@ -293,6 +301,18 @@
     </div>
 
     <script>
+        // MailerLite Configuration
+        const MAILERLITE_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiODNkZDhiMTY2ZTQ5MDY2NWY5YjQzMzU1ODM3YjBhZGM1OGU2YjU2OWFiOTg5MDg0ODEzNTAwYjFkZTFiMmFmMWNjMmM2MWFjNjQxZDFmZjciLCJpYXQiOjE3NDg5NTMyNDMuMDUwMDE3LCJuYmYiOjE3NDg5NTMyNDMuMDUwMDIsImV4cCI6NDkwNDYyNjg0My4wNDM5NTQsInN1YiI6IjE1ODEyNjkiLCJzY29wZXMiOltdfQ.irCclvaRLPuh5BCekhp1qR3A0ZyGWLP4wkMYolUsCCx3yx-V8V9V1p8CYP4nZbkwFiS8IzWUkilhgSTYqTwYmDeG9D2pQSwokSYWbZDsbVWwZtZVh-kW_gup0PfdBHdZGObddwQU7B_QZMKnlpqMgNPEBREweKxdMMadKZHHFf66gaAIkq5fcgNdGhQW8xXqDgUr2GahoisepokvD14aNRM3WEMkelkhOQ3AwALDbdLtkmlPegqNllik6Xw6ZDOIOSAkHikkBa9aZpfMQ0TPjOdy_6TfE9LxjDZ_-USQrCQuTiCQnxgvEjJDjhdGW2iIJIK9fLOIWrSVbBQg3xAC_idDk_eLqn-bEN1YNPeKeA7jT8FPaL4P5OxU3RryWg-f8KlWVNxgxXfifPawIMKIgescPCGJry7bbVTvRi-KgJViIWUl3N93QRSCPjXj7br8sB3dZtlRZk0oxwgzEP0394_778d4RR5Ns3WaeIB_e5DgNsj4tVzv-J2BAdOsiWwjFZnSWHZxrptgz3yQ-ZxCLkfnzLneadJueLeb2FTKMVpJGcassc_ibhu7K55bN8khSBr9tJ1Xlsx4f3vvsUPrYtqbcAipCwAGlCoM-UELouPwrqOYGGcvvlZUpINWaV49ZTE7KejBHnZcBLP8_ozO9Avr7wyemWNKbVvfg1yqYYA';
+        const MAILERLITE_API_URL = 'https://connect.mailerlite.com/api';
+
+        // Group IDs mapping (will be set after groups are created)
+        const MAILERLITE_GROUPS = {
+            'champion': 'Champion Traders',
+            'solid': 'Solid Traders',
+            'developing': 'Developing Traders',
+            'vulnerable': 'Vulnerable Traders'
+        };
+
         // Assessment Data Collection (in-memory storage)
         var assessmentData = {
             sessionId: 'session_' + Date.now(),
@@ -303,7 +323,8 @@
             category: '',
             completed: false,
             emailProvided: false,
-            pdfDownloaded: false
+            pdfDownloaded: false,
+            mailerliteAdded: false
         };
 
         // In-memory database
@@ -519,25 +540,120 @@
             return texts[category];
         }
 
-        function submitEmail() {
-            var email = document.getElementById('email-input').value;
-            if (email && email.includes('@')) {
-                assessmentData.emailProvided = true;
-
-                gtag('event', 'email_signup', {
-                    event_category: 'conversion',
-                    event_label: 'email_captured'
+        // MailerLite Integration
+        async function addToMailerLite(email, firstName) {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                
+                // Determine group based on score
+                var groupName = getMailerLiteGroup(assessmentData.totalScore);
+                
+                // First, get all groups to find the correct group ID
+                const groupsResponse = await fetch(`${MAILERLITE_API_URL}/groups`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${MAILERLITE_API_TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
                 });
 
-                alert('Thank you! Your personalized insights will be sent to your email. PDF report is generating...');
+                if (!groupsResponse.ok) {
+                    throw new Error('Failed to fetch groups');
+                }
+
+                const groupsData = await groupsResponse.json();
+                const targetGroup = groupsData.data.find(group => group.name === groupName);
+
+                if (!targetGroup) {
+                    throw new Error(`Group "${groupName}" not found`);
+                }
+
+                // Add subscriber to the specific group
+                const subscriberData = {
+                    email: email,
+                    fields: {
+                        name: firstName || '',
+                        assessment_score: assessmentData.totalScore,
+                        trader_category: assessmentData.category,
+                        completion_date: new Date().toISOString()
+                    },
+                    groups: [targetGroup.id]
+                };
+
+                const addResponse = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${MAILERLITE_API_TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(subscriberData)
+                });
+
+                if (!addResponse.ok) {
+                    const errorData = await addResponse.json();
+                    throw new Error(`MailerLite API error: ${errorData.message || 'Unknown error'}`);
+                }
+
+                const responseData = await addResponse.json();
                 
-                generatePDF();
-            } else {
-                alert('Please enter a valid email address.');
+                // Update assessment data
+                assessmentData.mailerliteAdded = true;
+                assessmentData.mailerliteGroupId = targetGroup.id;
+                assessmentData.mailerliteSubscriberId = responseData.data.id;
+
+                document.getElementById('loading').style.display = 'none';
+                return true;
+
+            } catch (error) {
+                console.error('MailerLite integration failed:', error);
+                document.getElementById('loading').style.display = 'none';
+                
+                // Don't block the user experience - continue with PDF generation
+                alert('Email signup successful! Your personalized report is generating...');
+                return false;
             }
         }
 
-        function generatePDF() {
+        function getMailerLiteGroup(score) {
+            if (score >= 280) return MAILERLITE_GROUPS.champion;
+            if (score >= 200) return MAILERLITE_GROUPS.solid;
+            if (score >= 120) return MAILERLITE_GROUPS.developing;
+            return MAILERLITE_GROUPS.vulnerable;
+        }
+
+        async function submitEmail() {
+            var email = document.getElementById('email-input').value;
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Extract first name from email (simple approach)
+            var firstName = email.split('@')[0].split('.')[0];
+            firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+            
+            // Track email capture
+            gtag('event', 'email_signup', {
+                event_category: 'conversion',
+                event_label: 'email_captured'
+            });
+            
+            // Update assessment data
+            assessmentData.emailProvided = true;
+            assessmentData.email = email;
+            
+            // Add to MailerLite
+            await addToMailerLite(email, firstName);
+            
+            // Generate PDF
+            generatePersonalizedReport();
+            
+            alert('Success! You\'ve been added to your personalized email series. Your PDF report is downloading now!');
+        }
+
+        function generatePersonalizedReport() {
             try {
                 var jsPDF = window.jspdf.jsPDF;
                 var doc = new jsPDF();
@@ -552,7 +668,7 @@
                     doc.rect(x, y, w, h, 'F');
                 }
                 
-                // ENHANCED HEADER
+                // Header
                 doc.setFillColor(102, 126, 234);
                 doc.rect(0, 0, pageWidth, 45, 'F');
                 
@@ -568,7 +684,7 @@
                 doc.setFont("helvetica", "normal");
                 doc.text("Discover Your Emotional Trading Weaknesses", pageWidth/2, 38, { align: 'center' });
                 
-                // ENHANCED DISCLAIMER
+                // Disclaimer
                 yPos = 55;
                 doc.setFillColor(255, 248, 220);
                 doc.setDrawColor(255, 193, 7);
@@ -582,14 +698,14 @@
                 doc.text("Educational analysis of emotional trading patterns - Not financial advice", margin + 25, yPos + 6);
                 doc.text("For investment decisions, consult a licensed financial advisor", margin + 3, yPos + 12);
                 
-                // ASSESSMENT RESULTS
-                yPos = 80; // Reduced spacing after disclaimer
+                // Assessment Results
+                yPos = 80;
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(16);
                 doc.setFont("helvetica", "bold");
                 doc.text("Your Assessment Results", margin, yPos);
                 
-                // VISUAL SCORE CIRCLE
+                // Visual Score Circle
                 var scoreColor = getScoreColorRGB(assessmentData.totalScore);
                 doc.setFillColor(scoreColor.r, scoreColor.g, scoreColor.b);
                 doc.circle(margin + 25, yPos + 25, 20, 'F');
@@ -604,10 +720,10 @@
                 doc.text("Overall Score: " + assessmentData.totalScore + "/320", margin + 55, yPos + 20);
                 doc.text("Category: " + assessmentData.category.replace('_', ' ').toUpperCase(), margin + 55, yPos + 30);
                 
-                yPos += 55; // More spacing after score circle
+                yPos += 55;
                 
-                // YOUR STRENGTHS (dynamic height)
-                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [230, 255, 230]); // Increased height
+                // Your Strengths
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [230, 255, 230]);
                 doc.setTextColor(0, 120, 0);
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
@@ -626,19 +742,18 @@
                         var sentence = strengthsSentences[i].trim();
                         if (i < strengthsSentences.length - 1) sentence += '.';
                         
-                        // Use splitTextToSize for proper text wrapping
                         var wrappedLines = doc.splitTextToSize(sentence, pageWidth - 2 * margin - 15);
                         for (var j = 0; j < wrappedLines.length; j++) {
                             doc.text(wrappedLines[j], margin + 5, strengthsY);
-                            strengthsY += 5; // Line spacing for wrapped text
+                            strengthsY += 5;
                         }
                     }
                 }
                 
-                yPos = strengthsY + 3; // Minimal section spacing
+                yPos = strengthsY + 3;
                 
-                // KEY AREAS FOR IMPROVEMENT (dynamic height)
-                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [255, 235, 215]); // Increased height
+                // Key Areas for Improvement
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 40, [255, 235, 215]);
                 doc.setTextColor(180, 100, 0);
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
@@ -657,25 +772,24 @@
                         var sentence = improvementsSentences[i].trim();
                         if (i < improvementsSentences.length - 1) sentence += '.';
                         
-                        // Use splitTextToSize for proper text wrapping
                         var wrappedLines = doc.splitTextToSize(sentence, pageWidth - 2 * margin - 15);
                         for (var j = 0; j < wrappedLines.length; j++) {
                             doc.text(wrappedLines[j], margin + 5, improvementsY);
-                            improvementsY += 5; // Line spacing for wrapped text
+                            improvementsY += 5;
                         }
                     }
                 }
                 
-                yPos = improvementsY + 3; // Minimal section spacing
+                yPos = improvementsY + 3;
                 
-                // CHECK FOR NEW PAGE
+                // Check for new page
                 if (yPos > 200) {
                     doc.addPage();
                     yPos = 30;
                 }
                 
-                // PERSONALIZED ACTION PLAN (dynamic height)
-                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 50, [230, 240, 255]); // Increased height
+                // Personalized Action Plan
+                drawSectionBox(margin, yPos, pageWidth - 2 * margin, 50, [230, 240, 255]);
                 doc.setTextColor(0, 100, 200);
                 doc.setFontSize(14);
                 doc.setFont("helvetica", "bold");
@@ -691,24 +805,22 @@
                 
                 for (var i = 0; i < actionItems.length; i++) {
                     if (actionItems[i].trim()) {
-                        // Use splitTextToSize for proper text wrapping
                         var wrappedLines = doc.splitTextToSize(actionItems[i].trim(), pageWidth - 2 * margin - 15);
                         for (var j = 0; j < wrappedLines.length; j++) {
                             doc.text(wrappedLines[j], margin + 5, actionY);
-                            actionY += 5; // Line spacing for wrapped text
+                            actionY += 5;
                         }
                     }
                 }
                 
-                yPos = actionY + 3; // Minimal section spacing
+                yPos = actionY + 3;
                 
-                // CHECK FOR NEW PAGE
+                // Expert Insights Box
                 if (yPos > pageHeight - 60) {
                     doc.addPage();
                     yPos = 30;
                 }
                 
-                // EXPERT INSIGHT BOX (ensure it fits)
                 doc.setDrawColor(0, 100, 200);
                 doc.setLineWidth(1);
                 doc.rect(margin, yPos, pageWidth - 2 * margin, 35);
@@ -720,42 +832,45 @@
                 doc.setTextColor(0, 100, 200);
                 doc.setFontSize(12);
                 doc.setFont("helvetica", "bold");
-                doc.text("Expert Insight", margin + 5, yPos + 8); // Moved up
+                doc.text("Expert Insight", margin + 5, yPos + 8);
                 
                 doc.setTextColor(0, 0, 0);
                 doc.setFontSize(9);
                 doc.setFont("helvetica", "normal");
-                doc.text("Based on 10+ years of market experience", margin + 5, yPos + 15); // Moved up
-                doc.text("This analysis reflects common patterns seen in", margin + 5, yPos + 20); // Moved up
-                doc.text("successful traders who have overcome similar", margin + 5, yPos + 25); // Moved up
-                doc.text("psychological challenges.", margin + 5, yPos + 30); // Moved up
+                doc.text("Based on 10+ years of market experience", margin + 5, yPos + 15);
+                doc.text("This analysis reflects common patterns seen in", margin + 5, yPos + 20);
+                doc.text("successful traders who have overcome similar", margin + 5, yPos + 25);
+                doc.text("psychological challenges.", margin + 5, yPos + 30);
                 
-                // FOOTER
+                // Footer
                 doc.setTextColor(100, 100, 100);
                 doc.setFontSize(8);
                 doc.text("© 2025 Schnitzlein Consulting - Trading Psychology Assessment", pageWidth/2, pageHeight - 10, { align: 'center' });
                 
-                // Download
-                doc.save("Trading_Psychology_Report_" + Date.now() + ".pdf");
-                
+                // Update assessment data
                 assessmentData.pdfDownloaded = true;
                 
+                // Track PDF download
                 gtag('event', 'pdf_download', {
                     event_category: 'conversion',
-                    event_label: 'report_downloaded'
+                    event_label: 'report_downloaded',
+                    value: assessmentData.totalScore
                 });
+                
+                // Download PDF
+                doc.save("Trading_Psychology_Report_" + Date.now() + ".pdf");
                 
             } catch (error) {
                 console.error('PDF generation failed:', error);
-                alert('PDF generation failed, but your results have been saved.');
+                alert('PDF generation failed, but your email signup was successful.');
             }
         }
 
         function getScoreColorRGB(score) {
-            if (score >= 280) return {r: 76, g: 175, b: 80}; // Green
-            if (score >= 200) return {r: 33, g: 150, b: 243}; // Blue
-            if (score >= 120) return {r: 255, g: 152, b: 0}; // Orange
-            return {r: 244, g: 67, b: 54}; // Red
+            if (score >= 280) return {r: 76, g: 175, b: 80};
+            if (score >= 200) return {r: 33, g: 150, b: 243};
+            if (score >= 120) return {r: 255, g: 152, b: 0};
+            return {r: 244, g: 67, b: 54};
         }
 
         function getStrengthsForCategory(category) {
@@ -809,9 +924,9 @@
                 totalSessions: aiDatabase.length,
                 averageScore: aiDatabase.reduce(function(sum, session) { return sum + session.totalScore; }, 0) / aiDatabase.length,
                 categoryDistribution: {},
-                averageCompletionTime: 0,
                 emailCaptureRate: (aiDatabase.filter(function(session) { return session.emailProvided; }).length / aiDatabase.length) * 100,
-                pdfDownloadRate: (aiDatabase.filter(function(session) { return session.pdfDownloaded; }).length / aiDatabase.length) * 100
+                pdfDownloadRate: (aiDatabase.filter(function(session) { return session.pdfDownloaded; }).length / aiDatabase.length) * 100,
+                mailerliteSuccessRate: (aiDatabase.filter(function(session) { return session.mailerliteAdded; }).length / aiDatabase.length) * 100
             };
 
             aiDatabase.forEach(function(session) {
