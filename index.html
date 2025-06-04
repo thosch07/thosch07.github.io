@@ -267,6 +267,12 @@
             cursor: pointer;
             font-size: 12px;
             z-index: 1001;
+            display: none; /* Hidden by default */
+        }
+
+        /* Show admin only when ?admin=true in URL */
+        .admin-mode .admin-toggle {
+            display: block;
         }
 
         .admin-button {
@@ -1338,7 +1344,40 @@
 
         // Initialize admin stats on page load
         window.addEventListener('load', function() {
-            updateAdminStats();
+            // Check if admin mode should be enabled
+            const urlParams = new URLSearchParams(window.location.search);
+            let isAdminStored = false;
+            
+            // Safe localStorage check
+            try {
+                isAdminStored = localStorage.getItem('admin_mode') === 'true';
+            } catch(e) {
+                // localStorage not available, ignore
+                isAdminStored = false;
+            }
+            
+            const isAdmin = urlParams.get('admin') === 'true' || 
+                           window.location.hash === '#admin' ||
+                           isAdminStored;
+            
+            if (isAdmin) {
+                document.body.classList.add('admin-mode');
+                updateAdminStats();
+            }
+            
+            // Secret admin activation: Ctrl+Shift+A
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                    document.body.classList.add('admin-mode');
+                    updateAdminStats();
+                    try {
+                        localStorage.setItem('admin_mode', 'true');
+                    } catch(e) {
+                        // localStorage not available, admin mode only for this session
+                        console.log('Admin mode activated for this session only');
+                    }
+                }
+            });
         });
     </script>
 </body>
