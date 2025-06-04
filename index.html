@@ -368,25 +368,43 @@
             constructor() {
                 this.storageKey = 'trading_psychology_assessments';
                 this.maxStorageSize = 1000; // Max assessments to store
+                this.useLocalStorage = false;
+                this.storageType = 'memory';
                 this.loadData();
             }
 
             loadData() {
+                // Try localStorage first
                 try {
+                    const testKey = 'localStorage_test';
+                    localStorage.setItem(testKey, 'test');
+                    localStorage.removeItem(testKey);
+                    this.useLocalStorage = true;
+                    this.storageType = 'localStorage';
+                    
                     const stored = localStorage.getItem(this.storageKey);
-                    this.data = stored ? JSON.parse(stored) : {
-                        assessments: [],
-                        metadata: {
-                            created: new Date().toISOString(),
-                            lastUpdated: new Date().toISOString(),
-                            version: '2.0',
-                            totalSessions: 0
-                        }
-                    };
+                    this.data = stored ? JSON.parse(stored) : this.getDefaultData();
+                    
                 } catch (error) {
-                    console.error('Error loading data:', error);
-                    this.data = { assessments: [], metadata: {} };
+                    // Fallback to in-memory storage
+                    console.warn('localStorage not available, using in-memory storage:', error.message);
+                    this.useLocalStorage = false;
+                    this.storageType = 'memory';
+                    this.data = this.getDefaultData();
                 }
+            }
+
+            getDefaultData() {
+                return {
+                    assessments: [],
+                    metadata: {
+                        created: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        version: '2.0',
+                        totalSessions: 0,
+                        storageType: this.storageType
+                    }
+                };
             }
 
             saveData() {
@@ -398,11 +416,16 @@
                     
                     this.data.metadata.lastUpdated = new Date().toISOString();
                     this.data.metadata.totalSessions = this.data.assessments.length;
+                    this.data.metadata.storageType = this.storageType;
                     
-                    localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+                    if (this.useLocalStorage) {
+                        localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+                    }
+                    // In-memory storage always works (data persists during session)
+                    
                     return true;
                 } catch (error) {
-                    console.error('Error saving data:', error);
+                    console.warn('Error saving to localStorage, data stored in memory only:', error.message);
                     return false;
                 }
             }
@@ -709,9 +732,16 @@
             const statsEl = document.getElementById('admin-stats');
             
             if (!insights) {
-                statsEl.innerHTML = 'No data yet';
+                statsEl.innerHTML = `
+                    <strong>📊 Quick Stats</strong><br>
+                    No data yet<br>
+                    <small>Storage: ${DB.storageType}</small>
+                `;
                 return;
             }
+
+            const storageIcon = DB.useLocalStorage ? '💾' : '🧠';
+            const storageText = DB.useLocalStorage ? 'Persistent' : 'Session Only';
 
             statsEl.innerHTML = `
                 <strong>📊 Quick Stats</strong><br>
@@ -719,7 +749,8 @@
                 Avg Score: ${insights.averageScore}<br>
                 Completion: ${insights.completionRate}%<br>
                 Email Rate: ${insights.emailCaptureRate}%<br>
-                PDF Rate: ${insights.pdfDownloadRate}%
+                PDF Rate: ${insights.pdfDownloadRate}%<br>
+                <small>${storageIcon} ${storageText}</small>
             `;
         }
 
@@ -756,6 +787,16 @@
             }
 
             let report = `📊 DETAILED TRADING PSYCHOLOGY INSIGHTS\n\n`;
+            
+            // Storage info
+            const storageIcon = DB.useLocalStorage ? '💾' : '🧠';
+            const storageText = DB.useLocalStorage ? 'Persistent (localStorage)' : 'Session Only (memory)';
+            report += `💾 Storage: ${storageIcon} ${storageText}\n`;
+            if (!DB.useLocalStorage) {
+                report += `⚠️  Data will be lost on page refresh/close\n`;
+            }
+            report += `\n`;
+            
             report += `Total Assessments: ${insights.totalAssessments}\n`;
             report += `Average Score: ${insights.averageScore}/320\n`;
             report += `Completion Rate: ${insights.completionRate}%\n\n`;
