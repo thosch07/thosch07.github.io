@@ -241,15 +241,76 @@
             margin-top: 10px;
         }
 
+        /* Admin Panel Styles */
+        .admin-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 15px;
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .admin-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 1001;
+        }
+
+        .admin-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 3px;
+            width: 100%;
+        }
+
+        .admin-stats {
+            font-size: 12px;
+            margin: 5px 0;
+            padding: 5px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .content { padding: 20px; }
             .email-form { flex-direction: column; }
             .email-input { margin-bottom: 10px; }
+            .admin-panel { right: 5px; top: 5px; }
+            .admin-toggle { right: 5px; top: 5px; }
         }
     </style>
 </head>
 <body>
+    <!-- Admin Panel -->
+    <button class="admin-toggle" onclick="toggleAdminPanel()">📊 Admin</button>
+    <div class="admin-panel" id="admin-panel">
+        <div class="admin-stats" id="admin-stats">Loading...</div>
+        <button class="admin-button" onclick="exportToCSV()">📥 Export CSV</button>
+        <button class="admin-button" onclick="exportToJSON()">📄 Export JSON</button>
+        <button class="admin-button" onclick="showDetailedInsights()">📊 Insights</button>
+        <button class="admin-button" onclick="backupData()">💾 Backup</button>
+        <button class="admin-button" onclick="clearAllData()">🗑️ Clear All</button>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>Trading Psychology Assessment</h1>
@@ -301,11 +362,236 @@
     </div>
 
     <script>
+        // ===== PERSISTENT DATA STORAGE SYSTEM =====
+        
+        class TradingAssessmentDatabase {
+            constructor() {
+                this.storageKey = 'trading_psychology_assessments';
+                this.maxStorageSize = 1000; // Max assessments to store
+                this.loadData();
+            }
+
+            loadData() {
+                try {
+                    const stored = localStorage.getItem(this.storageKey);
+                    this.data = stored ? JSON.parse(stored) : {
+                        assessments: [],
+                        metadata: {
+                            created: new Date().toISOString(),
+                            lastUpdated: new Date().toISOString(),
+                            version: '2.0',
+                            totalSessions: 0
+                        }
+                    };
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                    this.data = { assessments: [], metadata: {} };
+                }
+            }
+
+            saveData() {
+                try {
+                    // Cleanup old data if too large
+                    if (this.data.assessments.length > this.maxStorageSize) {
+                        this.data.assessments = this.data.assessments.slice(-this.maxStorageSize);
+                    }
+                    
+                    this.data.metadata.lastUpdated = new Date().toISOString();
+                    this.data.metadata.totalSessions = this.data.assessments.length;
+                    
+                    localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+                    return true;
+                } catch (error) {
+                    console.error('Error saving data:', error);
+                    return false;
+                }
+            }
+
+            addAssessment(assessment) {
+                assessment.id = this.generateId();
+                assessment.persistedAt = new Date().toISOString();
+                this.data.assessments.push(assessment);
+                return this.saveData();
+            }
+
+            generateId() {
+                return 'assess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            getAssessments() {
+                return this.data.assessments;
+            }
+
+            getInsights() {
+                const assessments = this.data.assessments;
+                if (assessments.length === 0) return null;
+
+                const insights = {
+                    totalAssessments: assessments.length,
+                    averageScore: this.calculateAverageScore(assessments),
+                    categoryDistribution: this.getCategoryDistribution(assessments),
+                    completionRate: this.getCompletionRate(assessments),
+                    emailCaptureRate: this.getEmailCaptureRate(assessments),
+                    pdfDownloadRate: this.getPdfDownloadRate(assessments),
+                    timeAnalysis: this.getTimeAnalysis(assessments),
+                    scoreDistribution: this.getScoreDistribution(assessments)
+                };
+
+                return insights;
+            }
+
+            calculateAverageScore(assessments) {
+                const completed = assessments.filter(a => a.completed);
+                return completed.length > 0 
+                    ? Math.round(completed.reduce((sum, a) => sum + a.totalScore, 0) / completed.length)
+                    : 0;
+            }
+
+            getCategoryDistribution(assessments) {
+                const dist = {};
+                assessments.filter(a => a.completed).forEach(a => {
+                    dist[a.category] = (dist[a.category] || 0) + 1;
+                });
+                return dist;
+            }
+
+            getCompletionRate(assessments) {
+                return assessments.length > 0 
+                    ? Math.round((assessments.filter(a => a.completed).length / assessments.length) * 100)
+                    : 0;
+            }
+
+            getEmailCaptureRate(assessments) {
+                const completed = assessments.filter(a => a.completed);
+                return completed.length > 0 
+                    ? Math.round((completed.filter(a => a.emailProvided).length / completed.length) * 100)
+                    : 0;
+            }
+
+            getPdfDownloadRate(assessments) {
+                const withEmail = assessments.filter(a => a.emailProvided);
+                return withEmail.length > 0 
+                    ? Math.round((withEmail.filter(a => a.pdfDownloaded).length / withEmail.length) * 100)
+                    : 0;
+            }
+
+            getTimeAnalysis(assessments) {
+                const completed = assessments.filter(a => a.completed && a.startTime && a.endTime);
+                if (completed.length === 0) return null;
+
+                const durations = completed.map(a => {
+                    const start = new Date(a.startTime);
+                    const end = new Date(a.endTime);
+                    return (end - start) / 1000; // seconds
+                });
+
+                return {
+                    averageDuration: Math.round(durations.reduce((a, b) => a + b, 0) / durations.length),
+                    minDuration: Math.min(...durations),
+                    maxDuration: Math.max(...durations)
+                };
+            }
+
+            getScoreDistribution(assessments) {
+                const scores = assessments.filter(a => a.completed).map(a => a.totalScore);
+                return {
+                    min: Math.min(...scores) || 0,
+                    max: Math.max(...scores) || 0,
+                    champion: scores.filter(s => s >= 280).length,
+                    solid: scores.filter(s => s >= 200 && s < 280).length,
+                    developing: scores.filter(s => s >= 120 && s < 200).length,
+                    vulnerable: scores.filter(s => s < 120).length
+                };
+            }
+
+            exportToCSV() {
+                const assessments = this.data.assessments;
+                if (assessments.length === 0) return null;
+
+                const headers = [
+                    'ID', 'Start Time', 'End Time', 'Duration (seconds)', 'Total Score', 'Category',
+                    'Completed', 'Email Provided', 'PDF Downloaded', 'MailerLite Added',
+                    'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8'
+                ];
+
+                const rows = assessments.map(a => {
+                    const duration = a.startTime && a.endTime 
+                        ? Math.round((new Date(a.endTime) - new Date(a.startTime)) / 1000)
+                        : '';
+                    
+                    return [
+                        a.id || a.sessionId,
+                        a.startTime || '',
+                        a.endTime || '',
+                        duration,
+                        a.totalScore || '',
+                        a.category || '',
+                        a.completed || false,
+                        a.emailProvided || false,
+                        a.pdfDownloaded || false,
+                        a.mailerliteAdded || false,
+                        a.answers['0'] !== undefined ? a.answers['0'] : '',
+                        a.answers['1'] !== undefined ? a.answers['1'] : '',
+                        a.answers['2'] !== undefined ? a.answers['2'] : '',
+                        a.answers['3'] !== undefined ? a.answers['3'] : '',
+                        a.answers['4'] !== undefined ? a.answers['4'] : '',
+                        a.answers['5'] !== undefined ? a.answers['5'] : '',
+                        a.answers['6'] !== undefined ? a.answers['6'] : '',
+                        a.answers['7'] !== undefined ? a.answers['7'] : ''
+                    ];
+                });
+
+                const csvContent = [headers, ...rows]
+                    .map(row => row.map(field => '"' + String(field).replace(/"/g, '""') + '"').join(','))
+                    .join('\n');
+
+                return csvContent;
+            }
+
+            exportToJSON() {
+                return JSON.stringify(this.data, null, 2);
+            }
+
+            clearAll() {
+                this.data = {
+                    assessments: [],
+                    metadata: {
+                        created: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString(),
+                        version: '2.0',
+                        totalSessions: 0
+                    }
+                };
+                return this.saveData();
+            }
+
+            backup() {
+                const backup = {
+                    data: this.data,
+                    timestamp: new Date().toISOString(),
+                    version: '2.0'
+                };
+                
+                const dataStr = JSON.stringify(backup, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(dataBlob);
+                link.download = `trading_psychology_backup_${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+            }
+        }
+
+        // Initialize Database
+        const DB = new TradingAssessmentDatabase();
+
+        // ===== ORIGINAL ASSESSMENT LOGIC =====
+        
         // MailerLite Configuration
         const MAILERLITE_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiODNkZDhiMTY2ZTQ5MDY2NWY5YjQzMzU1ODM3YjBhZGM1OGU2YjU2OWFiOTg5MDg0ODEzNTAwYjFkZTFiMmFmMWNjMmM2MWFjNjQxZDFmZjciLCJpYXQiOjE3NDg5NTMyNDMuMDUwMDE3LCJuYmYiOjE3NDg5NTMyNDMuMDUwMDIsImV4cCI6NDkwNDYyNjg0My4wNDM5NTQsInN1YiI6IjE1ODEyNjkiLCJzY29wZXMiOltdfQ.irCclvaRLPuh5BCekhp1qR3A0ZyGWLP4wkMYolUsCCx3yx-V8V9V1p8CYP4nZbkwFiS8IzWUkilhgSTYqTwYmDeG9D2pQSwokSYWbZDsbVWwZtZVh-kW_gup0PfdBHdZGObddwQU7B_QZMKnlpqMgNPEBREweKxdMMadKZHHFf66gaAIkq5fcgNdGhQW8xXqDgUr2GahoisepokvD14aNRM3WEMkelkhOQ3AwALDbdLtkmlPegqNllik6Xw6ZDOIOSAkHikkBa9aZpfMQ0TPjOdy_6TfE9LxjDZ_-USQrCQuTiCQnxgvEjJDjhdGW2iIJIK9fLOIWrSVbBQg3xAC_idDk_eLqn-bEN1YNPeKeA7jT8FPaL4P5OxU3RryWg-f8KlWVNxgxXfifPawIMKIgescPCGJry7bbVTvRi-KgJViIWUl3N93QRSCPjXj7br8sB3dZtlRZk0oxwgzEP0394_778d4RR5Ns3WaeIB_e5DgNsj4tVzv-J2BAdOsiWwjFZnSWHZxrptgz3yQ-ZxCLkfnzLneadJueLeb2FTKMVpJGcassc_ibhu7K55bN8khSBr9tJ1Xlsx4f3vvsUPrYtqbcAipCwAGlCoM-UELouPwrqOYGGcvvlZUpINWaV49ZTE7KejBHnZcBLP8_ozO9Avr7wyemWNKbVvfg1yqYYA';
         const MAILERLITE_API_URL = 'https://connect.mailerlite.com/api';
 
-        // Group IDs mapping (will be set after groups are created)
+        // Group IDs mapping
         const MAILERLITE_GROUPS = {
             'champion': 'Champion Traders',
             'solid': 'Solid Traders',
@@ -313,7 +599,7 @@
             'vulnerable': 'Vulnerable Traders'
         };
 
-        // Assessment Data Collection (in-memory storage)
+        // Current assessment data
         var assessmentData = {
             sessionId: 'session_' + Date.now(),
             startTime: null,
@@ -326,9 +612,6 @@
             pdfDownloaded: false,
             mailerliteAdded: false
         };
-
-        // In-memory database
-        var aiDatabase = [];
 
         // Trading Psychology Questions
         var questions = [
@@ -408,6 +691,118 @@
 
         var currentQuestion = 0;
         var userAnswers = [];
+
+        // ===== ADMIN FUNCTIONS =====
+
+        function toggleAdminPanel() {
+            const panel = document.getElementById('admin-panel');
+            const isVisible = panel.style.display === 'block';
+            panel.style.display = isVisible ? 'none' : 'block';
+            
+            if (!isVisible) {
+                updateAdminStats();
+            }
+        }
+
+        function updateAdminStats() {
+            const insights = DB.getInsights();
+            const statsEl = document.getElementById('admin-stats');
+            
+            if (!insights) {
+                statsEl.innerHTML = 'No data yet';
+                return;
+            }
+
+            statsEl.innerHTML = `
+                <strong>📊 Quick Stats</strong><br>
+                Sessions: ${insights.totalAssessments}<br>
+                Avg Score: ${insights.averageScore}<br>
+                Completion: ${insights.completionRate}%<br>
+                Email Rate: ${insights.emailCaptureRate}%<br>
+                PDF Rate: ${insights.pdfDownloadRate}%
+            `;
+        }
+
+        function exportToCSV() {
+            const csv = DB.exportToCSV();
+            if (!csv) {
+                alert('No data to export');
+                return;
+            }
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `trading_psychology_assessments_${new Date().toISOString().split('T')[0]}.csv`);
+            link.click();
+        }
+
+        function exportToJSON() {
+            const json = DB.exportToJSON();
+            const blob = new Blob([json], { type: 'application/json' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `trading_psychology_data_${new Date().toISOString().split('T')[0]}.json`);
+            link.click();
+        }
+
+        function showDetailedInsights() {
+            const insights = DB.getInsights();
+            if (!insights) {
+                alert('No assessment data available yet.');
+                return;
+            }
+
+            let report = `📊 DETAILED TRADING PSYCHOLOGY INSIGHTS\n\n`;
+            report += `Total Assessments: ${insights.totalAssessments}\n`;
+            report += `Average Score: ${insights.averageScore}/320\n`;
+            report += `Completion Rate: ${insights.completionRate}%\n\n`;
+            
+            report += `📈 CONVERSION FUNNEL:\n`;
+            report += `Started → Completed: ${insights.completionRate}%\n`;
+            report += `Completed → Email: ${insights.emailCaptureRate}%\n`;
+            report += `Email → PDF: ${insights.pdfDownloadRate}%\n\n`;
+            
+            report += `👥 CATEGORY DISTRIBUTION:\n`;
+            Object.entries(insights.categoryDistribution).forEach(([cat, count]) => {
+                const percentage = Math.round((count / insights.totalAssessments) * 100);
+                report += `${cat.replace('_', ' ')}: ${count} (${percentage}%)\n`;
+            });
+
+            if (insights.timeAnalysis) {
+                report += `\n⏱️ TIME ANALYSIS:\n`;
+                report += `Average Duration: ${Math.round(insights.timeAnalysis.averageDuration/60)} minutes\n`;
+                report += `Fastest: ${insights.timeAnalysis.minDuration}s\n`;
+                report += `Slowest: ${Math.round(insights.timeAnalysis.maxDuration/60)} minutes\n`;
+            }
+
+            report += `\n📊 SCORE DISTRIBUTION:\n`;
+            report += `Champion (280+): ${insights.scoreDistribution.champion}\n`;
+            report += `Solid (200-279): ${insights.scoreDistribution.solid}\n`;
+            report += `Developing (120-199): ${insights.scoreDistribution.developing}\n`;
+            report += `Vulnerable (<120): ${insights.scoreDistribution.vulnerable}\n`;
+
+            alert(report);
+        }
+
+        function backupData() {
+            DB.backup();
+            alert('Backup downloaded successfully!');
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to delete ALL assessment data? This cannot be undone.')) {
+                if (confirm('This will permanently delete all collected data. Continue?')) {
+                    DB.clearAll();
+                    updateAdminStats();
+                    alert('All data has been cleared.');
+                }
+            }
+        }
+
+        // ===== ASSESSMENT FUNCTIONS =====
 
         function startAssessment() {
             gtag('event', 'assessment_started', {
@@ -500,11 +895,8 @@
             
             assessmentData.category = category;
 
-            // Store data in memory
-            aiDatabase.push(assessmentData);
-            if (aiDatabase.length > 50) {
-                aiDatabase = aiDatabase.slice(-50);
-            }
+            // Save to persistent storage
+            DB.addAssessment(JSON.parse(JSON.stringify(assessmentData)));
 
             document.getElementById('question-container').classList.remove('active');
             document.getElementById('results-container').classList.add('active');
@@ -540,15 +932,13 @@
             return texts[category];
         }
 
-        // MailerLite Integration
+        // MailerLite Integration (unchanged)
         async function addToMailerLite(email, firstName) {
             try {
                 document.getElementById('loading').style.display = 'block';
                 
-                // Determine group based on score
                 var groupName = getMailerLiteGroup(assessmentData.totalScore);
                 
-                // First, get all groups to find the correct group ID
                 const groupsResponse = await fetch(`${MAILERLITE_API_URL}/groups`, {
                     method: 'GET',
                     headers: {
@@ -569,7 +959,6 @@
                     throw new Error(`Group "${groupName}" not found`);
                 }
 
-                // Add subscriber to the specific group
                 const subscriberData = {
                     email: email,
                     fields: {
@@ -598,10 +987,12 @@
 
                 const responseData = await addResponse.json();
                 
-                // Update assessment data
                 assessmentData.mailerliteAdded = true;
                 assessmentData.mailerliteGroupId = targetGroup.id;
                 assessmentData.mailerliteSubscriberId = responseData.data.id;
+
+                // Update persistent storage
+                DB.addAssessment(JSON.parse(JSON.stringify(assessmentData)));
 
                 document.getElementById('loading').style.display = 'none';
                 return true;
@@ -610,7 +1001,6 @@
                 console.error('MailerLite integration failed:', error);
                 document.getElementById('loading').style.display = 'none';
                 
-                // Don't block the user experience - continue with PDF generation
                 alert('Email signup successful! Your personalized report is generating...');
                 return false;
             }
@@ -630,29 +1020,27 @@
                 return;
             }
             
-            // Extract first name from email (simple approach)
             var firstName = email.split('@')[0].split('.')[0];
             firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
             
-            // Track email capture
             gtag('event', 'email_signup', {
                 event_category: 'conversion',
                 event_label: 'email_captured'
             });
             
-            // Update assessment data
             assessmentData.emailProvided = true;
             assessmentData.email = email;
             
-            // Add to MailerLite
-            await addToMailerLite(email, firstName);
+            // Update persistent storage
+            DB.addAssessment(JSON.parse(JSON.stringify(assessmentData)));
             
-            // Generate PDF
+            await addToMailerLite(email, firstName);
             generatePersonalizedReport();
             
             alert('Success! You\'ve been added to your personalized email series. Your PDF report is downloading now!');
         }
 
+        // PDF Generation (unchanged but with persistent storage update)
         function generatePersonalizedReport() {
             try {
                 var jsPDF = window.jspdf.jsPDF;
@@ -662,7 +1050,6 @@
                 var margin = 20;
                 var yPos = 30;
                 
-                // Helper function for section boxes
                 function drawSectionBox(x, y, w, h, color) {
                     doc.setFillColor(color[0], color[1], color[2]);
                     doc.rect(x, y, w, h, 'F');
@@ -847,17 +1234,16 @@
                 doc.setFontSize(8);
                 doc.text("© 2025 Schnitzlein Consulting - Trading Psychology Assessment", pageWidth/2, pageHeight - 10, { align: 'center' });
                 
-                // Update assessment data
+                // Update assessment data and persistent storage
                 assessmentData.pdfDownloaded = true;
+                DB.addAssessment(JSON.parse(JSON.stringify(assessmentData)));
                 
-                // Track PDF download
                 gtag('event', 'pdf_download', {
                     event_category: 'conversion',
                     event_label: 'report_downloaded',
                     value: assessmentData.totalScore
                 });
                 
-                // Download PDF
                 doc.save("Trading_Psychology_Report_" + Date.now() + ".pdf");
                 
             } catch (error) {
@@ -866,6 +1252,7 @@
             }
         }
 
+        // Helper functions for PDF content (unchanged)
         function getScoreColorRGB(score) {
             if (score >= 280) return {r: 76, g: 175, b: 80};
             if (score >= 200) return {r: 33, g: 150, b: 243};
@@ -903,39 +1290,15 @@
             return actionPlans[category] || actionPlans.developing_trader;
         }
 
-        // Admin functions
-        window.exportAssessmentData = function() {
-            console.log('Trading Psychology Data:', aiDatabase);
-            return aiDatabase;
-        };
+        // Global admin functions for console access
+        window.exportAssessmentData = exportToJSON;
+        window.getAssessmentInsights = showDetailedInsights;
+        window.clearAllAssessmentData = clearAllData;
 
-        window.clearAllData = function() {
-            aiDatabase = [];
-            console.log('All data cleared');
-        };
-
-        window.getAIInsights = function() {
-            if (aiDatabase.length === 0) {
-                console.log('No assessment data available yet.');
-                return;
-            }
-
-            var insights = {
-                totalSessions: aiDatabase.length,
-                averageScore: aiDatabase.reduce(function(sum, session) { return sum + session.totalScore; }, 0) / aiDatabase.length,
-                categoryDistribution: {},
-                emailCaptureRate: (aiDatabase.filter(function(session) { return session.emailProvided; }).length / aiDatabase.length) * 100,
-                pdfDownloadRate: (aiDatabase.filter(function(session) { return session.pdfDownloaded; }).length / aiDatabase.length) * 100,
-                mailerliteSuccessRate: (aiDatabase.filter(function(session) { return session.mailerliteAdded; }).length / aiDatabase.length) * 100
-            };
-
-            aiDatabase.forEach(function(session) {
-                insights.categoryDistribution[session.category] = (insights.categoryDistribution[session.category] || 0) + 1;
-            });
-
-            console.log('AI Insights:', insights);
-            return insights;
-        };
+        // Initialize admin stats on page load
+        window.addEventListener('load', function() {
+            updateAdminStats();
+        });
     </script>
 </body>
 </html>
