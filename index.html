@@ -535,6 +535,8 @@
         <div class="admin-stats" id="admin-stats">Loading...</div>
         <button class="admin-button" onclick="exportToCSV()">📥 Export CSV</button>
         <button class="admin-button" onclick="exportToJSON()">📄 Export JSON</button>
+        <button class="admin-button" onclick="showWaitlistEmails()">📧 Waitlist Emails</button>
+        <button class="admin-button" onclick="exportWaitlist()">📥 Export Waitlist</button>
         <button class="admin-button" onclick="showDetailedInsights()">📊 Insights</button>
         <button class="admin-button" onclick="showAIPatterns()">🧠 AI Patterns</button>
         <button class="admin-button" onclick="backupData()">💾 Backup</button>
@@ -955,6 +957,7 @@
             getDefaultData() {
                 return {
                     assessments: [],
+                    waitlist: [],
                     metadata: {
                         created: new Date().toISOString(),
                         lastUpdated: new Date().toISOString(),
@@ -991,6 +994,64 @@
                 assessment.persistedAt = new Date().toISOString();
                 this.data.assessments.push(assessment);
                 return this.saveData();
+            }
+
+            addToWaitlist(email, userData = {}) {
+                // Check if email already exists
+                var existingEntry = this.data.waitlist.find(function(entry) {
+                    return entry.email === email;
+                });
+                
+                if (existingEntry) {
+                    return false; // Already exists
+                }
+                
+                var waitlistEntry = {
+                    id: this.generateId(),
+                    email: email,
+                    signupDate: new Date().toISOString(),
+                    source: 'ai_assessment',
+                    userData: userData || {}
+                };
+                
+                this.data.waitlist.push(waitlistEntry);
+                return this.saveData();
+            }
+
+            getWaitlist() {
+                return this.data.waitlist || [];
+            }
+
+            getWaitlistCount() {
+                return this.data.waitlist ? this.data.waitlist.length : 0;
+            }
+
+            exportWaitlistToCSV() {
+                var waitlist = this.data.waitlist || [];
+                if (waitlist.length === 0) return null;
+
+                var headers = ['Email', 'Signup Date', 'Source', 'User Score', 'AI Risk Level', 'Assessment Category'];
+                
+                var rows = waitlist.map(function(entry) {
+                    return [
+                        entry.email || '',
+                        entry.signupDate || '',
+                        entry.source || '',
+                        entry.userData.totalScore || '',
+                        entry.userData.aiRiskLevel || '',
+                        entry.userData.category || ''
+                    ];
+                });
+
+                var csvContent = [headers].concat(rows)
+                    .map(function(row) { 
+                        return row.map(function(field) { 
+                            return '"' + String(field).replace(/"/g, '""') + '"'; 
+                        }).join(','); 
+                    })
+                    .join('\n');
+
+                return csvContent;
             }
 
             generateId() {
@@ -1174,6 +1235,7 @@
             clearAll() {
                 this.data = {
                     assessments: [],
+                    waitlist: [],
                     metadata: {
                         created: new Date().toISOString(),
                         lastUpdated: new Date().toISOString(),
@@ -1324,10 +1386,11 @@
 
         function updateAdminStats() {
             var insights = DB.getInsights();
+            var waitlistCount = DB.getWaitlistCount();
             var statsEl = document.getElementById('admin-stats');
             
             if (!insights) {
-                statsEl.innerHTML = '<strong>📊 Quick Stats</strong><br>No data yet<br><small>Storage: ' + DB.storageType + '</small>';
+                statsEl.innerHTML = '<strong>📊 Quick Stats</strong><br>No data yet<br>Waitlist: ' + waitlistCount + '<br><small>Storage: ' + DB.storageType + '</small>';
                 return;
             }
 
@@ -1340,6 +1403,7 @@
                 'Completion: ' + insights.completionRate + '%<br>' +
                 'Email Rate: ' + insights.emailCaptureRate + '%<br>' +
                 'PDF Rate: ' + insights.pdfDownloadRate + '%<br>' +
+                '📧 Waitlist: ' + waitlistCount + '<br>' +
                 '<small>' + storageIcon + ' ' + storageText + '</small>';
         }
 
@@ -1395,6 +1459,44 @@
             link.setAttribute('href', url);
             link.setAttribute('download', 'trading_psychology_ai_data_' + new Date().toISOString().split('T')[0] + '.json');
             link.click();
+        }
+
+        function showWaitlistEmails() {
+            var waitlist = DB.getWaitlist();
+            if (waitlist.length === 0) {
+                alert('📧 No waitlist emails yet.\n\nEmails will appear here when users join the waitlist for the Premium AI Toolkit.');
+                return;
+            }
+
+            var report = '📧 WAITLIST EMAILS (' + waitlist.length + ' total)\n\n';
+            
+            for (var i = 0; i < waitlist.length; i++) {
+                var entry = waitlist[i];
+                var date = new Date(entry.signupDate).toLocaleDateString();
+                var score = entry.userData.totalScore ? ' (Score: ' + entry.userData.totalScore + ')' : '';
+                report += (i + 1) + '. ' + entry.email + '\n';
+                report += '   📅 ' + date + score + '\n\n';
+            }
+
+            report += '\n💡 Use "Export Waitlist" for CSV file with all details.';
+            alert(report);
+        }
+
+        function exportWaitlist() {
+            var csv = DB.exportWaitlistToCSV();
+            if (!csv) {
+                alert('No waitlist data to export');
+                return;
+            }
+
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            var url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'premium_toolkit_waitlist_' + new Date().toISOString().split('T')[0] + '.csv');
+            link.click();
+            
+            alert('📧 Waitlist exported successfully!\n\nYou can import this CSV into any email service.');
         }
 
         function showDetailedInsights() {
@@ -1979,8 +2081,21 @@
 
             // Check if user already provided email
             if (assessmentData.emailProvided && assessmentData.email) {
-                // User already gave email - add them to waitlist automatically
-                alert('🎉 Perfect! You\'re already on our email list, so we\'ll notify you as soon as the Advanced AI Toolkit is ready!\n\n✨ Waitlist members get:\n• Early access\n• Special pricing\n• Exclusive features');
+                // Add existing user to waitlist with their assessment data
+                var userData = {
+                    totalScore: assessmentData.totalScore,
+                    category: assessmentData.category,
+                    aiRiskLevel: assessmentData.aiAnalysis ? assessmentData.aiAnalysis.riskLevel : '',
+                    aiPrimaryPattern: assessmentData.aiAnalysis && assessmentData.aiAnalysis.primaryPattern ? assessmentData.aiAnalysis.primaryPattern.id : ''
+                };
+                
+                var added = DB.addToWaitlist(assessmentData.email, userData);
+                
+                if (added) {
+                    alert('🎉 Perfect! You\'ve been added to the Premium AI Toolkit waitlist!\n\n✨ Waitlist benefits:\n• Early access\n• Special pricing\n• Exclusive features\n\nWe\'ll email you as soon as it\'s ready!');
+                } else {
+                    alert('✅ You\'re already on our waitlist!\n\nWe\'ll notify you as soon as the Premium AI Toolkit launches.');
+                }
                 
                 // Track waitlist signup
                 gtag('event', 'waitlist_joined', {
@@ -1993,20 +2108,27 @@
                 var email = prompt('🔔 Join the Waitlist!\n\nEnter your email to get notified when the Advanced AI Toolkit launches:\n\n✨ Waitlist benefits:\n• Early access\n• Special pricing\n• Exclusive features');
                 
                 if (email && email.includes('@')) {
-                    // Add to waitlist (you can integrate with your email service later)
-                    alert('🎉 You\'re on the waitlist!\n\nWe\'ll email you as soon as the Advanced AI Toolkit is ready.\n\n✨ You\'ll get early access and special pricing!');
+                    // Add to waitlist with current assessment data if available
+                    var userData = {
+                        totalScore: assessmentData.totalScore || 0,
+                        category: assessmentData.category || '',
+                        aiRiskLevel: assessmentData.aiAnalysis ? assessmentData.aiAnalysis.riskLevel : '',
+                        aiPrimaryPattern: assessmentData.aiAnalysis && assessmentData.aiAnalysis.primaryPattern ? assessmentData.aiAnalysis.primaryPattern.id : ''
+                    };
+                    
+                    var added = DB.addToWaitlist(email, userData);
+                    
+                    if (added) {
+                        alert('🎉 You\'re on the waitlist!\n\nWe\'ll email you as soon as the Advanced AI Toolkit is ready.\n\n✨ You\'ll get early access and special pricing!');
+                    } else {
+                        alert('✅ You\'re already on our waitlist!\n\nWe\'ll notify you as soon as the Premium AI Toolkit launches.');
+                    }
                     
                     // Track waitlist signup
                     gtag('event', 'waitlist_joined', {
                         event_category: 'conversion',
-                        event_label: 'new_email_signup',
-                        custom_parameters: {
-                            waitlist_email: email
-                        }
+                        event_label: 'new_email_signup'
                     });
-                    
-                    // TODO: Add to your email service/database
-                    console.log('Waitlist signup:', email, assessmentData);
                     
                 } else if (email) {
                     alert('Please enter a valid email address to join the waitlist.');
