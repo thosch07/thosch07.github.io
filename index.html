@@ -423,6 +423,9 @@
     </div>
 
     <script>
+        // ===== GLOBAL VARIABLES =====
+        window.adminPanelOpen = false; // Fixed syntax error
+
         // ===== AI DYNAMIC INSIGHTS GENERATOR =====
         
         class AIInsightsEngine {
@@ -536,11 +539,11 @@
             }
 
             analyzePatterns(answers) {
-                const detectedPatterns = [];
-                const riskLevel = this.calculateRiskLevel(answers);
+                var detectedPatterns = [];
+                var riskLevel = this.calculateRiskLevel(answers);
                 
                 // Check each pattern
-                for (let [patternId, pattern] of this.patterns) {
+                for (var [patternId, pattern] of this.patterns) {
                     if (this.detectPattern(answers, pattern)) {
                         detectedPatterns.push({
                             id: patternId,
@@ -559,8 +562,9 @@
             }
 
             detectPattern(answers, pattern) {
-                let score = 0;
-                for (let trigger of pattern.triggers) {
+                var score = 0;
+                for (var i = 0; i < pattern.triggers.length; i++) {
+                    var trigger = pattern.triggers[i];
                     if (answers[trigger] !== undefined) {
                         score += answers[trigger] + 1; // Convert 0-3 to 1-4
                     }
@@ -569,9 +573,10 @@
             }
 
             calculateConfidence(answers, pattern) {
-                let totalScore = 0;
-                let maxScore = 0;
-                for (let trigger of pattern.triggers) {
+                var totalScore = 0;
+                var maxScore = 0;
+                for (var i = 0; i < pattern.triggers.length; i++) {
+                    var trigger = pattern.triggers[i];
                     if (answers[trigger] !== undefined) {
                         totalScore += answers[trigger] + 1;
                         maxScore += 4;
@@ -581,10 +586,11 @@
             }
 
             calculateRiskLevel(answers) {
-                const riskIndicators = [0, 3, 5, 7]; // Questions that indicate risk
-                let riskScore = 0;
+                var riskIndicators = [0, 3, 5, 7]; // Questions that indicate risk
+                var riskScore = 0;
                 
-                for (let indicator of riskIndicators) {
+                for (var i = 0; i < riskIndicators.length; i++) {
+                    var indicator = riskIndicators[i];
                     if (answers[indicator] !== undefined) {
                         riskScore += answers[indicator]; // 0-3 scale
                     }
@@ -597,24 +603,27 @@
 
             identifyPrimaryPattern(patterns) {
                 if (patterns.length === 0) return null;
-                return patterns.reduce((prev, current) => 
-                    (prev.confidence > current.confidence) ? prev : current
-                );
+                return patterns.reduce(function(prev, current) {
+                    return (prev.confidence > current.confidence) ? prev : current;
+                });
             }
 
             determineAdvancedCategory(answers, patterns) {
                 // AI logic to determine advanced category beyond basic 4
-                if (patterns.find(p => p.id === 'fomo_high')) {
-                    return this.advancedCategories.fomo_trader;
-                }
-                if (patterns.find(p => p.id === 'revenge_trading')) {
-                    return this.advancedCategories.revenge_trader;
-                }
-                if (patterns.find(p => p.id === 'analysis_paralysis')) {
-                    return this.advancedCategories.analysis_paralysis_trader;
-                }
-                if (patterns.find(p => p.id === 'impulsive_behavior')) {
-                    return this.advancedCategories.emotional_swing_trader;
+                for (var i = 0; i < patterns.length; i++) {
+                    var pattern = patterns[i];
+                    if (pattern.id === 'fomo_high') {
+                        return this.advancedCategories.fomo_trader;
+                    }
+                    if (pattern.id === 'revenge_trading') {
+                        return this.advancedCategories.revenge_trader;
+                    }
+                    if (pattern.id === 'analysis_paralysis') {
+                        return this.advancedCategories.analysis_paralysis_trader;
+                    }
+                    if (pattern.id === 'impulsive_behavior') {
+                        return this.advancedCategories.emotional_swing_trader;
+                    }
                 }
                 
                 // Default to disciplined but stressed if no major patterns
@@ -622,11 +631,12 @@
             }
 
             generateDynamicRecommendations(analysisResult) {
-                const recommendations = [];
+                var recommendations = [];
                 
-                for (let pattern of analysisResult.patterns) {
-                    const patternRecs = this.recommendations.get(pattern.id) || [];
-                    recommendations.push(...patternRecs);
+                for (var i = 0; i < analysisResult.patterns.length; i++) {
+                    var pattern = analysisResult.patterns[i];
+                    var patternRecs = this.recommendations.get(pattern.id) || [];
+                    recommendations = recommendations.concat(patternRecs);
                 }
 
                 // Add risk-level specific recommendations
@@ -637,11 +647,14 @@
                     );
                 }
 
-                return [...new Set(recommendations)]; // Remove duplicates
+                // Remove duplicates
+                return recommendations.filter(function(item, index) {
+                    return recommendations.indexOf(item) === index;
+                });
             }
 
             generatePersonalizedInsights(totalScore, analysisResult) {
-                const insights = {
+                var insights = {
                     riskAlerts: [],
                     patterns: [],
                     recommendations: this.generateDynamicRecommendations(analysisResult),
@@ -658,7 +671,8 @@
                 }
 
                 // Pattern-specific insights
-                for (let pattern of analysisResult.patterns) {
+                for (var i = 0; i < analysisResult.patterns.length; i++) {
+                    var pattern = analysisResult.patterns[i];
                     insights.patterns.push({
                         name: pattern.description,
                         confidence: pattern.confidence,
@@ -684,7 +698,7 @@
         }
 
         // Initialize AI Engine
-        const AI = new AIInsightsEngine();
+        var AI = new AIInsightsEngine();
 
         // ===== ENHANCED DATABASE WITH AI TRACKING =====
         
@@ -699,13 +713,13 @@
 
             loadData() {
                 try {
-                    const testKey = 'localStorage_test';
+                    var testKey = 'localStorage_test';
                     localStorage.setItem(testKey, 'test');
                     localStorage.removeItem(testKey);
                     this.useLocalStorage = true;
                     this.storageType = 'localStorage';
                     
-                    const stored = localStorage.getItem(this.storageKey);
+                    var stored = localStorage.getItem(this.storageKey);
                     this.data = stored ? JSON.parse(stored) : this.getDefaultData();
                     
                 } catch (error) {
@@ -766,10 +780,10 @@
             }
 
             getInsights() {
-                const assessments = this.data.assessments;
+                var assessments = this.data.assessments;
                 if (assessments.length === 0) return null;
 
-                const insights = {
+                var insights = {
                     totalAssessments: assessments.length,
                     averageScore: this.calculateAverageScore(assessments),
                     categoryDistribution: this.getCategoryDistribution(assessments),
@@ -785,7 +799,7 @@
             }
 
             getAIPatternInsights(assessments) {
-                const patterns = {
+                var patterns = {
                     fomoTraders: 0,
                     revengeTraders: 0,
                     analysisParalysis: 0,
@@ -793,34 +807,36 @@
                     highRiskUsers: 0
                 };
 
-                assessments.forEach(assessment => {
+                for (var i = 0; i < assessments.length; i++) {
+                    var assessment = assessments[i];
                     if (assessment.aiAnalysis) {
-                        assessment.aiAnalysis.patterns.forEach(pattern => {
+                        for (var j = 0; j < assessment.aiAnalysis.patterns.length; j++) {
+                            var pattern = assessment.aiAnalysis.patterns[j];
                             if (pattern.id === 'fomo_high') patterns.fomoTraders++;
                             if (pattern.id === 'revenge_trading') patterns.revengeTraders++;
                             if (pattern.id === 'analysis_paralysis') patterns.analysisParalysis++;
                             if (pattern.id === 'impulsive_behavior') patterns.impulsiveTraders++;
-                        });
+                        }
                         
                         if (assessment.aiAnalysis.riskLevel === 'high') {
                             patterns.highRiskUsers++;
                         }
                     }
-                });
+                }
 
                 return patterns;
             }
 
             calculateAverageScore(assessments) {
-                const completed = assessments.filter(a => a.completed);
+                var completed = assessments.filter(function(a) { return a.completed; });
                 return completed.length > 0 
-                    ? Math.round(completed.reduce((sum, a) => sum + a.totalScore, 0) / completed.length)
+                    ? Math.round(completed.reduce(function(sum, a) { return sum + a.totalScore; }, 0) / completed.length)
                     : 0;
             }
 
             getCategoryDistribution(assessments) {
-                const dist = {};
-                assessments.filter(a => a.completed).forEach(a => {
+                var dist = {};
+                assessments.filter(function(a) { return a.completed; }).forEach(function(a) {
                     dist[a.category] = (dist[a.category] || 0) + 1;
                 });
                 return dist;
@@ -828,66 +844,68 @@
 
             getCompletionRate(assessments) {
                 return assessments.length > 0 
-                    ? Math.round((assessments.filter(a => a.completed).length / assessments.length) * 100)
+                    ? Math.round((assessments.filter(function(a) { return a.completed; }).length / assessments.length) * 100)
                     : 0;
             }
 
             getEmailCaptureRate(assessments) {
-                const completed = assessments.filter(a => a.completed);
+                var completed = assessments.filter(function(a) { return a.completed; });
                 return completed.length > 0 
-                    ? Math.round((completed.filter(a => a.emailProvided).length / completed.length) * 100)
+                    ? Math.round((completed.filter(function(a) { return a.emailProvided; }).length / completed.length) * 100)
                     : 0;
             }
 
             getPdfDownloadRate(assessments) {
-                const withEmail = assessments.filter(a => a.emailProvided);
+                var withEmail = assessments.filter(function(a) { return a.emailProvided; });
                 return withEmail.length > 0 
-                    ? Math.round((withEmail.filter(a => a.pdfDownloaded).length / withEmail.length) * 100)
+                    ? Math.round((withEmail.filter(function(a) { return a.pdfDownloaded; }).length / withEmail.length) * 100)
                     : 0;
             }
 
             getTimeAnalysis(assessments) {
-                const completed = assessments.filter(a => a.completed && a.startTime && a.endTime);
+                var completed = assessments.filter(function(a) { 
+                    return a.completed && a.startTime && a.endTime; 
+                });
                 if (completed.length === 0) return null;
 
-                const durations = completed.map(a => {
-                    const start = new Date(a.startTime);
-                    const end = new Date(a.endTime);
+                var durations = completed.map(function(a) {
+                    var start = new Date(a.startTime);
+                    var end = new Date(a.endTime);
                     return (end - start) / 1000;
                 });
 
                 return {
-                    averageDuration: Math.round(durations.reduce((a, b) => a + b, 0) / durations.length),
-                    minDuration: Math.min(...durations),
-                    maxDuration: Math.max(...durations)
+                    averageDuration: Math.round(durations.reduce(function(a, b) { return a + b; }, 0) / durations.length),
+                    minDuration: Math.min.apply(Math, durations),
+                    maxDuration: Math.max.apply(Math, durations)
                 };
             }
 
             getScoreDistribution(assessments) {
-                const scores = assessments.filter(a => a.completed).map(a => a.totalScore);
+                var scores = assessments.filter(function(a) { return a.completed; }).map(function(a) { return a.totalScore; });
                 return {
-                    min: Math.min(...scores) || 0,
-                    max: Math.max(...scores) || 0,
-                    champion: scores.filter(s => s >= 280).length,
-                    solid: scores.filter(s => s >= 200 && s < 280).length,
-                    developing: scores.filter(s => s >= 120 && s < 200).length,
-                    vulnerable: scores.filter(s => s < 120).length
+                    min: Math.min.apply(Math, scores) || 0,
+                    max: Math.max.apply(Math, scores) || 0,
+                    champion: scores.filter(function(s) { return s >= 280; }).length,
+                    solid: scores.filter(function(s) { return s >= 200 && s < 280; }).length,
+                    developing: scores.filter(function(s) { return s >= 120 && s < 200; }).length,
+                    vulnerable: scores.filter(function(s) { return s < 120; }).length
                 };
             }
 
             exportToCSV() {
-                const assessments = this.data.assessments;
+                var assessments = this.data.assessments;
                 if (assessments.length === 0) return null;
 
-                const headers = [
+                var headers = [
                     'ID', 'Start Time', 'End Time', 'Duration (seconds)', 'Total Score', 'Category',
                     'Completed', 'Email Provided', 'PDF Downloaded', 'MailerLite Added',
                     'AI Risk Level', 'AI Primary Pattern', 'AI Advanced Category',
                     'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8'
                 ];
 
-                const rows = assessments.map(a => {
-                    const duration = a.startTime && a.endTime 
+                var rows = assessments.map(function(a) {
+                    var duration = a.startTime && a.endTime 
                         ? Math.round((new Date(a.endTime) - new Date(a.startTime)) / 1000)
                         : '';
                     
@@ -905,19 +923,23 @@
                         a.aiAnalysis ? a.aiAnalysis.riskLevel : '',
                         a.aiAnalysis && a.aiAnalysis.primaryPattern ? a.aiAnalysis.primaryPattern.id : '',
                         a.aiAnalysis && a.aiAnalysis.advancedCategory ? a.aiAnalysis.advancedCategory.name : '',
-                        a.answers['0'] !== undefined ? a.answers['0'] : '',
-                        a.answers['1'] !== undefined ? a.answers['1'] : '',
-                        a.answers['2'] !== undefined ? a.answers['2'] : '',
-                        a.answers['3'] !== undefined ? a.answers['3'] : '',
-                        a.answers['4'] !== undefined ? a.answers['4'] : '',
-                        a.answers['5'] !== undefined ? a.answers['5'] : '',
-                        a.answers['6'] !== undefined ? a.answers['6'] : '',
-                        a.answers['7'] !== undefined ? a.answers['7'] : ''
+                        a.answers && a.answers['0'] !== undefined ? a.answers['0'] : '',
+                        a.answers && a.answers['1'] !== undefined ? a.answers['1'] : '',
+                        a.answers && a.answers['2'] !== undefined ? a.answers['2'] : '',
+                        a.answers && a.answers['3'] !== undefined ? a.answers['3'] : '',
+                        a.answers && a.answers['4'] !== undefined ? a.answers['4'] : '',
+                        a.answers && a.answers['5'] !== undefined ? a.answers['5'] : '',
+                        a.answers && a.answers['6'] !== undefined ? a.answers['6'] : '',
+                        a.answers && a.answers['7'] !== undefined ? a.answers['7'] : ''
                     ];
                 });
 
-                const csvContent = [headers, ...rows]
-                    .map(row => row.map(field => '"' + String(field).replace(/"/g, '""') + '"').join(','))
+                var csvContent = [headers].concat(rows)
+                    .map(function(row) { 
+                        return row.map(function(field) { 
+                            return '"' + String(field).replace(/"/g, '""') + '"'; 
+                        }).join(','); 
+                    })
                     .join('\n');
 
                 return csvContent;
@@ -941,32 +963,32 @@
             }
 
             backup() {
-                const backup = {
+                var backup = {
                     data: this.data,
                     timestamp: new Date().toISOString(),
                     version: '3.0-AI'
                 };
                 
-                const dataStr = JSON.stringify(backup, null, 2);
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                var dataStr = JSON.stringify(backup, null, 2);
+                var dataBlob = new Blob([dataStr], {type: 'application/json'});
                 
-                const link = document.createElement('a');
+                var link = document.createElement('a');
                 link.href = URL.createObjectURL(dataBlob);
-                link.download = `trading_psychology_ai_backup_${new Date().toISOString().split('T')[0]}.json`;
+                link.download = 'trading_psychology_ai_backup_' + new Date().toISOString().split('T')[0] + '.json';
                 link.click();
             }
         }
 
         // Initialize Database
-        const DB = new TradingAssessmentDatabase();
+        var DB = new TradingAssessmentDatabase();
 
         // ===== ASSESSMENT LOGIC WITH AI ENHANCEMENT =====
         
         // MailerLite Configuration
-        const MAILERLITE_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiODNkZDhiMTY2ZTQ5MDY2NWY5YjQzMzU1ODM3YjBhZGM1OGU2YjU2OWFiOTg5MDg0ODEzNTAwYjFkZTFiMmFmMWNjMmM2MWFjNjQxZDFmZjciLCJpYXQiOjE3NDg5NTMyNDMuMDUwMDE3LCJuYmYiOjE3NDg5NTMyNDMuMDUwMDIsImV4cCI6NDkwNDYyNjg0My4wNDM5NTQsInN1YiI6IjE1ODEyNjkiLCJzY29wZXMiOltdfQ.irCclvaRLPuh5BCekhp1qR3A0ZyGWLP4wkMYolUsCCx3yx-V8V9V1p8CYP4nZbkwFiS8IzWUkilhgSTYqTwYmDeG9D2pQSwokSYWbZDsbVWwZtZVh-kW_gup0PfdBHdZGObddwQU7B_QZMKnlpqMgNPEBREweKxdMMadKZHHFf66gaAIkq5fcgNdGhQW8xXqDgUr2GahoisepokvD14aNRM3WEMkelkhOQ3AwALDbdLtkmlPegqNllik6Xw6ZDOIOSAkHikkBa9aZpfMQ0TPjOdy_6TfE9LxjDZ_-USQrCQuTiCQnxgvEjJDjhdGW2iIJIK9fLOIWrSVbBQg3xAC_idDk_eLqn-bEN1YNPeKeA7jT8FPaL4P5OxU3RryWg-f8KlWVNxgxXfifPawIMKIgescPCGJry7bbVTvRi-KgJViIWUl3N93QRSCPjXj7br8sB3dZtlRZk0oxwgzEP0394_778d4RR5Ns3WaeIB_e5DgNsj4tVzv-J2BAdOsiWwjFZnSWHZxrptgz3yQ-ZxCLkfnzLneadJueLeb2FTKMVpJGcassc_ibhu7K55bN8khSBr9tJ1Xlsx4f3vvsUPrYtqbcAipCwAGlCoM-UELouPwrqOYGGcvvlZUpINWaV49ZTE7KejBHnZcBLP8_ozO9Avr7wyemWNKbVvfg1yqYYA';
-        const MAILERLITE_API_URL = 'https://connect.mailerlite.com/api';
+        var MAILERLITE_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiODNkZDhiMTY2ZTQ5MDY2NWY5YjQzMzU1ODM3YjBhZGM1OGU2YjU2OWFiOTg5MDg0ODEzNTAwYjFkZTFiMmFmMWNjMmM2MWFjNjQxZDFmZjciLCJpYXQiOjE3NDg5NTMyNDMuMDUwMDE3LCJuYmYiOjE3NDg5NTMyNDMuMDUwMDIsImV4cCI6NDkwNDYyNjg0My4wNDM5NTQsInN1YiI6IjE1ODEyNjkiLCJzY29wZXMiOltdfQ.irCclvaRLPuh5BCekhp1qR3A0ZyGWLP4wkMYolUsCCx3yx-V8V9V1p8CYP4nZbkwFiS8IzWUkilhgSTYqTwYmDeG9D2pQSwokSYWbZDsbVWwZtZVh-kW_gup0PfdBHdZGObddwQU7B_QZMKnlpqMgNPEBREweKxdMMadKZHHFf66gaAIkq5fcgNdGhQW8xXqDgUr2GahoisepokvD14aNRM3WEMkelkhOQ3AwALDbdLtkmlPegqNllik6Xw6ZDOIOSAkHikkBa9aZpfMQ0TPjOdy_6TfE9LxjDZ_-USQrCQuTiCQnxgvEjJDjhdGW2iIJIK9fLOIWrSVbBQg3xAC_idDk_eLqn-bEN1YNPeKeA7jT8FPaL4P5OxU3RryWg-f8KlWVNxgxXfifPawIMKIgescPCGJry7bbVTvRi-KgJViIWUl3N93QRSCPjXj7br8sB3dZtlRZk0oxwgzEP0394_778d4RR5Ns3WaeIB_e5DgNsj4tVzv-J2BAdOsiWwjFZnSWHZxrptgz3yQ-ZxCLkfnzLneadJueLeb2FTKMVpJGcassc_ibhu7K55bN8khSBr9tJ1Xlsx4f3vvsUPrYtqbcAipCwAGlCoM-UELouPwrqOYGGcvvlZUpINWaV49ZTE7KejBHnZcBLP8_ozO9Avr7wyemWNKbVvfg1yqYYA';
+        var MAILERLITE_API_URL = 'https://connect.mailerlite.com/api';
 
-        const MAILERLITE_GROUPS = {
+        var MAILERLITE_GROUPS = {
             'champion': 'Champion Traders',
             'solid': 'Solid Traders',
             'developing': 'Developing Traders',
@@ -1069,8 +1091,8 @@
         // ===== ADMIN FUNCTIONS =====
 
         function toggleAdminPanel() {
-            const panel = document.getElementById('admin-panel');
-            const isVisible = panel.style.display === 'block';
+            var panel = document.getElementById('admin-panel');
+            var isVisible = panel.style.display === 'block';
             panel.style.display = isVisible ? 'none' : 'block';
             
             if (!isVisible) {
@@ -1079,130 +1101,125 @@
         }
 
         function updateAdminStats() {
-            const insights = DB.getInsights();
-            const statsEl = document.getElementById('admin-stats');
+            var insights = DB.getInsights();
+            var statsEl = document.getElementById('admin-stats');
             
             if (!insights) {
-                statsEl.innerHTML = `
-                    <strong>📊 Quick Stats</strong><br>
-                    No data yet<br>
-                    <small>Storage: ${DB.storageType}</small>
-                `;
+                statsEl.innerHTML = '<strong>📊 Quick Stats</strong><br>No data yet<br><small>Storage: ' + DB.storageType + '</small>';
                 return;
             }
 
-            const storageIcon = DB.useLocalStorage ? '💾' : '🧠';
-            const storageText = DB.useLocalStorage ? 'Persistent' : 'Session Only';
+            var storageIcon = DB.useLocalStorage ? '💾' : '🧠';
+            var storageText = DB.useLocalStorage ? 'Persistent' : 'Session Only';
 
-            statsEl.innerHTML = `
-                <strong>📊 AI-Enhanced Stats</strong><br>
-                Sessions: ${insights.totalAssessments}<br>
-                Avg Score: ${insights.averageScore}<br>
-                Completion: ${insights.completionRate}%<br>
-                Email Rate: ${insights.emailCaptureRate}%<br>
-                PDF Rate: ${insights.pdfDownloadRate}%<br>
-                <small>${storageIcon} ${storageText}</small>
-            `;
+            statsEl.innerHTML = '<strong>📊 AI-Enhanced Stats</strong><br>' +
+                'Sessions: ' + insights.totalAssessments + '<br>' +
+                'Avg Score: ' + insights.averageScore + '<br>' +
+                'Completion: ' + insights.completionRate + '%<br>' +
+                'Email Rate: ' + insights.emailCaptureRate + '%<br>' +
+                'PDF Rate: ' + insights.pdfDownloadRate + '%<br>' +
+                '<small>' + storageIcon + ' ' + storageText + '</small>';
         }
 
         function showAIPatterns() {
-            const insights = DB.getInsights();
+            var insights = DB.getInsights();
             if (!insights || !insights.aiPatterns) {
                 alert('No AI pattern data available yet.');
                 return;
             }
 
-            const patterns = insights.aiPatterns;
-            let report = `🧠 AI PATTERN ANALYSIS\n\n`;
+            var patterns = insights.aiPatterns;
+            var report = '🧠 AI PATTERN ANALYSIS\n\n';
             
-            report += `EMOTIONAL PATTERNS DETECTED:\n`;
-            report += `• FOMO Traders: ${patterns.fomoTraders}\n`;
-            report += `• Revenge Traders: ${patterns.revengeTraders}\n`;
-            report += `• Analysis Paralysis: ${patterns.analysisParalysis}\n`;
-            report += `• Impulsive Traders: ${patterns.impulsiveTraders}\n`;
-            report += `• High Risk Users: ${patterns.highRiskUsers}\n\n`;
+            report += 'EMOTIONAL PATTERNS DETECTED:\n';
+            report += '• FOMO Traders: ' + patterns.fomoTraders + '\n';
+            report += '• Revenge Traders: ' + patterns.revengeTraders + '\n';
+            report += '• Analysis Paralysis: ' + patterns.analysisParalysis + '\n';
+            report += '• Impulsive Traders: ' + patterns.impulsiveTraders + '\n';
+            report += '• High Risk Users: ' + patterns.highRiskUsers + '\n\n';
 
-            const total = insights.totalAssessments;
+            var total = insights.totalAssessments;
             if (total > 0) {
-                report += `PATTERN PERCENTAGES:\n`;
-                report += `• FOMO: ${Math.round((patterns.fomoTraders/total)*100)}%\n`;
-                report += `• Revenge: ${Math.round((patterns.revengeTraders/total)*100)}%\n`;
-                report += `• Analysis Paralysis: ${Math.round((patterns.analysisParalysis/total)*100)}%\n`;
-                report += `• High Risk: ${Math.round((patterns.highRiskUsers/total)*100)}%\n`;
+                report += 'PATTERN PERCENTAGES:\n';
+                report += '• FOMO: ' + Math.round((patterns.fomoTraders/total)*100) + '%\n';
+                report += '• Revenge: ' + Math.round((patterns.revengeTraders/total)*100) + '%\n';
+                report += '• Analysis Paralysis: ' + Math.round((patterns.analysisParalysis/total)*100) + '%\n';
+                report += '• High Risk: ' + Math.round((patterns.highRiskUsers/total)*100) + '%\n';
             }
 
             alert(report);
         }
 
         function exportToCSV() {
-            const csv = DB.exportToCSV();
+            var csv = DB.exportToCSV();
             if (!csv) {
                 alert('No data to export');
                 return;
             }
 
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var link = document.createElement('a');
+            var url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `trading_psychology_ai_assessments_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute('download', 'trading_psychology_ai_assessments_' + new Date().toISOString().split('T')[0] + '.csv');
             link.click();
         }
 
         function exportToJSON() {
-            const json = DB.exportToJSON();
-            const blob = new Blob([json], { type: 'application/json' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
+            var json = DB.exportToJSON();
+            var blob = new Blob([json], { type: 'application/json' });
+            var link = document.createElement('a');
+            var url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `trading_psychology_ai_data_${new Date().toISOString().split('T')[0]}.json`);
+            link.setAttribute('download', 'trading_psychology_ai_data_' + new Date().toISOString().split('T')[0] + '.json');
             link.click();
         }
 
         function showDetailedInsights() {
-            const insights = DB.getInsights();
+            var insights = DB.getInsights();
             if (!insights) {
                 alert('No assessment data available yet.');
                 return;
             }
 
-            let report = `📊 DETAILED AI-ENHANCED INSIGHTS\n\n`;
+            var report = '📊 DETAILED AI-ENHANCED INSIGHTS\n\n';
             
-            const storageIcon = DB.useLocalStorage ? '💾' : '🧠';
-            const storageText = DB.useLocalStorage ? 'Persistent (localStorage)' : 'Session Only (memory)';
-            report += `💾 Storage: ${storageIcon} ${storageText}\n`;
+            var storageIcon = DB.useLocalStorage ? '💾' : '🧠';
+            var storageText = DB.useLocalStorage ? 'Persistent (localStorage)' : 'Session Only (memory)';
+            report += '💾 Storage: ' + storageIcon + ' ' + storageText + '\n';
             if (!DB.useLocalStorage) {
-                report += `⚠️  Data will be lost on page refresh/close\n`;
+                report += '⚠️  Data will be lost on page refresh/close\n';
             }
-            report += `\n`;
+            report += '\n';
             
-            report += `Total Assessments: ${insights.totalAssessments}\n`;
-            report += `Average Score: ${insights.averageScore}/320\n`;
-            report += `Completion Rate: ${insights.completionRate}%\n\n`;
+            report += 'Total Assessments: ' + insights.totalAssessments + '\n';
+            report += 'Average Score: ' + insights.averageScore + '/320\n';
+            report += 'Completion Rate: ' + insights.completionRate + '%\n\n';
             
-            report += `📈 CONVERSION FUNNEL:\n`;
-            report += `Started → Completed: ${insights.completionRate}%\n`;
-            report += `Completed → Email: ${insights.emailCaptureRate}%\n`;
-            report += `Email → PDF: ${insights.pdfDownloadRate}%\n\n`;
+            report += '📈 CONVERSION FUNNEL:\n';
+            report += 'Started → Completed: ' + insights.completionRate + '%\n';
+            report += 'Completed → Email: ' + insights.emailCaptureRate + '%\n';
+            report += 'Email → PDF: ' + insights.pdfDownloadRate + '%\n\n';
             
-            report += `👥 CATEGORY DISTRIBUTION:\n`;
-            Object.entries(insights.categoryDistribution).forEach(([cat, count]) => {
-                const percentage = Math.round((count / insights.totalAssessments) * 100);
-                report += `${cat.replace('_', ' ')}: ${count} (${percentage}%)\n`;
+            report += '👥 CATEGORY DISTRIBUTION:\n';
+            Object.keys(insights.categoryDistribution).forEach(function(cat) {
+                var count = insights.categoryDistribution[cat];
+                var percentage = Math.round((count / insights.totalAssessments) * 100);
+                report += cat.replace('_', ' ') + ': ' + count + ' (' + percentage + '%)\n';
             });
 
             if (insights.timeAnalysis) {
-                report += `\n⏱️ TIME ANALYSIS:\n`;
-                report += `Average Duration: ${Math.round(insights.timeAnalysis.averageDuration/60)} minutes\n`;
-                report += `Fastest: ${insights.timeAnalysis.minDuration}s\n`;
-                report += `Slowest: ${Math.round(insights.timeAnalysis.maxDuration/60)} minutes\n`;
+                report += '\n⏱️ TIME ANALYSIS:\n';
+                report += 'Average Duration: ' + Math.round(insights.timeAnalysis.averageDuration/60) + ' minutes\n';
+                report += 'Fastest: ' + insights.timeAnalysis.minDuration + 's\n';
+                report += 'Slowest: ' + Math.round(insights.timeAnalysis.maxDuration/60) + ' minutes\n';
             }
 
-            report += `\n📊 SCORE DISTRIBUTION:\n`;
-            report += `Champion (280+): ${insights.scoreDistribution.champion}\n`;
-            report += `Solid (200-279): ${insights.scoreDistribution.solid}\n`;
-            report += `Developing (120-199): ${insights.scoreDistribution.developing}\n`;
-            report += `Vulnerable (<120): ${insights.scoreDistribution.vulnerable}\n`;
+            report += '\n📊 SCORE DISTRIBUTION:\n';
+            report += 'Champion (280+): ' + insights.scoreDistribution.champion + '\n';
+            report += 'Solid (200-279): ' + insights.scoreDistribution.solid + '\n';
+            report += 'Developing (120-199): ' + insights.scoreDistribution.developing + '\n';
+            report += 'Vulnerable (<120): ' + insights.scoreDistribution.vulnerable + '\n';
 
             alert(report);
         }
@@ -1347,20 +1364,21 @@
         }
 
         function displayAIInsights() {
-            const container = document.getElementById('ai-insights-container');
-            const insights = assessmentData.aiInsights;
-            const analysis = assessmentData.aiAnalysis;
+            var container = document.getElementById('ai-insights-container');
+            var insights = assessmentData.aiInsights;
+            var analysis = assessmentData.aiAnalysis;
             
-            let html = '<div class="ai-insights">';
+            var html = '<div class="ai-insights">';
             html += '<h3>🧠 AI-Enhanced Insights</h3>';
             
             // Risk alerts
             if (insights.riskAlerts.length > 0) {
-                for (let alert of insights.riskAlerts) {
-                    html += `<div class="risk-alerts ${alert.level}">
-                        <strong>${alert.message}</strong><br>
-                        <em>Recommended Action: ${alert.action}</em>
-                    </div>`;
+                for (var i = 0; i < insights.riskAlerts.length; i++) {
+                    var alert = insights.riskAlerts[i];
+                    html += '<div class="risk-alerts ' + alert.level + '">';
+                    html += '<strong>' + alert.message + '</strong><br>';
+                    html += '<em>Recommended Action: ' + alert.action + '</em>';
+                    html += '</div>';
                 }
             }
 
@@ -1368,30 +1386,32 @@
             if (insights.patterns.length > 0) {
                 html += '<div class="pattern-detected">';
                 html += '<strong>🎯 Detected Psychological Patterns:</strong><br>';
-                for (let pattern of insights.patterns) {
-                    html += `• ${pattern.name} (${pattern.confidence}% confidence)<br>`;
+                for (var i = 0; i < insights.patterns.length; i++) {
+                    var pattern = insights.patterns[i];
+                    html += '• ' + pattern.name + ' (' + pattern.confidence + '% confidence)<br>';
                 }
                 html += '</div>';
             }
 
             // Advanced category
             if (analysis.advancedCategory) {
-                html += `<div class="personalized-tips">
-                    <strong>🏷️ Advanced Classification:</strong><br>
-                    <span style="color: ${analysis.advancedCategory.color}; font-weight: bold;">
-                        ${analysis.advancedCategory.name}
-                    </span><br>
-                    <em>${analysis.advancedCategory.description}</em>
-                </div>`;
+                html += '<div class="personalized-tips">';
+                html += '<strong>🏷️ Advanced Classification:</strong><br>';
+                html += '<span style="color: ' + analysis.advancedCategory.color + '; font-weight: bold;">';
+                html += analysis.advancedCategory.name;
+                html += '</span><br>';
+                html += '<em>' + analysis.advancedCategory.description + '</em>';
+                html += '</div>';
             }
 
             // Dynamic recommendations
             if (insights.recommendations.length > 0) {
                 html += '<div class="personalized-tips">';
                 html += '<strong>🎯 AI-Generated Recommendations:</strong><br>';
-                insights.recommendations.slice(0, 3).forEach((rec, index) => {
-                    html += `${index + 1}. ${rec}<br>`;
-                });
+                for (var i = 0; i < Math.min(insights.recommendations.length, 3); i++) {
+                    var rec = insights.recommendations[i];
+                    html += (i + 1) + '. ' + rec + '<br>';
+                }
                 html += '</div>';
             }
 
@@ -1416,17 +1436,17 @@
             return texts[category];
         }
 
-        // MailerLite Integration (unchanged)
+        // MailerLite Integration
         async function addToMailerLite(email, firstName) {
             try {
                 document.getElementById('loading').style.display = 'block';
                 
                 var groupName = getMailerLiteGroup(assessmentData.totalScore);
                 
-                const groupsResponse = await fetch(`${MAILERLITE_API_URL}/groups`, {
+                var groupsResponse = await fetch(MAILERLITE_API_URL + '/groups', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${MAILERLITE_API_TOKEN}`,
+                        'Authorization': 'Bearer ' + MAILERLITE_API_TOKEN,
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     }
@@ -1436,14 +1456,16 @@
                     throw new Error('Failed to fetch groups');
                 }
 
-                const groupsData = await groupsResponse.json();
-                const targetGroup = groupsData.data.find(group => group.name === groupName);
+                var groupsData = await groupsResponse.json();
+                var targetGroup = groupsData.data.find(function(group) {
+                    return group.name === groupName;
+                });
 
                 if (!targetGroup) {
-                    throw new Error(`Group "${groupName}" not found`);
+                    throw new Error('Group "' + groupName + '" not found');
                 }
 
-                const subscriberData = {
+                var subscriberData = {
                     email: email,
                     fields: {
                         name: firstName || '',
@@ -1456,10 +1478,10 @@
                     groups: [targetGroup.id]
                 };
 
-                const addResponse = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
+                var addResponse = await fetch(MAILERLITE_API_URL + '/subscribers', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${MAILERLITE_API_TOKEN}`,
+                        'Authorization': 'Bearer ' + MAILERLITE_API_TOKEN,
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
@@ -1467,11 +1489,11 @@
                 });
 
                 if (!addResponse.ok) {
-                    const errorData = await addResponse.json();
-                    throw new Error(`MailerLite API error: ${errorData.message || 'Unknown error'}`);
+                    var errorData = await addResponse.json();
+                    throw new Error('MailerLite API error: ' + (errorData.message || 'Unknown error'));
                 }
 
-                const responseData = await addResponse.json();
+                var responseData = await addResponse.json();
                 
                 assessmentData.mailerliteAdded = true;
                 assessmentData.mailerliteGroupId = targetGroup.id;
@@ -1530,6 +1552,11 @@
         // Enhanced PDF Generation with AI insights
         function generatePersonalizedReport() {
             try {
+                // Safe jsPDF initialization
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    throw new Error('jsPDF library not loaded');
+                }
+                
                 var jsPDF = window.jspdf.jsPDF;
                 var doc = new jsPDF();
                 var pageWidth = doc.internal.pageSize.getWidth();
@@ -1721,8 +1748,8 @@
 
         // Initialize admin stats on page load
         window.addEventListener('load', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            let isAdminStored = false;
+            var urlParams = new URLSearchParams(window.location.search);
+            var isAdminStored = false;
             
             try {
                 isAdminStored = localStorage.getItem('admin_mode') === 'true';
@@ -1730,7 +1757,7 @@
                 isAdminStored = false;
             }
             
-            const isAdmin = urlParams.get('admin') === 'true' || 
+            var isAdmin = urlParams.get('admin') === 'true' || 
                            window.location.hash === '#admin' ||
                            isAdminStored;
             
