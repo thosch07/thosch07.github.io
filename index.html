@@ -2070,6 +2070,12 @@
         // ===== NEW OPTIMIZATION FUNCTIONS =====
 
         function joinWaitlist() {
+            console.log('joinWaitlist called', {
+                emailProvided: assessmentData.emailProvided,
+                email: assessmentData.email,
+                totalScore: assessmentData.totalScore
+            });
+
             gtag('event', 'waitlist_interest', {
                 event_category: 'conversion',
                 event_label: 'premium_toolkit_waitlist',
@@ -2079,8 +2085,10 @@
                 }
             });
 
-            // Check if user already provided email
+            // Check if user already provided email for PDF
             if (assessmentData.emailProvided && assessmentData.email) {
+                console.log('User has email, adding to waitlist:', assessmentData.email);
+                
                 // Add existing user to waitlist with their assessment data
                 var userData = {
                     totalScore: assessmentData.totalScore,
@@ -2089,23 +2097,53 @@
                     aiPrimaryPattern: assessmentData.aiAnalysis && assessmentData.aiAnalysis.primaryPattern ? assessmentData.aiAnalysis.primaryPattern.id : ''
                 };
                 
-                var added = DB.addToWaitlist(assessmentData.email, userData);
-                
-                if (added) {
-                    alert('🎉 Perfect! You\'ve been added to the Premium AI Toolkit waitlist!\n\n✨ Waitlist benefits:\n• Early access\n• Special pricing\n• Exclusive features\n\nWe\'ll email you as soon as it\'s ready!');
+                try {
+                    var added = DB.addToWaitlist(assessmentData.email, userData);
+                    console.log('Waitlist add result:', added);
                     
-                    // Track waitlist signup
-                    gtag('event', 'waitlist_joined', {
-                        event_category: 'conversion',
-                        event_label: 'existing_email_user'
-                    });
-                } else {
-                    alert('✅ You\'re already on our Premium Toolkit waitlist!\n\nWe\'ll notify you as soon as it launches with early access and special pricing.');
+                    if (added) {
+                        // Show success message with better visibility
+                        var button = event.target;
+                        var originalText = button.textContent;
+                        button.textContent = '✅ Added to Waitlist!';
+                        button.style.background = '#28a745';
+                        
+                        setTimeout(function() {
+                            button.textContent = originalText;
+                            button.style.background = '';
+                        }, 3000);
+                        
+                        alert('🎉 SUCCESS!\n\nYou\'ve been added to the Premium AI Toolkit waitlist!\n\n✨ Benefits:\n• Early access before public launch\n• Special pricing (up to 30% off)\n• Exclusive beta features\n\nWe\'ll email you at: ' + assessmentData.email);
+                        
+                        // Track successful waitlist signup
+                        gtag('event', 'waitlist_joined', {
+                            event_category: 'conversion',
+                            event_label: 'existing_email_user'
+                        });
+                    } else {
+                        // Already on waitlist
+                        var button = event.target;
+                        var originalText = button.textContent;
+                        button.textContent = '✅ Already on Waitlist!';
+                        button.style.background = '#17a2b8';
+                        
+                        setTimeout(function() {
+                            button.textContent = originalText;
+                            button.style.background = '';
+                        }, 3000);
+                        
+                        alert('✅ ALREADY REGISTERED!\n\nYou\'re already on our Premium Toolkit waitlist!\n\n📧 We\'ll notify you at: ' + assessmentData.email + '\n\n✨ You\'ll get:\n• Early access\n• Special pricing\n• Exclusive features');
+                    }
+                } catch (error) {
+                    console.error('Error adding to waitlist:', error);
+                    alert('❌ Error adding to waitlist. Please try again or contact support.');
                 }
                 
             } else {
-                // Prompt for email signup
-                var email = prompt('🔔 Join the Waitlist!\n\nEnter your email to get notified when the Advanced AI Toolkit launches:\n\n✨ Waitlist benefits:\n• Early access\n• Special pricing\n• Exclusive features');
+                // User hasn't provided email yet - prompt for it
+                console.log('User has no email, prompting for input');
+                
+                var email = prompt('🔔 Join the Premium AI Toolkit Waitlist!\n\nEnter your email to get notified when it launches:\n\n✨ Waitlist benefits:\n• Early access before public launch\n• Special pricing (up to 30% off)\n• Exclusive beta features');
                 
                 if (email && email.includes('@')) {
                     // Add to waitlist with current assessment data if available
@@ -2116,22 +2154,28 @@
                         aiPrimaryPattern: assessmentData.aiAnalysis && assessmentData.aiAnalysis.primaryPattern ? assessmentData.aiAnalysis.primaryPattern.id : ''
                     };
                     
-                    var added = DB.addToWaitlist(email, userData);
-                    
-                    if (added) {
-                        alert('🎉 You\'re on the waitlist!\n\nWe\'ll email you as soon as the Advanced AI Toolkit is ready.\n\n✨ You\'ll get early access and special pricing!');
+                    try {
+                        var added = DB.addToWaitlist(email, userData);
+                        console.log('New email waitlist add result:', added);
                         
-                        // Track waitlist signup
-                        gtag('event', 'waitlist_joined', {
-                            event_category: 'conversion',
-                            event_label: 'new_email_signup'
-                        });
-                    } else {
-                        alert('✅ You\'re already on our Premium Toolkit waitlist!\n\nWe\'ll notify you as soon as it launches.');
+                        if (added) {
+                            alert('🎉 WELCOME TO THE WAITLIST!\n\nYou\'re now on the Premium AI Toolkit waitlist!\n\n📧 We\'ll email you at: ' + email + '\n\n✨ You\'ll get:\n• Early access\n• Special pricing\n• Exclusive features');
+                            
+                            // Track waitlist signup
+                            gtag('event', 'waitlist_joined', {
+                                event_category: 'conversion',
+                                event_label: 'new_email_signup'
+                            });
+                        } else {
+                            alert('✅ You\'re already on our Premium Toolkit waitlist!\n\nWe\'ll notify you as soon as it launches.');
+                        }
+                    } catch (error) {
+                        console.error('Error adding new email to waitlist:', error);
+                        alert('❌ Error adding to waitlist. Please try again or contact support.');
                     }
                     
                 } else if (email) {
-                    alert('Please enter a valid email address to join the waitlist.');
+                    alert('❌ Please enter a valid email address to join the waitlist.');
                 }
             }
         }
