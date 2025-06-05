@@ -99,6 +99,27 @@
             line-height: 1.6;
         }
 
+        .social-proof {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .proof-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .proof-icon {
+            font-size: 1.2rem;
+        }
+
         .start-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -288,6 +309,112 @@
             line-height: 1.4;
         }
 
+        .premium-cta-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .premium-cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+        }
+
+        .premium-cta h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .premium-cta p {
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .premium-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .premium-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .premium-benefits {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .benefit {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .sharing-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .sharing-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .sharing-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .qr-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        #qr-code {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+
+        .share-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .share-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .share-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
         .loading {
             display: none;
             color: #667eea;
@@ -354,6 +481,26 @@
             .email-input { margin-bottom: 10px; }
             .admin-panel { right: 5px; top: 5px; }
             .admin-toggle { right: 5px; top: 5px; }
+            
+            .social-proof {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .premium-benefits {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .qr-container {
+                flex-direction: column;
+            }
+            
+            .share-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -381,6 +528,22 @@
             <div class="intro" id="intro">
                 <h2>Master Your Trading Psychology with AI</h2>
                 <p>Our advanced assessment uses artificial intelligence to identify your unique emotional trading patterns, detect risk behaviors, and generate personalized improvement strategies.</p>
+                
+                <!-- Social Proof Section -->
+                <div class="social-proof">
+                    <div class="proof-item">
+                        <span class="proof-icon">🧠</span>
+                        <span class="proof-text">AI-Powered Pattern Recognition</span>
+                    </div>
+                    <div class="proof-item">
+                        <span class="proof-icon">⚡</span>
+                        <span class="proof-text">Instant Personalized Insights</span>
+                    </div>
+                    <div class="proof-item">
+                        <span class="proof-icon">📊</span>
+                        <span class="proof-text">Advanced Risk Assessment</span>
+                    </div>
+                </div>
                 
                 <button class="start-button" onclick="startAssessment()">Start AI Assessment Now</button>
                 
@@ -418,13 +581,40 @@
                         You'll receive an AI-personalized report with advanced insights. Unsubscribe anytime.
                     </div>
                 </div>
+
+                <!-- Premium Toolkit CTA Section -->
+                <div class="premium-cta-section">
+                    <div class="premium-cta">
+                        <h3>🚀 Ready for the Complete AI Psychology Toolkit?</h3>
+                        <p>Take your trading psychology to the next level with our comprehensive AI-enhanced toolkit featuring advanced pattern recognition and personalized improvement strategies.</p>
+                        <button class="premium-button" onclick="learnMoreToolkit()">Learn More About Premium Toolkit</button>
+                        <div class="premium-benefits">
+                            <div class="benefit">🧠 Advanced AI Analysis</div>
+                            <div class="benefit">📊 Daily Progress Tracking</div>
+                            <div class="benefit">📈 Personalized Training Plans</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code Sharing Section -->
+                <div class="sharing-section">
+                    <h3>📱 Share This AI Assessment</h3>
+                    <p>Help other traders discover their psychological patterns</p>
+                    <div class="qr-container">
+                        <canvas id="qr-code" width="120" height="120"></canvas>
+                        <div class="share-buttons">
+                            <button class="share-button" onclick="copyAssessmentLink()">📋 Copy Link</button>
+                            <button class="share-button" onclick="downloadQRCode()">📱 Download QR Code</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         // ===== GLOBAL VARIABLES =====
-        window.adminPanelOpen = false; // Fixed syntax error
+        window.adminPanelOpen = false;
 
         // ===== AI DYNAMIC INSIGHTS GENERATOR =====
         
@@ -1352,6 +1542,9 @@
             // Display AI insights
             displayAIInsights();
 
+            // Generate QR code for sharing
+            setTimeout(generateQRCode, 500);
+
             gtag('event', 'ai_assessment_completed', {
                 event_category: 'ai_assessment',
                 event_label: category,
@@ -1738,6 +1931,130 @@
                 console.error('AI PDF generation failed:', error);
                 alert('PDF generation failed, but your email signup was successful.');
             }
+        }
+
+        // ===== NEW OPTIMIZATION FUNCTIONS =====
+
+        function learnMoreToolkit() {
+            gtag('event', 'premium_toolkit_clicked', {
+                event_category: 'conversion',
+                event_label: 'premium_toolkit_interest',
+                custom_parameters: {
+                    user_score: assessmentData.totalScore,
+                    ai_risk_level: assessmentData.aiAnalysis ? assessmentData.aiAnalysis.riskLevel : 'unknown'
+                }
+            });
+
+            // You can customize this URL to your premium toolkit page
+            var toolkitUrl = 'https://schnitzlein-consulting.com/premium-ai-toolkit';
+            
+            // Add UTM parameters for tracking
+            var utmParams = '?utm_source=ai_assessment&utm_medium=cta&utm_campaign=premium_toolkit';
+            
+            window.open(toolkitUrl + utmParams, '_blank');
+        }
+
+        function copyAssessmentLink() {
+            var assessmentUrl = window.location.origin + window.location.pathname;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(assessmentUrl).then(function() {
+                    alert('✅ Assessment link copied to clipboard!');
+                }).catch(function() {
+                    fallbackCopyTextToClipboard(assessmentUrl);
+                });
+            } else {
+                fallbackCopyTextToClipboard(assessmentUrl);
+            }
+
+            gtag('event', 'link_shared', {
+                event_category: 'sharing',
+                event_label: 'copy_link'
+            });
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? '✅ Assessment link copied!' : '❌ Copy failed';
+                alert(msg);
+            } catch (err) {
+                alert('❌ Copy failed. URL: ' + text);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        function generateQRCode() {
+            var canvas = document.getElementById('qr-code');
+            var ctx = canvas.getContext('2d');
+            
+            // Simple QR code placeholder (you would integrate a real QR library for production)
+            var size = 120;
+            var cellSize = size / 25;
+            
+            // Clear canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Create a simple pattern that resembles a QR code
+            ctx.fillStyle = '#000000';
+            
+            // Finder patterns (corners)
+            drawFinderPattern(ctx, 0, 0, cellSize);
+            drawFinderPattern(ctx, 18 * cellSize, 0, cellSize);
+            drawFinderPattern(ctx, 0, 18 * cellSize, cellSize);
+            
+            // Random data pattern
+            for (var i = 0; i < 25; i++) {
+                for (var j = 0; j < 25; j++) {
+                    if (Math.random() > 0.5 && !isFinderArea(i, j)) {
+                        ctx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+            
+            // Add center text
+            ctx.fillStyle = '#667eea';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('SCAN ME', size/2, size/2 + 20);
+        }
+
+        function drawFinderPattern(ctx, x, y, cellSize) {
+            // Outer square
+            ctx.fillRect(x, y, 7 * cellSize, 7 * cellSize);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(x + cellSize, y + cellSize, 5 * cellSize, 5 * cellSize);
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(x + 2 * cellSize, y + 2 * cellSize, 3 * cellSize, 3 * cellSize);
+        }
+
+        function isFinderArea(x, y) {
+            return (x < 9 && y < 9) || (x > 15 && y < 9) || (x < 9 && y > 15);
+        }
+
+        function downloadQRCode() {
+            var canvas = document.getElementById('qr-code');
+            var link = document.createElement('a');
+            link.download = 'trading_psychology_assessment_qr.png';
+            link.href = canvas.toDataURL();
+            link.click();
+
+            gtag('event', 'qr_downloaded', {
+                event_category: 'sharing',
+                event_label: 'qr_code_download'
+            });
         }
 
         // Global admin functions
