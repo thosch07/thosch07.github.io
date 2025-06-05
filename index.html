@@ -1782,20 +1782,14 @@
             return texts[category];
         }
 
-        // MailerLite Integration (currently disabled until groups are created)
+        // MailerLite Integration (now active!)
         async function addToMailerLite(email, firstName) {
             try {
                 document.getElementById('loading').style.display = 'block';
                 console.log('MailerLite: Attempting to add email:', email);
                 
-                // Temporarily skip MailerLite until groups are set up
-                console.log('MailerLite: Skipping integration - groups not yet configured');
-                document.getElementById('loading').style.display = 'none';
-                return false; // Will show fallback message
-                
-                /* 
-                // Enable this once MailerLite groups are configured
                 var groupName = getMailerLiteGroup(assessmentData.totalScore);
+                console.log('MailerLite: Target group:', groupName);
                 
                 var groupsResponse = await fetch(MAILERLITE_API_URL + '/groups', {
                     method: 'GET',
@@ -1807,17 +1801,21 @@
                 });
 
                 if (!groupsResponse.ok) {
-                    throw new Error('Failed to fetch groups');
+                    throw new Error('Failed to fetch groups: ' + groupsResponse.status);
                 }
 
                 var groupsData = await groupsResponse.json();
+                console.log('MailerLite: Available groups:', groupsData.data.map(g => g.name));
+                
                 var targetGroup = groupsData.data.find(function(group) {
                     return group.name === groupName;
                 });
 
                 if (!targetGroup) {
-                    throw new Error('Group "' + groupName + '" not found');
+                    throw new Error('Group "' + groupName + '" not found. Available groups: ' + groupsData.data.map(g => g.name).join(', '));
                 }
+
+                console.log('MailerLite: Found target group:', targetGroup.name, 'ID:', targetGroup.id);
 
                 var subscriberData = {
                     email: email,
@@ -1832,6 +1830,8 @@
                     groups: [targetGroup.id]
                 };
 
+                console.log('MailerLite: Adding subscriber:', subscriberData);
+
                 var addResponse = await fetch(MAILERLITE_API_URL + '/subscribers', {
                     method: 'POST',
                     headers: {
@@ -1844,10 +1844,11 @@
 
                 if (!addResponse.ok) {
                     var errorData = await addResponse.json();
-                    throw new Error('MailerLite API error: ' + (errorData.message || 'Unknown error'));
+                    throw new Error('MailerLite API error: ' + (errorData.message || 'Unknown error') + ' (Status: ' + addResponse.status + ')');
                 }
 
                 var responseData = await addResponse.json();
+                console.log('MailerLite: Success!', responseData);
                 
                 assessmentData.mailerliteAdded = true;
                 assessmentData.mailerliteGroupId = targetGroup.id;
@@ -1857,11 +1858,13 @@
 
                 document.getElementById('loading').style.display = 'none';
                 return true;
-                */
 
             } catch (error) {
                 console.error('MailerLite integration failed:', error);
                 document.getElementById('loading').style.display = 'none';
+                
+                // Graceful fallback
+                alert('Email signup successful! Your personalized AI report is generating...\n\n(Email integration temporarily unavailable)');
                 return false;
             }
         }
