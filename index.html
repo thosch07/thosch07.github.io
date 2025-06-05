@@ -2093,15 +2093,15 @@
                 
                 if (added) {
                     alert('🎉 Perfect! You\'ve been added to the Premium AI Toolkit waitlist!\n\n✨ Waitlist benefits:\n• Early access\n• Special pricing\n• Exclusive features\n\nWe\'ll email you as soon as it\'s ready!');
+                    
+                    // Track waitlist signup
+                    gtag('event', 'waitlist_joined', {
+                        event_category: 'conversion',
+                        event_label: 'existing_email_user'
+                    });
                 } else {
-                    alert('✅ You\'re already on our waitlist!\n\nWe\'ll notify you as soon as the Premium AI Toolkit launches.');
+                    alert('✅ You\'re already on our Premium Toolkit waitlist!\n\nWe\'ll notify you as soon as it launches with early access and special pricing.');
                 }
-                
-                // Track waitlist signup
-                gtag('event', 'waitlist_joined', {
-                    event_category: 'conversion',
-                    event_label: 'existing_email_user'
-                });
                 
             } else {
                 // Prompt for email signup
@@ -2120,15 +2120,15 @@
                     
                     if (added) {
                         alert('🎉 You\'re on the waitlist!\n\nWe\'ll email you as soon as the Advanced AI Toolkit is ready.\n\n✨ You\'ll get early access and special pricing!');
+                        
+                        // Track waitlist signup
+                        gtag('event', 'waitlist_joined', {
+                            event_category: 'conversion',
+                            event_label: 'new_email_signup'
+                        });
                     } else {
-                        alert('✅ You\'re already on our waitlist!\n\nWe\'ll notify you as soon as the Premium AI Toolkit launches.');
+                        alert('✅ You\'re already on our Premium Toolkit waitlist!\n\nWe\'ll notify you as soon as it launches.');
                     }
-                    
-                    // Track waitlist signup
-                    gtag('event', 'waitlist_joined', {
-                        event_category: 'conversion',
-                        event_label: 'new_email_signup'
-                    });
                     
                 } else if (email) {
                     alert('Please enter a valid email address to join the waitlist.');
