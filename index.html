@@ -356,6 +356,30 @@
             flex-wrap: wrap;
         }
 
+        .waitlist-info {
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+
+        .waitlist-info small {
+            font-size: 0.85rem;
+        }
+
+        .results-disclaimer {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .results-disclaimer strong {
+            color: #333;
+        }
+
         .benefit {
             font-size: 0.9rem;
             opacity: 0.9;
@@ -585,13 +609,16 @@
                 <!-- Premium Toolkit CTA Section -->
                 <div class="premium-cta-section">
                     <div class="premium-cta">
-                        <h3>🚀 Ready for the Complete AI Psychology Toolkit?</h3>
-                        <p>Take your trading psychology to the next level with our comprehensive AI-enhanced toolkit featuring advanced pattern recognition and personalized improvement strategies.</p>
-                        <button class="premium-button" onclick="learnMoreToolkit()">Learn More About Premium Toolkit</button>
+                        <h3>🚀 Coming Soon: Advanced AI Psychology Toolkit</h3>
+                        <p>Be the first to know when our comprehensive AI-enhanced toolkit launches. Get advanced pattern recognition, daily progress tracking, and personalized training plans.</p>
+                        <button class="premium-button" onclick="joinWaitlist()">🔔 Get Notified When Available</button>
                         <div class="premium-benefits">
                             <div class="benefit">🧠 Advanced AI Analysis</div>
                             <div class="benefit">📊 Daily Progress Tracking</div>
                             <div class="benefit">📈 Personalized Training Plans</div>
+                        </div>
+                        <div class="waitlist-info">
+                            <small>✨ Waitlist members get exclusive early access + special pricing</small>
                         </div>
                     </div>
                 </div>
@@ -607,6 +634,11 @@
                             <button class="share-button" onclick="downloadQRCode()">📱 Download QR Code</button>
                         </div>
                     </div>
+                </div>
+
+                <!-- Results Disclaimer -->
+                <div class="results-disclaimer">
+                    <p><strong>Important Disclaimer:</strong> This AI-enhanced assessment provides educational analysis of emotional trading patterns and is not financial advice. Results are based on self-reported responses and pattern recognition algorithms. For investment decisions and professional trading psychology support, consult a licensed financial advisor or qualified trading psychology specialist. Past performance and psychological assessments do not guarantee future trading results.</p>
                 </div>
             </div>
         </div>
@@ -1935,23 +1967,51 @@
 
         // ===== NEW OPTIMIZATION FUNCTIONS =====
 
-        function learnMoreToolkit() {
-            gtag('event', 'premium_toolkit_clicked', {
+        function joinWaitlist() {
+            gtag('event', 'waitlist_interest', {
                 event_category: 'conversion',
-                event_label: 'premium_toolkit_interest',
+                event_label: 'premium_toolkit_waitlist',
                 custom_parameters: {
                     user_score: assessmentData.totalScore,
                     ai_risk_level: assessmentData.aiAnalysis ? assessmentData.aiAnalysis.riskLevel : 'unknown'
                 }
             });
 
-            // You can customize this URL to your premium toolkit page
-            var toolkitUrl = 'https://schnitzlein-consulting.com/premium-ai-toolkit';
-            
-            // Add UTM parameters for tracking
-            var utmParams = '?utm_source=ai_assessment&utm_medium=cta&utm_campaign=premium_toolkit';
-            
-            window.open(toolkitUrl + utmParams, '_blank');
+            // Check if user already provided email
+            if (assessmentData.emailProvided && assessmentData.email) {
+                // User already gave email - add them to waitlist automatically
+                alert('🎉 Perfect! You\'re already on our email list, so we\'ll notify you as soon as the Advanced AI Toolkit is ready!\n\n✨ Waitlist members get:\n• Early access\n• Special pricing\n• Exclusive features');
+                
+                // Track waitlist signup
+                gtag('event', 'waitlist_joined', {
+                    event_category: 'conversion',
+                    event_label: 'existing_email_user'
+                });
+                
+            } else {
+                // Prompt for email signup
+                var email = prompt('🔔 Join the Waitlist!\n\nEnter your email to get notified when the Advanced AI Toolkit launches:\n\n✨ Waitlist benefits:\n• Early access\n• Special pricing\n• Exclusive features');
+                
+                if (email && email.includes('@')) {
+                    // Add to waitlist (you can integrate with your email service later)
+                    alert('🎉 You\'re on the waitlist!\n\nWe\'ll email you as soon as the Advanced AI Toolkit is ready.\n\n✨ You\'ll get early access and special pricing!');
+                    
+                    // Track waitlist signup
+                    gtag('event', 'waitlist_joined', {
+                        event_category: 'conversion',
+                        event_label: 'new_email_signup',
+                        custom_parameters: {
+                            waitlist_email: email
+                        }
+                    });
+                    
+                    // TODO: Add to your email service/database
+                    console.log('Waitlist signup:', email, assessmentData);
+                    
+                } else if (email) {
+                    alert('Please enter a valid email address to join the waitlist.');
+                }
+            }
         }
 
         function copyAssessmentLink() {
