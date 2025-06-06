@@ -1784,7 +1784,7 @@
             return texts[category];
         }
 
-        // MailerLite Integration (robust with fallback)
+        // MailerLite Integration (super simple approach)
         async function addToMailerLite(email, firstName) {
             try {
                 document.getElementById('loading').style.display = 'block';
@@ -1793,7 +1793,7 @@
                 var groupName = getMailerLiteGroup(assessmentData.totalScore);
                 console.log('MailerLite: Target group:', groupName);
                 
-                // Step 1: Get all groups
+                // Step 1: Get target group
                 var groupsResponse = await fetch(MAILERLITE_API_URL + '/groups', {
                     method: 'GET',
                     headers: {
@@ -1808,25 +1808,22 @@
                 }
 
                 var groupsData = await groupsResponse.json();
-                console.log('MailerLite: Available groups:', groupsData.data.map(g => g.name));
-                
                 var targetGroup = groupsData.data.find(function(group) {
                     return group.name === groupName;
                 });
 
                 if (!targetGroup) {
-                    throw new Error('Group "' + groupName + '" not found. Available groups: ' + groupsData.data.map(g => g.name).join(', '));
+                    throw new Error('Group not found: ' + groupName);
                 }
 
-                console.log('MailerLite: Found target group:', targetGroup.name, 'ID:', targetGroup.id);
+                console.log('MailerLite: Found group:', targetGroup.name, 'ID:', targetGroup.id);
 
-                // Step 2: Try to add subscriber without custom fields
+                // Step 2: Add subscriber WITHOUT group first
                 var subscriberData = {
-                    email: email,
-                    groups: [targetGroup.id]
+                    email: email
                 };
 
-                console.log('MailerLite: Adding subscriber (minimal):', subscriberData);
+                console.log('MailerLite: Adding subscriber (email only):', subscriberData);
 
                 var addResponse = await fetch(MAILERLITE_API_URL + '/subscribers', {
                     method: 'POST',
@@ -1839,65 +1836,77 @@
                 });
 
                 var responseData = await addResponse.json();
-                console.log('MailerLite: Response:', addResponse.status, responseData);
+                console.log('MailerLite: Add subscriber response:', addResponse.status, responseData);
 
-                if (!addResponse.ok) {
-                    // If subscriber already exists, try to update their group
-                    if (addResponse.status === 422 || addResponse.status === 409) {
-                        console.log('MailerLite: Subscriber might already exist, trying alternative approach...');
-                        
-                        // Try to find existing subscriber
-                        var searchResponse = await fetch(MAILERLITE_API_URL + '/subscribers?filter[email]=' + encodeURIComponent(email), {
-                            method: 'GET',
-                            headers: {
-                                'Authorization': 'Bearer ' + MAILERLITE_API_TOKEN,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            }
-                        });
+                var subscriberId;
 
-                        if (searchResponse.ok) {
-                            var searchData = await searchResponse.json();
-                            if (searchData.data && searchData.data.length > 0) {
-                                var existingSubscriber = searchData.data[0];
-                                console.log('MailerLite: Found existing subscriber:', existingSubscriber.id);
-                                
-                                // Add to group
-                                var groupAddResponse = await fetch(MAILERLITE_API_URL + '/subscribers/' + existingSubscriber.id + '/groups/' + targetGroup.id, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Authorization': 'Bearer ' + MAILERLITE_API_TOKEN,
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json'
-                                    }
-                                });
-
-                                if (groupAddResponse.ok) {
-                                    console.log('MailerLite: Successfully added existing subscriber to group');
-                                    assessmentData.mailerliteAdded = true;
-                                    assessmentData.mailerliteGroupId = targetGroup.id;
-                                    assessmentData.mailerliteSubscriberId = existingSubscriber.id;
-                                    
-                                    document.getElementById('loading').style.display = 'none';
-                                    return true;
-                                }
-                            }
-                        }
-                    }
+                if (addResponse.ok) {
+                    // New subscriber created
+                    subscriberId = responseData.data.id;
+                    console.log('MailerLite: New subscriber created with ID:', subscriberId);
+                } else if (addResponse.status === 422 && responseData.message && responseData.message.includes('already')) {
+                    // Subscriber already exists, find their ID
+                    console.log('MailerLite: Subscriber already exists, searching for ID...');
                     
-                    throw new Error('MailerLite API error: ' + (responseData.message || 'Unknown error') + ' (Status: ' + addResponse.status + ')');
+                    var searchResponse = await fetch(MAILERLITE_API_URL + '/subscribers?filter[email]=' + encodeURIComponent(email), {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + MAILERLITE_API_TOKEN,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (searchResponse.ok) {
+                        var searchData = await searchResponse.json();
+                        if (searchData.data && searchData.data.length > 0) {
+                            subscriberId = searchData.data[0].id;
+                            console.log('MailerLite: Found existing subscriber ID:', subscriberId);
+                        } else {
+                            throw new Error('Could not find existing subscriber');
+                        }
+                    } else {
+                        throw new Error('Failed to search for existing subscriber');
+                    }
+                } else {
+                    throw new Error('Failed to create subscriber: ' + (responseData.message || 'Unknown error'));
                 }
 
-                console.log('MailerLite: Success!', responseData);
-                
-                assessmentData.mailerliteAdded = true;
-                assessmentData.mailerliteGroupId = targetGroup.id;
-                assessmentData.mailerliteSubscriberId = responseData.data.id;
+                // Step 3: Add subscriber to group
+                if (subscriberId) {
+                    console.log('MailerLite: Adding subscriber', subscriberId, 'to group', targetGroup.id);
+                    
+                    var groupAddResponse = await fetch(MAILERLITE_API_URL + '/subscribers/' + subscriberId + '/groups/' + targetGroup.id, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + MAILERLITE_API_TOKEN,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
 
-                DB.addAssessment(JSON.parse(JSON.stringify(assessmentData)));
+                    var groupResponseData = await groupAddResponse.json();
+                    console.log('MailerLite: Add to group response:', groupAddResponse.status, groupResponseData);
 
-                document.getElementById('loading').style.display = 'none';
-                return true;
+                    if (groupAddResponse.ok) {
+                        console.log('MailerLite: Successfully added to group!');
+                        
+                        assessmentData.mailerliteAdded = true;
+                        assessmentData.mailerliteGroupId = targetGroup.id;
+                        assessmentData.mailerliteSubscriberId = subscriberId;
+
+                        DB.addAssessment(JSON.parse(JSON.stringify(assessmentData)));
+
+                        document.getElementById('loading').style.display = 'none';
+                        return true;
+                    } else {
+                        console.warn('MailerLite: Failed to add to group, but subscriber exists');
+                        document.getElementById('loading').style.display = 'none';
+                        return false;
+                    }
+                } else {
+                    throw new Error('No subscriber ID obtained');
+                }
 
             } catch (error) {
                 console.error('MailerLite integration failed:', error);
