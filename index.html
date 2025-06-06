@@ -816,10 +816,12 @@
                 for (var i = 0; i < riskIndicators.length; i++) {
                     var indicator = riskIndicators[i];
                     if (answers[indicator] !== undefined) {
-                        riskScore += answers[indicator]; // 0-3 scale
+                        // Invert scoring: higher answer index = lower risk
+                        riskScore += (3 - answers[indicator]); // Convert 0-3 to 3-0
                     }
                 }
 
+                // Now higher riskScore = higher risk (consistent with logic)
                 if (riskScore <= 4) return 'low';
                 if (riskScore <= 8) return 'medium';
                 return 'high';
