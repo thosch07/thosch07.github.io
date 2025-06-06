@@ -1823,16 +1823,13 @@
                     email: email,
                     fields: {
                         name: firstName || '',
-                        assessment_score: assessmentData.totalScore,
-                        trader_category: assessmentData.category,
-                        ai_risk_level: assessmentData.aiAnalysis.riskLevel,
-                        ai_primary_pattern: assessmentData.aiAnalysis.primaryPattern ? assessmentData.aiAnalysis.primaryPattern.id : '',
-                        completion_date: new Date().toISOString()
+                        last_name: '',
+                        company: 'Trading Psychology Assessment'
                     },
                     groups: [targetGroup.id]
                 };
 
-                console.log('MailerLite: Adding subscriber:', subscriberData);
+                console.log('MailerLite: Adding subscriber (simplified):', subscriberData);
 
                 var addResponse = await fetch(MAILERLITE_API_URL + '/subscribers', {
                     method: 'POST',
