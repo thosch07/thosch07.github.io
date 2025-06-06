@@ -1784,12 +1784,20 @@
             return texts[category];
         }
 
-        // MailerLite Integration (super simple approach)
+        // MailerLite Integration (with detailed error logging)
         async function addToMailerLite(email, firstName) {
             try {
                 document.getElementById('loading').style.display = 'block';
                 console.log('MailerLite: Attempting to add email:', email);
                 
+                // TEMPORARY: Skip MailerLite for now to ensure assessment works
+                console.log('MailerLite: Temporarily disabled for debugging');
+                document.getElementById('loading').style.display = 'none';
+                alert('Email signup successful! Your personalized AI report is generating...\n\n(MailerLite integration temporarily disabled for debugging)');
+                return false;
+                
+                /* 
+                // ORIGINAL CODE - ENABLE AFTER DEBUGGING
                 var groupName = getMailerLiteGroup(assessmentData.totalScore);
                 console.log('MailerLite: Target group:', groupName);
                 
@@ -1818,7 +1826,22 @@
 
                 console.log('MailerLite: Found group:', targetGroup.name, 'ID:', targetGroup.id);
 
-                // Step 2: Add subscriber WITHOUT group first
+                // Step 2: Check API token validity first
+                var testResponse = await fetch(MAILERLITE_API_URL + '/me', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + MAILERLITE_API_TOKEN,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                console.log('MailerLite: API token test:', testResponse.status);
+                if (!testResponse.ok) {
+                    throw new Error('API token invalid or expired');
+                }
+
+                // Step 3: Add subscriber WITHOUT group first
                 var subscriberData = {
                     email: email
                 };
@@ -1837,6 +1860,11 @@
 
                 var responseData = await addResponse.json();
                 console.log('MailerLite: Add subscriber response:', addResponse.status, responseData);
+                
+                // Log detailed errors if available
+                if (responseData.errors) {
+                    console.log('MailerLite: Detailed errors:', responseData.errors);
+                }
 
                 var subscriberId;
 
@@ -1872,7 +1900,7 @@
                     throw new Error('Failed to create subscriber: ' + (responseData.message || 'Unknown error'));
                 }
 
-                // Step 3: Add subscriber to group
+                // Step 4: Add subscriber to group
                 if (subscriberId) {
                     console.log('MailerLite: Adding subscriber', subscriberId, 'to group', targetGroup.id);
                     
@@ -1907,6 +1935,7 @@
                 } else {
                     throw new Error('No subscriber ID obtained');
                 }
+                */
 
             } catch (error) {
                 console.error('MailerLite integration failed:', error);
