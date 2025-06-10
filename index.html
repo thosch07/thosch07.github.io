@@ -875,6 +875,73 @@
         // Admin panel state
         window.adminPanelOpen = false;
         
+        // 🍪 COOKIE HELPER FUNCTIONS - NEW
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            }
+            return null;
+        }
+        
+        // 🚀 ENHANCED TRACKING FUNCTION - NEW
+        function trackAssessmentData(assessmentData) {
+            // Google Analytics Enhanced Tracking
+            gtag('event', 'assessment_completed', {
+                event_category: 'assessment',
+                event_label: assessmentData.category,
+                value: assessmentData.totalScore,
+                custom_parameters: {
+                    score: assessmentData.totalScore,
+                    category: assessmentData.category,
+                    risk_level: assessmentData.aiAnalysis?.riskLevel || 'unknown',
+                    patterns_detected: assessmentData.aiAnalysis?.detectedPatterns?.length || 0,
+                    pattern_list: assessmentData.aiAnalysis?.detectedPatterns?.join(',') || 'none',
+                    timestamp: assessmentData.timestamp,
+                    session_id: 'session_' + Date.now()
+                }
+            });
+            
+            // Cookie Backup (funktioniert auch bei GitHub Pages)
+            try {
+                var cookieData = {
+                    assessments: JSON.parse(getCookie('tpa_assessments') || '[]'),
+                    stats: JSON.parse(getCookie('tpa_stats') || '{"total":0,"emails":0}')
+                };
+                
+                cookieData.assessments.push({
+                    id: 'a_' + Date.now(),
+                    score: assessmentData.totalScore,
+                    category: assessmentData.category,
+                    risk: assessmentData.aiAnalysis?.riskLevel,
+                    date: new Date().toLocaleDateString(),
+                    patterns: assessmentData.aiAnalysis?.detectedPatterns?.length || 0
+                });
+                
+                cookieData.stats.total++;
+                
+                setCookie('tpa_assessments', JSON.stringify(cookieData.assessments), 30);
+                setCookie('tpa_stats', JSON.stringify(cookieData.stats), 30);
+                
+                console.log('✅ Assessment tracked via GA + Cookies');
+            } catch (e) {
+                console.log('Cookie backup failed:', e);
+            }
+        }
+        
         // Database class for better data management
         class AssessmentDatabase {
             constructor() {
@@ -1375,6 +1442,9 @@
                     aiAnalysis: aiAnalysis
                 };
                 
+                // 🚀 NEW: Enhanced tracking
+                trackAssessmentData(assessmentData);
+                
                 // Save to database
                 database.addAssessment(assessmentData);
                 
@@ -1442,7 +1512,7 @@
             aiContent.innerHTML = html;
         }
         
-        // Email submission
+        // Email submission - ENHANCED
         function submitEmail() {
             var email = document.getElementById('emailInput').value.trim();
             
@@ -1454,6 +1524,26 @@
             // Update assessment data
             assessmentData.email = email;
             assessmentData.emailProvided = true;
+            
+            // 🚀 ENHANCED EMAIL TRACKING:
+            gtag('event', 'email_conversion', {
+                event_category: 'conversion',
+                event_label: 'assessment_email_provided',
+                value: 1,
+                custom_parameters: {
+                    user_score: assessmentData.totalScore,
+                    user_category: assessmentData.category,
+                    user_risk: assessmentData.aiAnalysis?.riskLevel,
+                    conversion_funnel_step: 'email_capture'
+                }
+            });
+            
+            // Update cookie stats
+            try {
+                var stats = JSON.parse(getCookie('tpa_stats') || '{"total":0,"emails":0}');
+                stats.emails++;
+                setCookie('tpa_stats', JSON.stringify(stats), 30);
+            } catch (e) {}
             
             // Update database
             database.addAssessment(assessmentData);
@@ -1821,65 +1911,101 @@
             }
         }
         
+        // 📊 ENHANCED ADMIN DATA with Cookie Integration
         function loadAdminData() {
             var stats = database.getStats();
             var assessments = database.data.assessments || [];
             
-            // Update stats grid
-            var statsGrid = document.getElementById('statsGrid');
-            statsGrid.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-number">${stats.totalSessions}</div>
-                    <div class="stat-label">Sessions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.avgScore}</div>
-                    <div class="stat-label">Avg Score</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.completionRate}%</div>
-                    <div class="stat-label">Completion</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.emailRate}%</div>
-                    <div class="stat-label">Email Rate</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.pdfDownloads}</div>
-                    <div class="stat-label">PDF Rate</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${stats.waitlistCount}</div>
-                    <div class="stat-label">📧 Waitlist</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">${database.storageAvailable === 'localStorage' ? '💾' : database.storageAvailable === 'sessionStorage' ? '📝' : '🧠'}</div>
-                    <div class="stat-label">${database.storageAvailable === 'localStorage' ? 'Persistent' : database.storageAvailable === 'sessionStorage' ? 'Session' : 'Memory'}</div>
-                </div>
-            `;
-            
-            // Show recent assessments
-            var assessmentsList = document.getElementById('assessmentsList');
-            if (assessments.length === 0) {
-                assessmentsList.innerHTML = '<p style="text-align: center; color: #718096; margin: 20px 0;">No assessments yet. Complete an assessment to see data here.</p>';
-            } else {
-                var recentAssessments = assessments.slice(-5).reverse();
-                var html = '<table class="data-table"><thead><tr><th>Date</th><th>Score</th><th>Category</th><th>Risk</th><th>Email</th></tr></thead><tbody>';
+            // 🍪 COOKIE DATA INTEGRATION:
+            try {
+                var cookieAssessments = JSON.parse(getCookie('tpa_assessments') || '[]');
+                var cookieStats = JSON.parse(getCookie('tpa_stats') || '{"total":0,"emails":0}');
                 
-                recentAssessments.forEach(assessment => {
-                    var date = new Date(assessment.timestamp).toLocaleDateString();
-                    var email = assessment.email ? '✅' : '❌';
-                    html += `<tr>
-                        <td>${date}</td>
-                        <td>${assessment.score}</td>
-                        <td>${assessment.category}</td>
-                        <td>${assessment.aiAnalysis?.riskLevel || 'N/A'}</td>
-                        <td>${email}</td>
-                    </tr>`;
-                });
+                // Merge cookie data with memory data
+                var totalSessions = stats.totalSessions + cookieStats.total;
+                var totalEmails = stats.emailsCollected + cookieStats.emails;
                 
-                html += '</tbody></table>';
-                assessmentsList.innerHTML = html;
+                // Update stats display
+                var statsGrid = document.getElementById('statsGrid');
+                statsGrid.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">${totalSessions}</div>
+                        <div class="stat-label">Total Sessions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${totalEmails}</div>
+                        <div class="stat-label">Email Conversions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${totalSessions > 0 ? Math.round((totalEmails/totalSessions)*100) : 0}%</div>
+                        <div class="stat-label">Conversion Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${cookieAssessments.length}</div>
+                        <div class="stat-label">Cookie Stored</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">🍪</div>
+                        <div class="stat-label">Storage Type</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${database.data.waitlist?.length || 0}</div>
+                        <div class="stat-label">Waitlist</div>
+                    </div>
+                `;
+                
+                // Show cookie assessments in recent assessments
+                if (cookieAssessments.length > 0) {
+                    var assessmentsList = document.getElementById('assessmentsList');
+                    var html = '<h4>🍪 Cookie-Stored Assessments</h4><table class="data-table"><thead><tr><th>Date</th><th>Score</th><th>Category</th><th>Risk</th><th>Patterns</th></tr></thead><tbody>';
+                    
+                    cookieAssessments.slice(-10).reverse().forEach(assessment => {
+                        html += `<tr>
+                            <td>${assessment.date}</td>
+                            <td>${assessment.score}</td>
+                            <td>${assessment.category}</td>
+                            <td>${assessment.risk || 'N/A'}</td>
+                            <td>${assessment.patterns || 0}</td>
+                        </tr>`;
+                    });
+                    
+                    html += '</tbody></table>';
+                    assessmentsList.innerHTML = html;
+                } else {
+                    var assessmentsList = document.getElementById('assessmentsList');
+                    assessmentsList.innerHTML = '<p style="text-align: center; color: #718096; margin: 20px 0;">No assessments yet. Complete an assessment to see data here.</p>';
+                }
+                
+            } catch (e) {
+                console.log('Cookie integration error:', e);
+                // Fallback to original stats display
+                var statsGrid = document.getElementById('statsGrid');
+                statsGrid.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.totalSessions}</div>
+                        <div class="stat-label">Sessions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.avgScore}</div>
+                        <div class="stat-label">Avg Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.completionRate}%</div>
+                        <div class="stat-label">Completion</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.emailRate}%</div>
+                        <div class="stat-label">Email Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.pdfDownloads}</div>
+                        <div class="stat-label">PDF Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.waitlistCount}</div>
+                        <div class="stat-label">📧 Waitlist</div>
+                    </div>
+                `;
             }
         }
         
@@ -2014,7 +2140,11 @@ ${JSON.stringify(Object.keys(database.data), null, 2)}
 Storage Fallback Chain:
 1. localStorage: ${database.storageAvailable === 'localStorage' ? '✅ Active' : '❌ Blocked'}
 2. sessionStorage: ${database.storageAvailable === 'sessionStorage' ? '✅ Active' : (database.storageAvailable === 'localStorage' ? '⚪ Available' : '❌ Blocked')}
-3. Memory Only: ${database.storageAvailable === 'memory' ? '✅ Active' : '⚪ Fallback'}`;
+3. Memory Only: ${database.storageAvailable === 'memory' ? '✅ Active' : '⚪ Fallback'}
+
+Cookie Storage Check:
+${getCookie('tpa_assessments') ? '✅ Cookie assessments found' : '❌ No cookie data'}
+${getCookie('tpa_stats') ? '✅ Cookie stats found' : '❌ No cookie stats'}`;
         }
         
         function exportData(format) {
@@ -2042,6 +2172,9 @@ Storage Fallback Chain:
             if (confirm('Are you sure you want to delete ALL AI assessment data?')) {
                 if (confirm('This will permanently delete all collected data including assessments, emails, and waitlist. This cannot be undone. Are you absolutely sure?')) {
                     database.clearAll();
+                    // Also clear cookies
+                    setCookie('tpa_assessments', '', -1);
+                    setCookie('tpa_stats', '', -1);
                     alert('✅ All data has been cleared');
                     loadAdminData();
                 }
