@@ -19,8 +19,8 @@
     <!-- PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <!-- 🚀 PAYPAL LIVE INTEGRATION -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AQ7d8ZPGOLBz3AC4uVlNgysPHMDEXUvqc2auLwqra9Ou_Wg4qIBNAAcjdAxwgKBIzISotkfcM8x0QgYm&currency=EUR&disable-funding=credit,card"></script>
+    <!-- 🚧 PAYPAL TEMPORARILY DISABLED - PRODUCT IN DEVELOPMENT -->
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=AQ7d8ZPGOLBz3AC4uVlNgysPHMDEXUvqc2auLwqra9Ou_Wg4qIBNAAcjdAxwgKBIzISotkfcM8x0QgYm&currency=EUR&disable-funding=credit,card"></script> -->
     
     <style>
         * {
@@ -763,14 +763,14 @@
                 <div id="aiContent"></div>
             </div>
             
-            <!-- 💎 EXTENDED AI ANALYSIS PAYMENT SECTION -->
+            <!-- 💎 COMING SOON - WAITLIST SECTION -->
             <div style="margin: 30px 0; text-align: center;">
-                <h3>💎 Get Your Extended AI Analysis Report</h3>
+                <h3>💎 Extended AI Analysis Report</h3>
                 <p><strong>Comprehensive 15-page PDF + Audio Sessions + Psychology Tracking</strong></p>
                 
                 <!-- Product Features -->
                 <div style="background: #f8fafc; border: 2px solid #667eea; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <h4 style="color: #667eea; margin-bottom: 15px;">🧠 Extended AI Analysis Includes:</h4>
+                    <h4 style="color: #667eea; margin-bottom: 15px;">🧠 Extended AI Analysis Will Include:</h4>
                     <ul style="text-align: left; display: inline-block; color: #4a5568;">
                         <li>✅ <strong>15-page detailed AI analysis</strong> of your trading psychology</li>
                         <li>✅ <strong>3 guided audio sessions</strong> (20 minutes each)</li>
@@ -780,24 +780,40 @@
                     </ul>
                 </div>
                 
-                <!-- Price Display -->
-                <div style="font-size: 2rem; font-weight: bold; color: #667eea; margin: 20px 0;">
-                    <span style="text-decoration: line-through; color: #a0aec0; font-size: 1.5rem;">97€</span>
-                    <span style="color: #e53e3e;">47€</span>
-                    <div style="font-size: 0.9rem; color: #718096; font-weight: normal;">Limited Time - 52% OFF</div>
+                <!-- Coming Soon Notice -->
+                <div style="background: #fff3cd; border: 2px solid #856404; border-radius: 12px; padding: 25px; margin: 20px 0;">
+                    <h4 style="color: #856404; margin-bottom: 15px;">🚧 Launching Soon!</h4>
+                    <p style="color: #856404; margin-bottom: 15px;">The Extended Analysis is in final development. Join the waitlist to be the first to access it!</p>
+                    
+                    <!-- Waitlist Benefits -->
+                    <div style="background: #ffffff; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                        <h5 style="color: #856404; margin-bottom: 10px;">🎁 Waitlist Benefits:</h5>
+                        <ul style="text-align: left; display: inline-block; color: #856404; font-size: 0.9rem;">
+                            <li>✅ Early access before public launch</li>
+                            <li>✅ Special launch pricing (€47 instead of €97)</li>
+                            <li>✅ Exclusive bonus materials</li>
+                            <li>✅ Priority support</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Email Input for Waitlist -->
+                    <div class="email-form" style="margin: 20px 0;">
+                        <input type="email" class="email-input" id="waitlistEmail" placeholder="Enter your email for early access" required>
+                    </div>
+                    
+                    <!-- Waitlist Button -->
+                    <button class="btn-waitlist" onclick="joinProductWaitlist()" style="font-size: 1.1rem; padding: 15px 30px;">
+                        🔔 Join Waitlist - Get Notified First!
+                    </button>
+                    
+                    <p style="font-size: 0.9rem; color: #856404; margin-top: 15px;">
+                        Expected launch: Within 1 week • Waitlist members get 48% off launch price
+                    </p>
                 </div>
-                
-                <!-- Email Input -->
-                <div class="email-form" style="margin-bottom: 20px;">
-                    <input type="email" class="email-input" id="buyerEmail" placeholder="Enter your email address" required>
-                </div>
-                
-                <!-- PayPal Button Container -->
-                <div id="paypal-button-container"></div>
                 
                 <!-- Security Notice -->
                 <p style="font-size: 0.9rem; color: #718096; margin-top: 15px;">
-                    🔒 Secure payment via PayPal • Instant download after payment • 30-day money-back guarantee
+                    🔒 Your email is secure and used only for product launch notifications
                 </p>
             </div>
 
@@ -1747,7 +1763,70 @@
             }
         }
         
-        // Waitlist functionality
+        // 🔔 PRODUCT WAITLIST FUNCTION
+        function joinProductWaitlist() {
+            var email = document.getElementById('waitlistEmail').value.trim();
+            
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address to join the waitlist.');
+                return;
+            }
+            
+            // Track waitlist signup
+            gtag('event', 'waitlist_signup', {
+                event_category: 'conversion',
+                event_label: 'product_waitlist',
+                custom_parameters: {
+                    user_score: assessmentData.totalScore,
+                    user_category: assessmentData.category,
+                    user_risk: assessmentData.aiAnalysis?.riskLevel,
+                    email_provided: email
+                }
+            });
+            
+            // Save to waitlist
+            var result = database.addToWaitlist(email, assessmentData);
+            
+            // Save to separate product waitlist cookie
+            try {
+                var productWaitlist = JSON.parse(getCookie('tpa_product_waitlist') || '[]');
+                var waitlistEntry = {
+                    email: email,
+                    timestamp: new Date().toISOString(),
+                    userScore: assessmentData.totalScore,
+                    userCategory: assessmentData.category,
+                    userRisk: assessmentData.aiAnalysis?.riskLevel,
+                    source: 'extended_analysis_waitlist'
+                };
+                productWaitlist.push(waitlistEntry);
+                setCookie('tpa_product_waitlist', JSON.stringify(productWaitlist), 30);
+            } catch (e) {
+                console.log('Product waitlist cookie save failed:', e);
+            }
+            
+            // Update UI
+            var btn = event.target;
+            var originalText = btn.textContent;
+            btn.textContent = '✅ Added to Waitlist!';
+            btn.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+            
+            // Disable email input
+            document.getElementById('waitlistEmail').disabled = true;
+            document.getElementById('waitlistEmail').style.opacity = '0.5';
+            
+            setTimeout(() => {
+                btn.textContent = '🎉 You\'re on the list!';
+                btn.disabled = true;
+                btn.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+            }, 2000);
+            
+            // Show success message
+            alert(`🎉 Perfect! You've been added to the Extended Analysis waitlist!\n\n✨ Benefits:\n- First access when we launch (within 1 week)\n- Special pricing: €47 instead of €97\n- Exclusive bonus materials\n- Priority support\n\nWe'll email you at: ${email}`);
+            
+            console.log('✅ User added to product waitlist:', email);
+        }
+        
+        // Waitlist functionality (original)
         function joinWaitlist() {
             gtag('event', 'waitlist_interest', {
                 event_category: 'conversion',
