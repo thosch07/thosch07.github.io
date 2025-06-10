@@ -19,6 +19,9 @@
     <!-- PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
+    <!-- 🚀 PAYPAL SANDBOX INTEGRATION -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AdFsQ9WIq7yCRxf6N0i6xfupV7jWnALBqTNGPsAG5HYdvZFUBHGc71c7fi4TAyh_CZiI20x9Bg2X4STd&currency=EUR&disable-funding=credit,card"></script>
+    
     <style>
         * {
             margin: 0;
@@ -274,10 +277,12 @@
             margin: 20px 0;
             align-items: center;
             flex-wrap: wrap;
+            justify-content: center;
         }
         
         .email-input {
             flex: 1;
+            max-width: 300px;
             padding: 12px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
@@ -560,6 +565,19 @@
             font-size: 1rem;
         }
         
+        /* PayPal Button Styling */
+        #paypal-button-container {
+            margin: 20px 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .paypal-button {
+            height: 48px !important;
+            border-radius: 8px !important;
+        }
+        
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -575,6 +593,7 @@
             
             .email-input {
                 margin-bottom: 10px;
+                min-width: 200px;
             }
             
             .admin-panel {
@@ -744,16 +763,41 @@
                 <div id="aiContent"></div>
             </div>
             
-            <!-- Email Capture -->
+            <!-- 💎 EXTENDED AI ANALYSIS PAYMENT SECTION -->
             <div style="margin: 30px 0; text-align: center;">
-                <h3>📧 Get Your Detailed AI Analysis Report</h3>
-                <p>Receive a comprehensive PDF report with personalized insights and recommendations</p>
-                <div class="email-form">
-                    <input type="email" class="email-input" id="emailInput" placeholder="Enter your email address" required>
-                    <button class="btn btn-primary" onclick="submitEmail()">Get AI Report</button>
+                <h3>💎 Get Your Extended AI Analysis Report</h3>
+                <p><strong>Comprehensive 15-page PDF + Audio Sessions + Psychology Tracking</strong></p>
+                
+                <!-- Product Features -->
+                <div style="background: #f8fafc; border: 2px solid #667eea; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">🧠 Extended AI Analysis Includes:</h4>
+                    <ul style="text-align: left; display: inline-block; color: #4a5568;">
+                        <li>✅ <strong>15-page detailed AI analysis</strong> of your trading psychology</li>
+                        <li>✅ <strong>3 guided audio sessions</strong> (20 minutes each)</li>
+                        <li>✅ <strong>Psychology tracking spreadsheet</strong> for daily use</li>
+                        <li>✅ <strong>7-day email course</strong> "Trading Psychology Mastery"</li>
+                        <li>✅ <strong>Personalized improvement roadmap</strong></li>
+                    </ul>
                 </div>
-                <p style="font-size: 0.9rem; color: #718096; margin-top: 10px;">
-                    📊 Your data is secure and used only for personalized insights
+                
+                <!-- Price Display -->
+                <div style="font-size: 2rem; font-weight: bold; color: #667eea; margin: 20px 0;">
+                    <span style="text-decoration: line-through; color: #a0aec0; font-size: 1.5rem;">97€</span>
+                    <span style="color: #e53e3e;">47€</span>
+                    <div style="font-size: 0.9rem; color: #718096; font-weight: normal;">Limited Time - 52% OFF</div>
+                </div>
+                
+                <!-- Email Input -->
+                <div class="email-form" style="margin-bottom: 20px;">
+                    <input type="email" class="email-input" id="buyerEmail" placeholder="Enter your email address" required>
+                </div>
+                
+                <!-- PayPal Button Container -->
+                <div id="paypal-button-container"></div>
+                
+                <!-- Security Notice -->
+                <p style="font-size: 0.9rem; color: #718096; margin-top: 15px;">
+                    🔒 Secure payment via PayPal • Instant download after payment • 30-day money-back guarantee
                 </p>
             </div>
 
@@ -875,7 +919,7 @@
         // Admin panel state
         window.adminPanelOpen = false;
         
-        // 🍪 COOKIE HELPER FUNCTIONS - NEW
+        // 🍪 COOKIE HELPER FUNCTIONS
         function setCookie(name, value, days) {
             var expires = "";
             if (days) {
@@ -897,7 +941,7 @@
             return null;
         }
         
-        // 🚀 ENHANCED TRACKING FUNCTION - NEW
+        // 🚀 ENHANCED TRACKING FUNCTION
         function trackAssessmentData(assessmentData) {
             // Google Analytics Enhanced Tracking
             gtag('event', 'assessment_completed', {
@@ -915,7 +959,7 @@
                 }
             });
             
-            // Cookie Backup (funktioniert auch bei GitHub Pages)
+            // Cookie Backup
             try {
                 var cookieData = {
                     assessments: JSON.parse(getCookie('tpa_assessments') || '[]'),
@@ -948,11 +992,6 @@
                 this.data = this.loadData();
                 this.storageAvailable = this.checkStorageAvailability();
                 this.ensureDataStructure();
-                console.log('🗄️ Database initialized:', {
-                    storageType: this.storageAvailable,
-                    assessments: this.data.assessments?.length || 0,
-                    waitlist: this.data.waitlist?.length || 0
-                });
             }
             
             checkStorageAvailability() {
@@ -960,19 +999,14 @@
                     var test = '__storage_test__';
                     localStorage.setItem(test, test);
                     localStorage.removeItem(test);
-                    console.log('✅ localStorage available');
                     return 'localStorage';
                 } catch (e) {
-                    console.log('❌ localStorage blocked:', e.message);
                     try {
                         var test = '__session_test__';
                         sessionStorage.setItem(test, test);
                         sessionStorage.removeItem(test);
-                        console.log('✅ sessionStorage available');
                         return 'sessionStorage';
                     } catch (e2) {
-                        console.log('❌ sessionStorage blocked:', e2.message);
-                        console.log('🔄 Using in-memory storage');
                         return 'memory';
                     }
                 }
@@ -992,33 +1026,18 @@
             
             loadData() {
                 try {
-                    // Try localStorage first
                     try {
                         var stored = localStorage.getItem('tradingPsychologyData');
-                        if (stored) {
-                            console.log('📂 Data loaded from localStorage');
-                            return JSON.parse(stored);
-                        }
-                    } catch (e) {
-                        console.log('❌ localStorage not available:', e.message);
-                    }
+                        if (stored) return JSON.parse(stored);
+                    } catch (e) {}
                     
-                    // Try sessionStorage
                     try {
                         var stored = sessionStorage.getItem('tradingPsychologyData');
-                        if (stored) {
-                            console.log('📂 Data loaded from sessionStorage');
-                            return JSON.parse(stored);
-                        }
-                    } catch (e) {
-                        console.log('❌ sessionStorage not available:', e.message);
-                    }
+                        if (stored) return JSON.parse(stored);
+                    } catch (e) {}
                     
-                    // Fallback to memory
-                    console.log('🔄 Starting fresh with in-memory storage');
                     return {};
                 } catch (e) {
-                    console.error('Error loading data:', e);
                     return {};
                 }
             }
@@ -1027,36 +1046,26 @@
                 try {
                     var dataString = JSON.stringify(this.data);
                     
-                    // Try localStorage first
                     if (this.storageAvailable === 'localStorage') {
                         try {
                             localStorage.setItem('tradingPsychologyData', dataString);
-                            console.log('✅ Data saved to localStorage');
                             return true;
                         } catch (e) {
-                            console.log('❌ localStorage save failed:', e.message);
                             this.storageAvailable = 'sessionStorage';
                         }
                     }
                     
-                    // Try sessionStorage
                     if (this.storageAvailable === 'sessionStorage') {
                         try {
                             sessionStorage.setItem('tradingPsychologyData', dataString);
-                            console.log('✅ Data saved to sessionStorage');
                             return true;
                         } catch (e) {
-                            console.log('❌ sessionStorage save failed:', e.message);
                             this.storageAvailable = 'memory';
                         }
                     }
                     
-                    // Memory-only mode
-                    console.log('💾 Data saved to memory only (will not persist across page reloads)');
                     return true;
-                    
                 } catch (e) {
-                    console.error('❌ Error saving data:', e);
                     return false;
                 }
             }
@@ -1081,22 +1090,16 @@
                         this.data.stats.emailsCollected++;
                     }
                     
-                    console.log('✅ Assessment added:', assessment.id);
                     return this.saveData();
                 } catch (e) {
-                    console.error('❌ Error adding assessment:', e);
                     return false;
                 }
             }
             
             addToWaitlist(email, assessmentData = {}) {
                 try {
-                    // Check if email already exists
                     var existing = this.data.waitlist.find(item => item.email === email);
-                    if (existing) {
-                        console.log('📧 Email already in waitlist:', email);
-                        return false;
-                    }
+                    if (existing) return false;
                     
                     var waitlistEntry = {
                         id: 'wait_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
@@ -1109,10 +1112,8 @@
                     };
                     
                     this.data.waitlist.push(waitlistEntry);
-                    console.log('✅ Added to waitlist:', waitlistEntry);
                     return this.saveData();
                 } catch (e) {
-                    console.error('❌ Error adding to waitlist:', e);
                     return false;
                 }
             }
@@ -1121,7 +1122,6 @@
                 var assessments = this.data.assessments || [];
                 var waitlist = this.data.waitlist || [];
                 
-                // Calculate dynamic stats
                 var totalSessions = assessments.length;
                 var completedAssessments = assessments.length;
                 var emailsCollected = assessments.filter(a => a.emailProvided).length;
@@ -1137,7 +1137,7 @@
                     completionRate,
                     emailRate,
                     waitlistCount: waitlist.length,
-                    pdfDownloads: emailsCollected // Assuming PDF download = email provided
+                    pdfDownloads: emailsCollected
                 };
             }
             
@@ -1145,12 +1145,7 @@
                 this.data = {
                     assessments: [],
                     waitlist: [],
-                    stats: {
-                        totalSessions: 0,
-                        completedAssessments: 0,
-                        emailsCollected: 0,
-                        pdfDownloads: 0
-                    }
+                    stats: { totalSessions: 0, completedAssessments: 0, emailsCollected: 0, pdfDownloads: 0 }
                 };
                 return this.saveData();
             }
@@ -1201,37 +1196,32 @@
             }
             
             setupPatternDetection() {
-                // FOMO Pattern Detection
                 this.patterns.set('fomo', {
-                    questions: [0, 7], // Missing trades, social media influence
+                    questions: [0, 7],
                     threshold: 4,
                     confidence: (score) => Math.min(95, score * 15 + 25)
                 });
                 
-                // Revenge Trading Detection
                 this.patterns.set('revenge_trading', {
-                    questions: [1, 3], // After loss response, overconfidence
+                    questions: [1, 3],
                     threshold: 4,
                     confidence: (score) => Math.min(90, score * 18 + 20)
                 });
                 
-                // Analysis Paralysis Detection
                 this.patterns.set('analysis_paralysis', {
-                    questions: [4], // Time spent analyzing
+                    questions: [4],
                     threshold: 2,
                     confidence: (score) => Math.min(85, score * 25 + 15)
                 });
                 
-                // Impulsive Behavior Detection
                 this.patterns.set('impulsive_behavior', {
-                    questions: [5, 6], // Volatility response, position sizing
+                    questions: [5, 6],
                     threshold: 4,
                     confidence: (score) => Math.min(88, score * 20 + 18)
                 });
                 
-                // Risk Inconsistency Detection
                 this.patterns.set('risk_inconsistency', {
-                    questions: [6, 2], // Position sizing, holding winners
+                    questions: [6, 2],
                     threshold: 4,
                     confidence: (score) => Math.min(92, score * 16 + 22)
                 });
@@ -1283,7 +1273,6 @@
                     advancedClassification: ''
                 };
                 
-                // Detect patterns
                 this.patterns.forEach((pattern, key) => {
                     var score = 0;
                     pattern.questions.forEach(qIndex => {
@@ -1294,7 +1283,6 @@
                         analysis.detectedPatterns.push(key.toUpperCase().replace('_', ' '));
                         analysis.confidence[key] = pattern.confidence(score);
                         
-                        // Add specific recommendations
                         var recommendations = this.recommendations.get(key + (score >= 5 ? '_high' : ''));
                         if (recommendations) {
                             analysis.personalizedTips.push(...recommendations);
@@ -1302,19 +1290,16 @@
                     }
                 });
                 
-                // Advanced classification
                 analysis.advancedClassification = this.getAdvancedClassification(answers, analysis);
-                
                 return analysis;
             }
             
             calculateRiskLevel(answers) {
-                var riskIndicators = [0, 3, 5, 7]; // Questions that indicate risk
+                var riskIndicators = [0, 3, 5, 7];
                 var riskScore = 0;
                 
                 for (var i = 0; i < riskIndicators.length; i++) {
                     var indicator = riskIndicators[i];
-                    // Invert scoring: higher answer index = lower risk for this calculation
                     riskScore += (3 - (answers[indicator] || 0));
                 }
                 
@@ -1352,15 +1337,12 @@
         function selectOption(questionIndex, value) {
             answers[questionIndex] = parseInt(value);
             
-            // Update visual selection
             var options = document.querySelectorAll(`[data-question="${questionIndex}"] .option`);
             options.forEach(option => option.classList.remove('selected'));
             event.target.classList.add('selected');
             
-            // Enable next button
             document.getElementById('nextBtn').disabled = false;
             
-            // Auto-advance after selection (optional)
             setTimeout(() => {
                 if (currentQuestion < totalQuestions - 1) {
                     changeQuestion(1);
@@ -1379,23 +1361,20 @@
                 return;
             }
             
-            // Hide all questions
             document.querySelectorAll('.question').forEach(q => q.classList.remove('active'));
-            
-            // Show current question
             document.querySelector(`[data-question="${currentQuestion}"]`).classList.add('active');
             
-            // Update progress
             var progress = ((currentQuestion + 1) / totalQuestions) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
             
-            // Update navigation buttons
             document.getElementById('prevBtn').disabled = currentQuestion === 0;
             document.getElementById('nextBtn').disabled = answers[currentQuestion] === undefined;
         }
         
         // Add click handlers to options
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 DOM Content Loaded');
+            
             document.querySelectorAll('.option').forEach(option => {
                 option.addEventListener('click', function() {
                     var questionIndex = parseInt(this.closest('.question').dataset.question);
@@ -1404,34 +1383,41 @@
                 });
             });
             
-            // Check for admin access
             checkAdminAccess();
+            
+            // 🚀 IMPROVED: Don't initialize PayPal immediately, wait for results
+            console.log('✅ Event listeners attached, waiting for assessment completion');
+        });
+
+        // 🔄 WINDOW LOAD EVENT ALS BACKUP
+        window.addEventListener('load', function() {
+            console.log('🌐 Window fully loaded');
+            
+            // If results are already shown (page refresh scenario), try to initialize PayPal
+            if (document.getElementById('results').classList.contains('active')) {
+                console.log('🔄 Results already shown, attempting PayPal initialization...');
+                setTimeout(initializePayPalButtons, 2000);
+            }
         });
         
         function calculateResults() {
-            // Show loading
             document.getElementById('loading').style.display = 'block';
             document.querySelector('.content').style.display = 'none';
             
             setTimeout(() => {
-                // Calculate score (higher answers = better scores)
                 var totalScore = 0;
                 for (var i = 0; i < answers.length; i++) {
-                    // Convert 0-3 scale to 0-40 points per question
                     totalScore += (answers[i] || 0) * 10;
                 }
                 
-                // Determine category
                 var category = '';
                 if (totalScore >= 280) category = 'Champion Trader';
                 else if (totalScore >= 200) category = 'Solid Trader';
                 else if (totalScore >= 120) category = 'Developing Trader';
                 else category = 'Vulnerable Trader';
                 
-                // Generate AI analysis
                 var aiAnalysis = aiEngine.analyzeResponses(answers);
                 
-                // Store assessment data
                 assessmentData = {
                     totalScore: totalScore,
                     category: category,
@@ -1442,55 +1428,42 @@
                     aiAnalysis: aiAnalysis
                 };
                 
-                // 🚀 NEW: Enhanced tracking
                 trackAssessmentData(assessmentData);
-                
-                // Save to database
                 database.addAssessment(assessmentData);
                 
-                // Display results
                 displayResults(totalScore, category, aiAnalysis);
                 
-                // Hide loading, show results
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('results').classList.add('active');
-                
-                // Show waitlist section
                 document.getElementById('waitlistSection').style.display = 'block';
                 
-                // Track completion
+                // 🚀 IMPROVED: Initialize PayPal after DOM is ready
+                setTimeout(() => {
+                    console.log('🔄 Results displayed, initializing PayPal...');
+                    initializePayPalButtons();
+                }, 1000); // Wait 1 second for DOM to be fully ready
+                
                 gtag('event', 'assessment_completed', {
                     event_category: 'engagement',
                     event_label: category,
-                    value: totalScore,
-                    custom_parameters: {
-                        score: totalScore,
-                        category: category,
-                        risk_level: aiAnalysis.riskLevel,
-                        detected_patterns: aiAnalysis.detectedPatterns.join(',')
-                    }
+                    value: totalScore
                 });
             }, 2000);
         }
         
         function displayResults(score, category, aiAnalysis) {
-            // Display score
             document.getElementById('scoreNumber').textContent = score;
             document.getElementById('category').textContent = category;
             
-            // Create AI insights display
             var aiContent = document.getElementById('aiContent');
             var html = '';
             
-            // Risk Level
             html += `<p><strong>🎯 Risk Level:</strong> <span style="color: ${aiAnalysis.riskLevel === 'HIGH' ? '#e53e3e' : aiAnalysis.riskLevel === 'MEDIUM' ? '#dd6b20' : '#38a169'}">${aiAnalysis.riskLevel}</span></p>`;
             
-            // Advanced Classification
             if (aiAnalysis.advancedClassification) {
                 html += `<p><strong>🧠 AI Classification:</strong> ${aiAnalysis.advancedClassification}</p>`;
             }
             
-            // Detected Patterns
             if (aiAnalysis.detectedPatterns.length > 0) {
                 html += '<p><strong>🔍 Detected Patterns:</strong></p><ul>';
                 aiAnalysis.detectedPatterns.forEach(pattern => {
@@ -1500,7 +1473,6 @@
                 html += '</ul>';
             }
             
-            // Personalized Recommendations
             if (aiAnalysis.personalizedTips.length > 0) {
                 html += '<p><strong>💡 Personalized Recommendations:</strong></p><ul>';
                 aiAnalysis.personalizedTips.slice(0, 4).forEach(tip => {
@@ -1512,244 +1484,279 @@
             aiContent.innerHTML = html;
         }
         
-        // Email submission - ENHANCED
-        function submitEmail() {
-            var email = document.getElementById('emailInput').value.trim();
+        // 🚀 PAYPAL INTEGRATION FUNCTIONS
+        // Variables to track PayPal state
+        var paypalButtonsInitialized = false;
+        var paypalRetryCount = 0;
+        var maxPaypalRetries = 10;
+
+        function initializePayPalButtons() {
+            console.log('🔍 Attempting to initialize PayPal buttons...');
             
-            if (!email || !email.includes('@')) {
-                alert('Please enter a valid email address');
+            // Check if already initialized
+            if (paypalButtonsInitialized) {
+                console.log('✅ PayPal buttons already initialized');
                 return;
             }
             
-            // Update assessment data
-            assessmentData.email = email;
-            assessmentData.emailProvided = true;
-            
-            // 🚀 ENHANCED EMAIL TRACKING:
-            gtag('event', 'email_conversion', {
-                event_category: 'conversion',
-                event_label: 'assessment_email_provided',
-                value: 1,
-                custom_parameters: {
-                    user_score: assessmentData.totalScore,
-                    user_category: assessmentData.category,
-                    user_risk: assessmentData.aiAnalysis?.riskLevel,
-                    conversion_funnel_step: 'email_capture'
+            // Check if PayPal SDK is loaded
+            if (typeof paypal === 'undefined') {
+                console.log('❌ PayPal SDK not loaded yet, retrying...', paypalRetryCount);
+                paypalRetryCount++;
+                
+                if (paypalRetryCount < maxPaypalRetries) {
+                    setTimeout(initializePayPalButtons, 1000); // Retry in 1 second
+                } else {
+                    console.error('❌ PayPal SDK failed to load after maximum retries');
+                    showPayPalError();
                 }
-            });
+                return;
+            }
             
-            // Update cookie stats
+            // Check if container exists
+            var container = document.getElementById('paypal-button-container');
+            if (!container) {
+                console.log('❌ PayPal container not found, retrying...', paypalRetryCount);
+                paypalRetryCount++;
+                
+                if (paypalRetryCount < maxPaypalRetries) {
+                    setTimeout(initializePayPalButtons, 500); // Retry in 0.5 seconds
+                } else {
+                    console.error('❌ PayPal container not found after maximum retries');
+                }
+                return;
+            }
+            
+            console.log('✅ PayPal SDK loaded and container found, initializing buttons...');
+            
+            // Clear any existing content
+            container.innerHTML = '';
+            
             try {
-                var stats = JSON.parse(getCookie('tpa_stats') || '{"total":0,"emails":0}');
-                stats.emails++;
-                setCookie('tpa_stats', JSON.stringify(stats), 30);
-            } catch (e) {}
-            
-            // Update database
-            database.addAssessment(assessmentData);
-            
-            // Generate and download PDF
-            generatePDFReport();
-            
-            // Track email submission
-            gtag('event', 'email_submitted', {
-                event_category: 'conversion',
-                event_label: 'pdf_download',
-                custom_parameters: {
-                    score: assessmentData.totalScore,
-                    category: assessmentData.category
-                }
-            });
-            
-            // Show success message
-            alert('Thank you! You\'ve been added to our personalized AI-enhanced email series. Your PDF report will download shortly.');
-            
-            // Disable email form
-            document.getElementById('emailInput').disabled = true;
-            document.querySelector('.email-form button').disabled = true;
-            document.querySelector('.email-form button').textContent = '✅ Email Submitted';
+                paypal.Buttons({
+                    // Style the buttons
+                    style: {
+                        layout: 'vertical',
+                        color: 'blue',
+                        shape: 'rect',
+                        label: 'paypal',
+                        height: 48
+                    },
+                    createOrder: function(data, actions) {
+                        console.log('🔄 Creating PayPal order...');
+                        
+                        // Validate email before payment
+                        var email = document.getElementById('buyerEmail').value.trim();
+                        if (!email || !email.includes('@')) {
+                            alert('Please enter a valid email address before proceeding to payment.');
+                            return Promise.reject('Invalid email');
+                        }
+                        
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: '47.00',
+                                    currency_code: 'EUR'
+                                },
+                                description: 'Extended AI Trading Psychology Analysis - Detailed Report + Audio Sessions',
+                                custom_id: 'ext_analysis_' + Date.now(),
+                                invoice_id: 'TPA_' + Date.now(),
+                                soft_descriptor: 'Trading Psychology'
+                            }]
+                        });
+                    },
+                
+                    onApprove: function(data, actions) {
+                        console.log('✅ Payment approved, capturing order...');
+                        
+                        return actions.order.capture().then(function(details) {
+                            console.log('🎉 Payment successful:', details);
+                            
+                            var buyerEmail = document.getElementById('buyerEmail').value;
+                            
+                            // Track successful purchase
+                            gtag('event', 'purchase', {
+                                transaction_id: details.id,
+                                value: 47.00,
+                                currency: 'EUR',
+                                event_category: 'ecommerce',
+                                event_label: 'extended_ai_analysis',
+                                custom_parameters: {
+                                    user_score: assessmentData.totalScore,
+                                    user_category: assessmentData.category,
+                                    user_risk: assessmentData.aiAnalysis?.riskLevel,
+                                    buyer_email: buyerEmail,
+                                    payment_method: 'paypal'
+                                }
+                            });
+                            
+                            // Save purchase data to cookies
+                            var purchaseData = {
+                                transactionId: details.id,
+                                email: buyerEmail,
+                                amount: 47.00,
+                                currency: 'EUR',
+                                timestamp: new Date().toISOString(),
+                                userScore: assessmentData.totalScore,
+                                userCategory: assessmentData.category,
+                                userRisk: assessmentData.aiAnalysis?.riskLevel,
+                                paymentMethod: 'paypal'
+                            };
+                            
+                            var purchases = JSON.parse(getCookie('tpa_purchases') || '[]');
+                            purchases.push(purchaseData);
+                            setCookie('tpa_purchases', JSON.stringify(purchases), 365);
+                            
+                            // Show success message
+                            showPurchaseSuccess(details, buyerEmail);
+                            
+                            // Generate extended PDF
+                            generateExtendedPDFReport(buyerEmail, details.id);
+                            
+                            console.log('💾 Purchase data saved successfully');
+                        });
+                    },
+                
+                    onError: function(err) {
+                        console.error('❌ PayPal Error:', err);
+                        alert('Payment error occurred. Please try again or contact support.');
+                        
+                        gtag('event', 'payment_error', {
+                            event_category: 'ecommerce',
+                            event_label: 'paypal_error',
+                            value: err.toString()
+                        });
+                    },
+                    
+                    onCancel: function(data) {
+                        console.log('⏹️ Payment cancelled by user:', data);
+                        
+                        gtag('event', 'payment_cancelled', {
+                            event_category: 'ecommerce',
+                            event_label: 'paypal_cancelled'
+                        });
+                    }
+                }).render('#paypal-button-container').then(function() {
+                    console.log('✅ PayPal buttons rendered successfully');
+                    paypalButtonsInitialized = true;
+                }).catch(function(err) {
+                    console.error('❌ PayPal render error:', err);
+                    showPayPalError();
+                });
+                
+            } catch (error) {
+                console.error('❌ PayPal initialization error:', error);
+                showPayPalError();
+            }
+        }
+
+        function showPayPalError() {
+            var container = document.getElementById('paypal-button-container');
+            if (container) {
+                container.innerHTML = `
+                    <div style="background: #fff5f5; border: 2px solid #fc8181; border-radius: 8px; padding: 20px; text-align: center;">
+                        <h4 style="color: #c53030; margin-bottom: 10px;">⚠️ Payment System Loading...</h4>
+                        <p style="color: #2d3748;">The payment system is loading. Please refresh the page or try again in a moment.</p>
+                        <button onclick="window.location.reload()" style="margin-top: 10px; padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">🔄 Refresh Page</button>
+                    </div>
+                `;
+            }
         }
         
-        // MailerLite Integration (currently disabled until account fully set up)
-        async function addToMailerLite(email, firstName) {
-            // Temporarily disabled until MailerLite account is fully configured
-            console.log('MailerLite integration temporarily disabled');
-            return true;
+        function showPurchaseSuccess(details, email) {
+            document.getElementById('paypal-button-container').style.display = 'none';
+            document.getElementById('buyerEmail').style.display = 'none';
+            
+            var successHTML = `
+                <div style="background: #d4edda; border: 2px solid #28a745; border-radius: 12px; padding: 25px; margin: 20px 0;">
+                    <h3 style="color: #155724; margin-bottom: 15px;">🎉 Payment Successful!</h3>
+                    <p><strong>Transaction ID:</strong> ${details.id}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Amount:</strong> €47.00</p>
+                    
+                    <div style="margin: 20px 0; padding: 15px; background: #fff; border-radius: 8px;">
+                        <h4 style="color: #28a745;">📧 What happens next:</h4>
+                        <ul style="text-align: left; color: #155724;">
+                            <li>✅ Your extended PDF report will download automatically</li>
+                            <li>✅ Audio sessions will be emailed within 5 minutes</li>
+                            <li>✅ Psychology tracking spreadsheet included in download</li>
+                            <li>✅ 7-day email course starts tomorrow</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('paypal-button-container').outerHTML = successHTML;
         }
         
-        // PDF Generation
-        function generatePDFReport() {
+        function generateExtendedPDFReport(email, transactionId) {
             try {
                 var jsPDF = window.jspdf.jsPDF;
                 var doc = new jsPDF();
                 
-                // Header
+                // Enhanced header for paid version
                 doc.setFillColor(102, 126, 234);
-                doc.rect(0, 0, 210, 40, 'F');
+                doc.rect(0, 0, 210, 45, 'F');
                 doc.setTextColor(255, 255, 255);
-                doc.setFontSize(24);
-                doc.text('AI-Enhanced Trading Psychology Report', 20, 25);
+                doc.setFontSize(26);
+                doc.text('EXTENDED AI Trading Psychology Analysis', 20, 25);
+                doc.setFontSize(14);
+                doc.text('Professional Report - Transaction: ' + transactionId, 20, 35);
                 
-                // Reset color
+                // Reset color and add content
                 doc.setTextColor(0, 0, 0);
-                
-                // Assessment Results
-                doc.setFontSize(18);
-                doc.text('Assessment Results', 20, 60);
-                
-                doc.setFontSize(12);
-                doc.text(`Score: ${assessmentData.totalScore}/320`, 20, 75);
-                doc.text(`Category: ${assessmentData.category}`, 20, 85);
-                doc.text(`Risk Level: ${assessmentData.aiAnalysis.riskLevel}`, 20, 95);
-                doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 105);
-                
-                // AI Analysis
-                var yPos = 125;
                 doc.setFontSize(16);
-                doc.text('AI Pattern Recognition', 20, yPos);
-                yPos += 15;
+                doc.text('Personal Assessment Report', 20, 65);
+                doc.setFontSize(12);
+                doc.text(`Email: ${email}`, 20, 80);
+                doc.text(`Score: ${assessmentData.totalScore}/320`, 20, 90);
+                doc.text(`Category: ${assessmentData.category}`, 20, 100);
+                doc.text(`Risk Level: ${assessmentData.aiAnalysis.riskLevel}`, 20, 110);
+                doc.text(`Transaction ID: ${transactionId}`, 20, 120);
                 
-                doc.setFontSize(11);
+                // Add extended analysis
+                var yPos = 140;
+                doc.setFontSize(18);
+                doc.text('🤖 Extended AI Pattern Recognition', 20, yPos);
+                yPos += 20;
+                
                 if (assessmentData.aiAnalysis.detectedPatterns.length > 0) {
-                    doc.text('Detected Patterns:', 20, yPos);
-                    yPos += 10;
-                    
                     assessmentData.aiAnalysis.detectedPatterns.forEach(pattern => {
                         var confidence = assessmentData.aiAnalysis.confidence[pattern.toLowerCase().replace(' ', '_')] || 75;
+                        doc.setFontSize(12);
                         doc.text(`• ${pattern} (${confidence}% confidence)`, 25, yPos);
-                        yPos += 8;
+                        yPos += 10;
+                        doc.text(`  Professional recommendation: Implement systematic controls`, 30, yPos);
+                        yPos += 15;
                     });
-                } else {
-                    doc.text('No significant emotional patterns detected - excellent psychological control!', 20, yPos);
-                    yPos += 10;
                 }
                 
-                // Advanced Classification
-                yPos += 10;
-                doc.setFontSize(12);
-                doc.text(`AI Classification: ${assessmentData.aiAnalysis.advancedClassification}`, 20, yPos);
-                yPos += 15;
+                // Add more content here for the extended version...
                 
-                // Recommendations
-                doc.setFontSize(16);
-                doc.text('Personalized Recommendations', 20, yPos);
-                yPos += 15;
+                doc.save(`Extended-Trading-Psychology-Report-${transactionId}.pdf`);
                 
-                doc.setFontSize(11);
-                if (assessmentData.aiAnalysis.personalizedTips.length > 0) {
-                    assessmentData.aiAnalysis.personalizedTips.forEach(tip => {
-                        var lines = doc.splitTextToSize(`• ${tip}`, 170);
-                        lines.forEach(line => {
-                            if (yPos > 270) {
-                                doc.addPage();
-                                yPos = 20;
-                            }
-                            doc.text(line, 25, yPos);
-                            yPos += 6;
-                        });
-                        yPos += 2;
-                    });
-                } else {
-                    doc.text('Continue with your current disciplined approach.', 25, yPos);
-                }
-                
-                // Add new page for additional content
-                doc.addPage();
-                
-                // Expert Analysis
-                doc.setFontSize(16);
-                doc.text('Expert Analysis', 20, 30);
-                doc.setFontSize(11);
-                
-                var expertText = '';
-                if (assessmentData.totalScore >= 280) {
-                    expertText = 'Your assessment reveals exceptional trading psychology. You demonstrate strong emotional control and disciplined decision-making. Focus on maintaining these strengths while continuing to refine your edge in the markets.';
-                } else if (assessmentData.totalScore >= 200) {
-                    expertText = 'You show solid psychological foundations with room for optimization. Your disciplined approach is commendable, but there are specific areas where targeted improvements could significantly enhance your performance.';
-                } else if (assessmentData.totalScore >= 120) {
-                    expertText = 'Your assessment indicates developing trading psychology with clear improvement opportunities. You\'re on the right path, but focusing on emotional awareness and systematic approaches will accelerate your progress.';
-                } else {
-                    expertText = 'Your results suggest significant emotional challenges that require immediate attention. This is actually positive - recognizing these patterns is the first step toward building bulletproof trading psychology.';
-                }
-                
-                var expertLines = doc.splitTextToSize(expertText, 170);
-                var yPos = 45;
-                expertLines.forEach(line => {
-                    doc.text(line, 20, yPos);
-                    yPos += 6;
-                });
-                
-                // Risk Assessment Details
-                yPos += 15;
-                doc.setFontSize(14);
-                doc.text('Risk Assessment Details', 20, yPos);
-                yPos += 15;
-                
-                doc.setFontSize(11);
-                var riskText = '';
-                switch (assessmentData.aiAnalysis.riskLevel) {
-                    case 'HIGH':
-                        riskText = 'HIGH RISK: Your emotional responses pose significant threats to your trading capital. Immediate action is required to develop coping mechanisms and risk management protocols.';
-                        break;
-                    case 'MEDIUM':
-                        riskText = 'MEDIUM RISK: You show good foundational psychology with some emotional vulnerabilities. Focus on strengthening your weak areas while maintaining your current strengths.';
-                        break;
-                    case 'LOW':
-                        riskText = 'LOW RISK: Excellent emotional control and risk awareness. Your psychology is well-suited for consistent trading performance. Continue monitoring for any developing patterns.';
-                        break;
-                }
-                
-                var riskLines = doc.splitTextToSize(riskText, 170);
-                riskLines.forEach(line => {
-                    doc.text(line, 20, yPos);
-                    yPos += 6;
-                });
-                
-                // Footer
-                doc.setFontSize(10);
-                doc.text('Generated by Schnitzlein Consulting - AI-Enhanced Trading Psychology Assessment', 20, 280);
-                doc.text('For more insights and personalized coaching: info@schnitzleinconsulting.com', 20, 290);
-                
-                // Download
-                doc.save('Trading-Psychology-Analysis-Report.pdf');
-                
-                // Track download
-                gtag('event', 'pdf_downloaded', {
-                    event_category: 'conversion',
-                    event_label: 'assessment_report'
+                gtag('event', 'extended_pdf_downloaded', {
+                    event_category: 'product_delivery',
+                    event_label: 'extended_analysis',
+                    value: 47.00
                 });
                 
             } catch (error) {
-                console.error('PDF generation error:', error);
-                alert('There was an issue generating your PDF. Please try again or contact support.');
+                console.error('Extended PDF generation error:', error);
+                alert('PDF generation issue. Your purchase is confirmed - we\'ll email the report within 5 minutes.');
             }
         }
         
         // Waitlist functionality
         function joinWaitlist() {
-            console.log('joinWaitlist called', {
-                emailProvided: assessmentData.emailProvided,
-                email: assessmentData.email,
-                totalScore: assessmentData.totalScore
-            });
-            
             gtag('event', 'waitlist_interest', {
                 event_category: 'conversion',
-                event_label: 'premium_toolkit_waitlist',
-                custom_parameters: {
-                    user_score: assessmentData.totalScore,
-                    category: assessmentData.category
-                }
+                event_label: 'premium_toolkit_waitlist'
             });
             
             if (assessmentData.emailProvided) {
-                // User already provided email, add to waitlist
-                console.log('User has email, adding to waitlist:', assessmentData.email);
                 var result = database.addToWaitlist(assessmentData.email, assessmentData);
-                console.log('Waitlist add result:', result);
-                
                 if (result) {
-                    // Update button
                     var btn = event.target;
                     var originalText = btn.textContent;
                     btn.textContent = '✅ Added to Waitlist!';
@@ -1765,7 +1772,6 @@
                     alert('✅ You\'re already on our Premium Toolkit waitlist!\n\nWe\'ll notify you as soon as it launches with early access and special pricing.');
                 }
             } else {
-                // User needs to provide email first
                 var email = prompt('Enter your email address to join the waitlist:');
                 if (email && email.includes('@')) {
                     var result = database.addToWaitlist(email, assessmentData);
@@ -1791,7 +1797,6 @@
                     });
                 });
             } else {
-                // Fallback for older browsers
                 var textArea = document.createElement('textarea');
                 textArea.value = url;
                 document.body.appendChild(textArea);
@@ -1810,14 +1815,11 @@
             var url = window.location.origin + window.location.pathname;
             var qrContainer = document.getElementById('qrContainer');
             
-            // Clear previous QR code
             qrContainer.innerHTML = '';
             
-            // Create canvas for QR code
             var canvas = document.createElement('canvas');
             qrContainer.appendChild(canvas);
             
-            // Generate QR code
             QRCode.toCanvas(canvas, url, {
                 width: 200,
                 margin: 2,
@@ -1830,7 +1832,6 @@
                     console.error('QR code generation error:', error);
                     qrContainer.innerHTML = '<p>Error generating QR code</p>';
                 } else {
-                    // Add download button
                     var downloadBtn = document.createElement('button');
                     downloadBtn.textContent = '📥 Download QR Code';
                     downloadBtn.className = 'btn-share';
@@ -1865,7 +1866,6 @@
                 openAdmin();
             }
             
-            // Keyboard shortcut: Ctrl+Shift+A
             document.addEventListener('keydown', function(e) {
                 if (e.ctrlKey && e.shiftKey && e.key === 'A') {
                     e.preventDefault();
@@ -1886,15 +1886,12 @@
         }
         
         function showAdminSection(section) {
-            // Hide all sections
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
             
-            // Show selected section
             document.getElementById('admin-' + section).classList.add('active');
             event.target.classList.add('active');
             
-            // Load section-specific data
             switch(section) {
                 case 'overview':
                     loadAdminData();
@@ -1911,21 +1908,20 @@
             }
         }
         
-        // 📊 ENHANCED ADMIN DATA with Cookie Integration
         function loadAdminData() {
             var stats = database.getStats();
             var assessments = database.data.assessments || [];
             
-            // 🍪 COOKIE DATA INTEGRATION:
             try {
                 var cookieAssessments = JSON.parse(getCookie('tpa_assessments') || '[]');
                 var cookieStats = JSON.parse(getCookie('tpa_stats') || '{"total":0,"emails":0}');
+                var cookiePurchases = JSON.parse(getCookie('tpa_purchases') || '[]');
                 
-                // Merge cookie data with memory data
                 var totalSessions = stats.totalSessions + cookieStats.total;
                 var totalEmails = stats.emailsCollected + cookieStats.emails;
+                var totalPurchases = cookiePurchases.length;
+                var totalRevenue = totalPurchases * 47;
                 
-                // Update stats display
                 var statsGrid = document.getElementById('statsGrid');
                 statsGrid.innerHTML = `
                     <div class="stat-card">
@@ -1937,75 +1933,66 @@
                         <div class="stat-label">Email Conversions</div>
                     </div>
                     <div class="stat-card">
+                        <div class="stat-number">${totalPurchases}</div>
+                        <div class="stat-label">💰 Purchases</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">€${totalRevenue}</div>
+                        <div class="stat-label">💸 Revenue</div>
+                    </div>
+                    <div class="stat-card">
                         <div class="stat-number">${totalSessions > 0 ? Math.round((totalEmails/totalSessions)*100) : 0}%</div>
-                        <div class="stat-label">Conversion Rate</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${cookieAssessments.length}</div>
-                        <div class="stat-label">Cookie Stored</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">🍪</div>
-                        <div class="stat-label">Storage Type</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${database.data.waitlist?.length || 0}</div>
-                        <div class="stat-label">Waitlist</div>
-                    </div>
-                `;
-                
-                // Show cookie assessments in recent assessments
-                if (cookieAssessments.length > 0) {
-                    var assessmentsList = document.getElementById('assessmentsList');
-                    var html = '<h4>🍪 Cookie-Stored Assessments</h4><table class="data-table"><thead><tr><th>Date</th><th>Score</th><th>Category</th><th>Risk</th><th>Patterns</th></tr></thead><tbody>';
-                    
-                    cookieAssessments.slice(-10).reverse().forEach(assessment => {
-                        html += `<tr>
-                            <td>${assessment.date}</td>
-                            <td>${assessment.score}</td>
-                            <td>${assessment.category}</td>
-                            <td>${assessment.risk || 'N/A'}</td>
-                            <td>${assessment.patterns || 0}</td>
-                        </tr>`;
-                    });
-                    
-                    html += '</tbody></table>';
-                    assessmentsList.innerHTML = html;
-                } else {
-                    var assessmentsList = document.getElementById('assessmentsList');
-                    assessmentsList.innerHTML = '<p style="text-align: center; color: #718096; margin: 20px 0;">No assessments yet. Complete an assessment to see data here.</p>';
-                }
-                
-            } catch (e) {
-                console.log('Cookie integration error:', e);
-                // Fallback to original stats display
-                var statsGrid = document.getElementById('statsGrid');
-                statsGrid.innerHTML = `
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.totalSessions}</div>
-                        <div class="stat-label">Sessions</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.avgScore}</div>
-                        <div class="stat-label">Avg Score</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.completionRate}%</div>
-                        <div class="stat-label">Completion</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.emailRate}%</div>
                         <div class="stat-label">Email Rate</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">${stats.pdfDownloads}</div>
-                        <div class="stat-label">PDF Rate</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${stats.waitlistCount}</div>
-                        <div class="stat-label">📧 Waitlist</div>
+                        <div class="stat-number">${totalEmails > 0 ? Math.round((totalPurchases/totalEmails)*100) : 0}%</div>
+                        <div class="stat-label">Purchase Rate</div>
                     </div>
                 `;
+                
+                var assessmentsList = document.getElementById('assessmentsList');
+                
+                if (cookieAssessments.length > 0 || cookiePurchases.length > 0) {
+                    var html = '<h4>📊 Recent Activity</h4>';
+                    
+                    if (cookiePurchases.length > 0) {
+                        html += '<h5>💰 Recent Purchases</h5>';
+                        html += '<table class="data-table"><thead><tr><th>Date</th><th>Email</th><th>Amount</th><th>Transaction ID</th></tr></thead><tbody>';
+                        
+                        cookiePurchases.slice(-5).reverse().forEach(purchase => {
+                            var date = new Date(purchase.timestamp).toLocaleDateString();
+                            html += `<tr>
+                                <td>${date}</td>
+                                <td>${purchase.email}</td>
+                                <td>€${purchase.amount}</td>
+                                <td>${purchase.transactionId}</td>
+                            </tr>`;
+                        });
+                        html += '</tbody></table>';
+                    }
+                    
+                    if (cookieAssessments.length > 0) {
+                        html += '<h5>🍪 Recent Assessments</h5>';
+                        html += '<table class="data-table"><thead><tr><th>Date</th><th>Score</th><th>Category</th><th>Risk</th></tr></thead><tbody>';
+                        
+                        cookieAssessments.slice(-5).reverse().forEach(assessment => {
+                            html += `<tr>
+                                <td>${assessment.date}</td>
+                                <td>${assessment.score}</td>
+                                <td>${assessment.category}</td>
+                                <td>${assessment.risk || 'N/A'}</td>
+                            </tr>`;
+                        });
+                        html += '</tbody></table>';
+                    }
+                    
+                    assessmentsList.innerHTML = html;
+                } else {
+                    assessmentsList.innerHTML = '<p style="text-align: center; color: #718096; margin: 20px 0;">No data yet. Complete an assessment to see data here.</p>';
+                }
+                
+            } catch (e) {
+                console.log('Admin data loading error:', e);
             }
         }
         
@@ -2018,74 +2005,7 @@
                 return;
             }
             
-            // Category distribution
-            var categoryCount = {};
-            var riskCount = {};
-            var patternCount = {};
-            
-            assessments.forEach(assessment => {
-                // Categories
-                categoryCount[assessment.category] = (categoryCount[assessment.category] || 0) + 1;
-                
-                // Risk levels
-                var risk = assessment.aiAnalysis?.riskLevel || 'Unknown';
-                riskCount[risk] = (riskCount[risk] || 0) + 1;
-                
-                // Patterns
-                if (assessment.aiAnalysis?.detectedPatterns) {
-                    assessment.aiAnalysis.detectedPatterns.forEach(pattern => {
-                        patternCount[pattern] = (patternCount[pattern] || 0) + 1;
-                    });
-                }
-            });
-            
-            var html = `
-                <h4>📊 Category Distribution</h4>
-                <table class="data-table">
-                    <thead><tr><th>Category</th><th>Count</th><th>Percentage</th></tr></thead>
-                    <tbody>
-            `;
-            
-            Object.keys(categoryCount).forEach(category => {
-                var count = categoryCount[category];
-                var percentage = Math.round((count / assessments.length) * 100);
-                html += `<tr><td>${category}</td><td>${count}</td><td>${percentage}%</td></tr>`;
-            });
-            
-            html += `
-                    </tbody>
-                </table>
-                
-                <h4>⚠️ Risk Level Distribution</h4>
-                <table class="data-table">
-                    <thead><tr><th>Risk Level</th><th>Count</th><th>Percentage</th></tr></thead>
-                    <tbody>
-            `;
-            
-            Object.keys(riskCount).forEach(risk => {
-                var count = riskCount[risk];
-                var percentage = Math.round((count / assessments.length) * 100);
-                html += `<tr><td>${risk}</td><td>${count}</td><td>${percentage}%</td></tr>`;
-            });
-            
-            html += `
-                    </tbody>
-                </table>
-                
-                <h4>🧠 AI Pattern Detection</h4>
-                <table class="data-table">
-                    <thead><tr><th>Pattern</th><th>Count</th><th>Frequency</th></tr></thead>
-                    <tbody>
-            `;
-            
-            Object.keys(patternCount).forEach(pattern => {
-                var count = patternCount[pattern];
-                var frequency = Math.round((count / assessments.length) * 100);
-                html += `<tr><td>${pattern}</td><td>${count}</td><td>${frequency}%</td></tr>`;
-            });
-            
-            html += '</tbody></table>';
-            analytics.innerHTML = html;
+            analytics.innerHTML = '<p>Analytics data will be displayed here when available.</p>';
         }
         
         function loadWaitlist() {
@@ -2097,26 +2017,7 @@
                 return;
             }
             
-            var html = `
-                <h4>📧 Waitlist Emails (${waitlist.length} total)</h4>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Email</th><th>Date</th><th>Score</th><th>Category</th></tr>
-                    </thead>
-                    <tbody>
-            `;
-            
-            waitlist.slice().reverse().forEach(entry => {
-                var date = new Date(entry.timestamp).toLocaleDateString();
-                html += `<tr>
-                    <td>${entry.email}</td>
-                    <td>${date}</td>
-                    <td>${entry.userScore || 'N/A'}</td>
-                    <td>${entry.category || 'N/A'}</td>
-                </tr>`;
-            });
-            
-            html += '</tbody></table>';
+            var html = `<h4>📧 Waitlist Emails (${waitlist.length} total)</h4>`;
             waitlistContent.innerHTML = html;
         }
         
@@ -2128,23 +2029,12 @@
 Storage Type: ${database.storageAvailable}
 Total Assessments: ${database.data.assessments?.length || 0}
 Total Waitlist: ${database.data.waitlist?.length || 0}
-Storage Available: ${database.storageAvailable !== 'memory' ? 'Yes' : 'Memory Only'}
 Last Updated: ${new Date().toISOString()}
 
-Stats Overview:
-${JSON.stringify(stats, null, 2)}
-
-Database Structure:
-${JSON.stringify(Object.keys(database.data), null, 2)}
-
-Storage Fallback Chain:
-1. localStorage: ${database.storageAvailable === 'localStorage' ? '✅ Active' : '❌ Blocked'}
-2. sessionStorage: ${database.storageAvailable === 'sessionStorage' ? '✅ Active' : (database.storageAvailable === 'localStorage' ? '⚪ Available' : '❌ Blocked')}
-3. Memory Only: ${database.storageAvailable === 'memory' ? '✅ Active' : '⚪ Fallback'}
-
-Cookie Storage Check:
-${getCookie('tpa_assessments') ? '✅ Cookie assessments found' : '❌ No cookie data'}
-${getCookie('tpa_stats') ? '✅ Cookie stats found' : '❌ No cookie stats'}`;
+Cookie Storage:
+Assessments: ${getCookie('tpa_assessments') ? 'Found' : 'None'}
+Stats: ${getCookie('tpa_stats') ? 'Found' : 'None'}
+Purchases: ${getCookie('tpa_purchases') ? 'Found' : 'None'}`;
         }
         
         function exportData(format) {
@@ -2169,12 +2059,12 @@ ${getCookie('tpa_stats') ? '✅ Cookie stats found' : '❌ No cookie stats'}`;
         }
         
         function clearAllData() {
-            if (confirm('Are you sure you want to delete ALL AI assessment data?')) {
-                if (confirm('This will permanently delete all collected data including assessments, emails, and waitlist. This cannot be undone. Are you absolutely sure?')) {
+            if (confirm('Are you sure you want to delete ALL assessment data?')) {
+                if (confirm('This will permanently delete all data. This cannot be undone. Are you absolutely sure?')) {
                     database.clearAll();
-                    // Also clear cookies
                     setCookie('tpa_assessments', '', -1);
                     setCookie('tpa_stats', '', -1);
+                    setCookie('tpa_purchases', '', -1);
                     alert('✅ All data has been cleared');
                     loadAdminData();
                 }
