@@ -823,20 +823,14 @@
 
                 <!-- REALISTIC: Current Available Products -->
                 <div class="category">
-                    <h3>📊 Available Trading Psychology Products</h3>
-                    <p style="margin-bottom: 20px; color: #6c757d;">Currently available products and upcoming AI tools for your trading psychology improvement:</p>
+                    <h3>🛠️ Trading Psychology Tools</h3>
+                    <p style="margin-bottom: 20px; color: #6c757d;">Current tools and upcoming AI features for your trading psychology improvement:</p>
                     
                     <div class="feature-grid">
                         <div class="feature-card">
                             <div class="feature-icon">✅</div>
                             <div class="feature-title">AI Psychology Assessment <span class="status-badge status-available">FREE</span></div>
                             <div class="feature-desc">Completely free - analyzes your trading psychology in 8 questions</div>
-                        </div>
-                        
-                        <div class="feature-card">
-                            <div class="feature-icon">📄</div>
-                            <div class="feature-title">Premium Psychology Analysis <span class="status-badge status-available">$47</span></div>
-                            <div class="feature-desc">10-page professional analysis with personalized action strategies, emotional management toolkit, and 90-day implementation roadmap</div>
                         </div>
                         
                         <div class="feature-card">
@@ -849,6 +843,12 @@
                             <div class="feature-icon">🎯</div>
                             <div class="feature-title">Real-time Emotion Detector <span class="status-badge status-development">Q4 2025</span></div>
                             <div class="feature-desc">Analyzes your trading messages and alerts for emotional decision-making patterns</div>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-title">Psychology Analytics Dashboard <span class="status-badge status-development">Q4 2025</span></div>
+                            <div class="feature-desc">Track emotional patterns and psychology improvement over time</div>
                         </div>
                     </div>
                 </div>
@@ -2245,7 +2245,7 @@
             return patterns;
         }
 
-        // PayPal Integration
+        // PayPal Integration - FIXED
         function initiatePayPalPayment() {
             const userEmail = document.getElementById('purchaseEmailInput').value.trim();
             
@@ -2262,20 +2262,37 @@
                 value: 47
             });
 
+            console.log('💳 Payment initiated for:', userEmail);
+
             // DEMO MODE: Show confirmation but DON'T generate PDF yet
             if (confirm(`🚨 DEMO MODE 🚨\n\nIn production, this would redirect to PayPal for $47 payment.\n\nPDF will be delivered to: ${userEmail}\n\nFor demo purposes, click OK to simulate successful payment.`)) {
-                // Simulate PayPal redirect delay
-                const button = event.target;
-                const originalText = button.textContent;
-                button.textContent = '🔄 Redirecting to PayPal...';
-                button.disabled = true;
                 
-                setTimeout(() => {
-                    // Simulate successful payment return
-                    handleSuccessfulPayment(userEmail, 'DEMO_TRANSACTION_' + Date.now());
-                    button.textContent = originalText;
-                    button.disabled = false;
-                }, 2000);
+                // Find the button that was clicked
+                const buttons = document.querySelectorAll('button');
+                let paymentButton = null;
+                buttons.forEach(btn => {
+                    if (btn.textContent.includes('Purchase Premium Analysis')) {
+                        paymentButton = btn;
+                    }
+                });
+                
+                if (paymentButton) {
+                    const originalText = paymentButton.textContent;
+                    paymentButton.textContent = '🔄 Processing Payment...';
+                    paymentButton.disabled = true;
+                    
+                    setTimeout(() => {
+                        // Simulate successful payment return
+                        handleSuccessfulPayment(userEmail, 'DEMO_TRANSACTION_' + Date.now());
+                        paymentButton.textContent = originalText;
+                        paymentButton.disabled = false;
+                    }, 2000);
+                } else {
+                    // Fallback if button not found
+                    setTimeout(() => {
+                        handleSuccessfulPayment(userEmail, 'DEMO_TRANSACTION_' + Date.now());
+                    }, 1000);
+                }
             }
             
             // TODO: Replace with real PayPal integration for production:
