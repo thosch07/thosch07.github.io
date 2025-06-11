@@ -766,7 +766,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 AI-Enhanced Trading Psychology Assessment</h1>
+            <h1>AI-Enhanced Trading Psychology Assessment</h1>
             <p>Discover your psychological strengths and weaknesses in trading with our advanced AI system</p>
             <button class="btn btn-secondary" onclick="restartAssessment()" style="margin-top: 15px; font-size: 0.9rem;">
                 🔄 Restart Assessment
@@ -836,7 +836,7 @@
                         <div class="feature-card">
                             <div class="feature-icon">📄</div>
                             <div class="feature-title">Premium Psychology Analysis <span class="status-badge status-coming-soon">$47</span></div>
-                            <div class="feature-desc">9-page professional analysis with personalized action strategies, emotional management toolkit, and 90-day implementation roadmap</div>
+                            <div class="feature-desc">10-page professional analysis with personalized action strategies, emotional management toolkit, and 90-day implementation roadmap</div>
                         </div>
                         
                         <div class="feature-card">
@@ -856,14 +856,14 @@
                 <!-- Waitlist Section -->
                 <div class="waitlist-box">
                     <h3>📄 Premium AI Analysis Available!</h3>
-                    <p>Get a comprehensive 9-page professional analysis with:</p>
+                    <p>Get a comprehensive 10-page professional analysis with:</p>
                     <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
                         <li><strong>Personalized Action Strategies</strong> - Custom protocols for your exact psychology level</li>
                         <li><strong>Professional Psychology Toolkit</strong> - Advanced techniques used by elite traders</li>
                         <li><strong>90-Day Implementation Roadmap</strong> - Step-by-step improvement plan</li>
                         <li><strong>Emotional Management System</strong> - Proven methods for trading psychology control</li>
                         <li><strong>Weekly Performance Tracking</strong> - Measure your psychology improvement</li>
-                        <li><strong>Priority Access</strong> to future AI trading psychology tools</li>
+                        <li><strong>Automated Tool Access</strong> to future AI trading psychology tools</li>
                     </ul>
                     <p><strong>Professional Value: $47 (one-time)</strong></p>
                     <div>
@@ -878,7 +878,7 @@
                 <!-- Development Testing -->
                 <div class="development-testing">
                     <h4>🧪 Development Testing</h4>
-                    <p>Test the new 8-page PDF with corrected scoring logic:</p>
+                    <p>Test the new 10-page PDF with corrected scoring logic:</p>
                     <button class="btn btn-secondary" onclick="testCurrentPDF()" style="margin-top: 10px;">
                         Generate Test PDF
                     </button>
@@ -1547,7 +1547,7 @@
             return 'Elite Trader';
         }
 
-        // Enhanced PDF Generation with Realistic Content in English
+        // Enhanced PDF Generation with Fixed Cover Page and Automated Services Only
         function generateExtendedPDFReport(email, transactionId) {
             try {
                 var jsPDF = window.jspdf.jsPDF;
@@ -1556,7 +1556,7 @@
                 // Calculate AI confidence score (realistic based on actual score)
                 var confidenceScore = Math.max(20, Math.min(95, (totalScore / 320) * 80 + 15 + (Math.random() * 10 - 5)));
                 
-                // Page 1: Cover Page (matching assessment colors)
+                // Page 1: Cover Page (matching assessment colors) - FIXED
                 // Create gradient-like effect with blue/purple colors
                 doc.setFillColor(102, 126, 234); // Blue
                 doc.rect(0, 0, 210, 297, 'F');
@@ -1566,9 +1566,9 @@
                 doc.rect(0, 0, 210, 150, 'F');
                 
                 doc.setTextColor(255, 255, 255);
-                doc.setFontSize(28);
+                doc.setFontSize(24);
                 doc.setFont(undefined, 'bold');
-                doc.text('🤖 AI-Enhanced Trading', 105, 80, { align: 'center' });
+                doc.text('AI-Enhanced Trading', 105, 75, { align: 'center' });
                 doc.text('Psychology Analysis', 105, 95, { align: 'center' });
                 
                 doc.setFontSize(16);
@@ -1693,7 +1693,7 @@
                     patternYPos += splitPattern.length * 5 + 3;
                 });
 
-                // Page 4: Psychology Risk Assessment
+                // Page 4: Complete Psychology Risk Assessment - NO DUPLICATES
                 doc.addPage();
                 doc.setFontSize(20);
                 doc.setFont(undefined, 'bold');
@@ -1702,7 +1702,7 @@
                 // Risk categories with visual representation
                 doc.setFontSize(12);
                 doc.setFont(undefined, 'bold');
-                doc.text('Risk Categories:', 20, 50);
+                doc.text('Comprehensive Risk Analysis:', 20, 50);
                 
                 doc.setFont(undefined, 'normal');
                 doc.setFontSize(10);
@@ -1745,6 +1745,24 @@
                     doc.text(bar + ' (' + risk.level + ')', 60, barYPos);
                     barYPos += 12;
                 });
+
+                // Additional risk insights
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('Risk Management Priorities:', 20, 220);
+                
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(10);
+                if (totalScore < 80) {
+                    doc.text('• Immediate intervention required - critical emotional patterns detected', 20, 235);
+                    doc.text('• Focus on emotional regulation and loss management', 20, 245);
+                } else if (totalScore < 160) {
+                    doc.text('• Significant improvement needed in emotional control', 20, 235);
+                    doc.text('• Implement structured risk management protocols', 20, 245);
+                } else {
+                    doc.text('• Fine-tune existing psychological edge', 20, 235);
+                    doc.text('• Optimize performance consistency', 20, 245);
+                }
 
                 // Page 5: 30/60/90 Day Improvement Roadmap
                 doc.addPage();
@@ -2034,25 +2052,77 @@
                 }
 
                 doc.setFont(undefined, 'bold');
-                doc.text('Exclusive Support Resources ($47 Value):', 20, 155);
+                doc.text('Automated Support Resources ($47 Value):', 20, 155);
                 doc.setFont(undefined, 'normal');
-                doc.text('• Monthly re-assessment access (track improvement)', 20, 165);
-                doc.text('• Priority access to new AI psychology tools', 20, 175);
-                doc.text('• Email support for psychology questions', 20, 185);
-                doc.text('• Advanced techniques PDF library access', 20, 195);
+                doc.text('• Access to updated AI psychology assessments', 20, 165);
+                doc.text('• Priority notifications for new AI tools (Q3/Q4 2025)', 20, 175);
+                doc.text('• Downloadable psychology improvement guides', 20, 185);
+                doc.text('• Advanced PDF analysis templates', 20, 195);
 
                 doc.setFont(undefined, 'bold');
-                doc.text('Contact & Professional Support:', 20, 210);
+                doc.text('Contact & Automated Services:', 20, 210);
                 doc.setFont(undefined, 'normal');
-                doc.text('Psychology Questions: info@schnitzleinconsulting.com', 20, 220);
-                doc.text('Website: www.schnitzleinconsulting.com', 20, 230);
-                doc.text('Tool Updates: Join our email list for launch notifications', 20, 240);
+                doc.text('Website: www.schnitzleinconsulting.com', 20, 220);
+                doc.text('AI Tool Updates: Automated notifications for new releases', 20, 230);
+                doc.text('Assessment Access: Unlimited retakes to track improvement', 20, 240);
 
                 doc.setFontSize(8);
                 doc.setFont(undefined, 'italic');
                 doc.text('This analysis is for educational purposes only and does not constitute financial advice.', 20, 260);
                 doc.text('Trading involves risk and past performance does not guarantee future results.', 20, 270);
                 doc.text('For serious psychological concerns, please consult a licensed professional.', 20, 280);
+
+                // Page 10: Bonus Psychology Resources
+                doc.addPage();
+                doc.setFontSize(20);
+                doc.setFont(undefined, 'bold');
+                doc.text('Bonus Psychology Resources', 20, 30);
+                
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('Recommended Reading for Your Level:', 20, 50);
+                
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(10);
+                
+                if (totalScore < 80) {
+                    doc.text('Essential Foundation Books:', 20, 65);
+                    doc.text('• "Trading in the Zone" by Mark Douglas', 25, 75);
+                    doc.text('• "The Psychology of Trading" by Brett Steenbarger', 25, 85);
+                    doc.text('• "Mind Over Markets" by James Dalton', 25, 95);
+                } else if (totalScore < 160) {
+                    doc.text('Skill Development Resources:', 20, 65);
+                    doc.text('• "Market Wizards" by Jack Schwager', 25, 75);
+                    doc.text('• "The Disciplined Trader" by Mark Douglas', 25, 85);
+                    doc.text('• "Best Practices for Equity Research" by James Valentine', 25, 95);
+                } else {
+                    doc.text('Advanced Performance Resources:', 20, 65);
+                    doc.text('• "Thinking, Fast and Slow" by Daniel Kahneman', 25, 75);
+                    doc.text('• "The Black Swan" by Nassim Taleb', 25, 85);
+                    doc.text('• "Antifragile" by Nassim Taleb', 25, 95);
+                }
+
+                doc.setFont(undefined, 'bold');
+                doc.text('Daily Psychology Exercises:', 20, 115);
+                doc.setFont(undefined, 'normal');
+                doc.text('• Morning Visualization: 5 minutes of perfect trade execution', 20, 125);
+                doc.text('• Pre-Trade Assessment: Rate emotional state 1-10', 20, 135);
+                doc.text('• Post-Trade Review: Document emotional decision points', 20, 145);
+                doc.text('• Evening Reflection: Journal about market psychology insights', 20, 155);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('Performance Tracking Templates:', 20, 175);
+                doc.setFont(undefined, 'normal');
+                doc.text('• Weekly Psychology Score Card (rate 1-10 each category)', 20, 185);
+                doc.text('• Monthly Progress Assessment (compare to baseline)', 20, 195);
+                doc.text('• Quarterly Goals Setting (specific psychology objectives)', 20, 205);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('Coming Q3/Q4 2025 - AI Tools Preview:', 20, 225);
+                doc.setFont(undefined, 'normal');
+                doc.text('• Real-time Emotion Detector: Analyzes your trading messages for emotions', 20, 235);
+                doc.text('• AI Risk Calculator: Optimal position sizing based on psychological state', 20, 245);
+                doc.text('• Psychology Performance Dashboard: Track emotional patterns over time', 20, 255);
 
                 // Save the PDF
                 const fileName = 'Trading_Psychology_Analysis_' + new Date().toISOString().split('T')[0] + '.pdf';
@@ -2363,7 +2433,7 @@
         // Console welcome message
         console.log(`
 🚀 Trading Psychology Assessment Tool
-📊 Version: 2.1 (English)
+📊 Version: 3.0 (English) - FIXED & OPTIMIZED
 🔧 Debug Commands:
 - debugInfo() - Show debug information
 - testCurrentPDF() - Generate test PDF
@@ -2376,6 +2446,12 @@
 - Ctrl+Shift+T - Generate test PDF
 - Ctrl+Shift+C - Clear all data
 - Ctrl+Shift+R - Restart assessment
+
+✅ FIXES APPLIED:
+- Cover page text corrected
+- Risk visualization no longer duplicated
+- Only automated services offered
+- 10-page premium PDF with enhanced value
 
 © 2025 Schnitzlein Consulting
         `);
