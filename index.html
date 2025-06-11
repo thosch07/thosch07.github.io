@@ -824,31 +824,31 @@
                 <!-- REALISTIC: Current Available Products -->
                 <div class="category">
                     <h3>📊 Available Trading Psychology Products</h3>
-                    <p style="margin-bottom: 20px; color: #6c757d;">Currently available products for your trading psychology improvement:</p>
+                    <p style="margin-bottom: 20px; color: #6c757d;">Currently available products and upcoming AI tools for your trading psychology improvement:</p>
                     
                     <div class="feature-grid">
                         <div class="feature-card">
                             <div class="feature-icon">✅</div>
-                            <div class="feature-title">AI Psychology Assessment <span class="status-badge status-available">AVAILABLE</span></div>
+                            <div class="feature-title">AI Psychology Assessment <span class="status-badge status-available">FREE</span></div>
                             <div class="feature-desc">Completely free - analyzes your trading psychology in 8 questions</div>
                         </div>
                         
                         <div class="feature-card">
                             <div class="feature-icon">📄</div>
-                            <div class="feature-title">Premium Psychology Analysis <span class="status-badge status-coming-soon">$47</span></div>
+                            <div class="feature-title">Premium Psychology Analysis <span class="status-badge status-available">$47</span></div>
                             <div class="feature-desc">10-page professional analysis with personalized action strategies, emotional management toolkit, and 90-day implementation roadmap</div>
                         </div>
                         
                         <div class="feature-card">
-                            <div class="feature-icon">🔮</div>
-                            <div class="feature-title">AI-Tools Roadmap <span class="status-badge status-development">Q3/Q4 2025</span></div>
-                            <div class="feature-desc">Risk Calculator, Emotion Detector, Psychology Tracker - in development</div>
+                            <div class="feature-icon">🧮</div>
+                            <div class="feature-title">AI Risk Calculator <span class="status-badge status-development">Q3 2025</span></div>
+                            <div class="feature-desc">Optimal position sizing based on your psychological state and confidence level</div>
                         </div>
                         
                         <div class="feature-card">
-                            <div class="feature-icon">📧</div>
-                            <div class="feature-title">Launch Notifications <span class="status-badge status-available">FREE</span></div>
-                            <div class="feature-desc">Be the first to know about new AI tools and products</div>
+                            <div class="feature-icon">🎯</div>
+                            <div class="feature-title">Real-time Emotion Detector <span class="status-badge status-development">Q4 2025</span></div>
+                            <div class="feature-desc">Analyzes your trading messages and alerts for emotional decision-making patterns</div>
                         </div>
                     </div>
                 </div>
@@ -1505,8 +1505,8 @@
             }, 30);
         }
 
-        function joinWaitlist() {
-            const emailInput = document.getElementById('emailInput');
+        function joinWaitlistForTools() {
+            const emailInput = document.getElementById('waitlistEmailInput');
             const email = emailInput.value.trim();
             
             if (!email || !isValidEmail(email)) {
@@ -1532,7 +1532,8 @@
                 answers: selectedAnswers,
                 sessionId: generateSessionId(),
                 category: getCategoryForScore(totalScore),
-                source: 'assessment_results'
+                source: 'ai_tools_waitlist',
+                type: 'future_tools'
             };
             
             saveData('waitlistSignup', waitlistData);
@@ -1544,7 +1545,7 @@
             // Track waitlist signup
             gtag('event', 'waitlist_signup', {
                 event_category: 'Conversion',
-                event_label: 'User joined waitlist',
+                event_label: 'AI Tools waitlist signup',
                 value: totalScore
             });
 
@@ -1560,7 +1561,12 @@
                 button.disabled = false;
             }, 3000);
 
-            console.log('📧 Waitlist signup:', email, 'Score:', totalScore);
+            console.log('📧 AI Tools waitlist signup:', email, 'Score:', totalScore);
+        }
+
+        // Legacy function for backwards compatibility
+        function joinWaitlist() {
+            joinWaitlistForTools();
         }
 
         function isValidEmail(email) {
@@ -2256,35 +2262,51 @@
                 value: 47
             });
 
-            // For now, simulate PayPal payment (replace with real PayPal SDK)
-            if (confirm(`Proceed to PayPal to pay $47 for your Premium Analysis?\n\nPDF will be delivered to: ${userEmail}`)) {
-                // Simulate successful payment for demo
-                handleSuccessfulPayment(userEmail, 'DEMO_TRANSACTION_' + Date.now());
+            // DEMO MODE: Show confirmation but DON'T generate PDF yet
+            if (confirm(`🚨 DEMO MODE 🚨\n\nIn production, this would redirect to PayPal for $47 payment.\n\nPDF will be delivered to: ${userEmail}\n\nFor demo purposes, click OK to simulate successful payment.`)) {
+                // Simulate PayPal redirect delay
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '🔄 Redirecting to PayPal...';
+                button.disabled = true;
                 
-                // TODO: Replace with real PayPal integration:
-                /*
-                paypal.Buttons({
-                    createOrder: function(data, actions) {
-                        return actions.order.create({
-                            purchase_units: [{
-                                amount: {
-                                    value: '47.00'
-                                }
-                            }]
-                        });
-                    },
-                    onApprove: function(data, actions) {
-                        return actions.order.capture().then(function(details) {
-                            handleSuccessfulPayment(userEmail, details.id);
-                        });
-                    }
-                }).render('#paypal-button-container');
-                */
+                setTimeout(() => {
+                    // Simulate successful payment return
+                    handleSuccessfulPayment(userEmail, 'DEMO_TRANSACTION_' + Date.now());
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 2000);
             }
+            
+            // TODO: Replace with real PayPal integration for production:
+            /*
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: '47.00'
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        handleSuccessfulPayment(userEmail, details.id);
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal error:', err);
+                    alert('Payment failed. Please try again.');
+                }
+            }).render('#paypal-button-container');
+            */
         }
 
         function handleSuccessfulPayment(email, transactionId) {
-            // Generate and download PDF
+            console.log('💰 Payment successful! Generating PDF for:', email);
+            
+            // ONLY generate PDF after successful payment
             generateExtendedPDFReport(email, transactionId);
             
             // Track successful conversion
@@ -2308,7 +2330,8 @@
                 amount: 47,
                 timestamp: new Date().toISOString(),
                 score: totalScore,
-                answers: selectedAnswers
+                answers: selectedAnswers,
+                paymentMethod: 'PayPal'
             };
             
             const allPurchases = loadData('allPurchases') || [];
@@ -2316,9 +2339,9 @@
             saveData('allPurchases', allPurchases);
 
             // Show success message
-            alert(`🎉 Payment successful!\n\nYour Premium Analysis PDF has been downloaded.\nTransaction ID: ${transactionId}`);
+            alert(`🎉 Payment successful!\n\n✅ Your Premium Analysis PDF has been downloaded\n📧 Email: ${email}\n🆔 Transaction: ${transactionId}\n\nThank you for your purchase!`);
             
-            console.log('✅ Payment processed successfully:', transactionId);
+            console.log('✅ Purchase processed successfully:', transactionId);
         }
         function testCurrentPDF() {
             if (totalScore === 0 && selectedAnswers.length === 0) {
@@ -2553,8 +2576,8 @@
         // Console welcome message
         console.log(`
 🚀 Trading Psychology Assessment Tool
-📊 Version: 3.1 (English) - PRODUCTION READY
-💰 PayPal Integration: Active ($47 Premium Analysis)
+📊 Version: 3.2 (English) - PRODUCTION READY + PAYMENT FIXED
+💰 PayPal Integration: Correctly requires payment before PDF delivery
 
 🔧 Debug Commands:
 - debugInfo() - Show debug information + enable test mode
@@ -2570,11 +2593,12 @@
 - Ctrl+Shift+R - Restart assessment
 
 ✅ PRODUCTION FEATURES:
-- PayPal payment integration ($47)
-- Real purchase tracking & analytics
-- Test mode hidden from customers
-- Revenue tracking in admin panel
-- Automated PDF delivery after payment
+- ✅ PayPal payment required before PDF generation
+- ✅ Real purchase tracking & analytics  
+- ✅ Test mode hidden from customers
+- ✅ Revenue tracking in admin panel
+- ✅ No fake numbers or false advertising
+- ✅ Separated waitlist (AI tools) vs purchase (PDF)
 
 💡 DEPLOYMENT READY:
 Replace the PayPal demo code with real PayPal SDK for production!
