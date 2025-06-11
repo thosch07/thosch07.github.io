@@ -2245,8 +2245,10 @@
             return patterns;
         }
 
-        // PayPal Integration - FIXED
+        // PayPal Integration - FIXED with proper button handling
         function initiatePayPalPayment() {
+            console.log('🔧 PayPal payment function called');
+            
             const userEmail = document.getElementById('purchaseEmailInput').value.trim();
             
             if (!userEmail || !isValidEmail(userEmail)) {
@@ -2264,35 +2266,35 @@
 
             console.log('💳 Payment initiated for:', userEmail);
 
+            // Get the purchase button by ID
+            const purchaseButton = document.getElementById('purchaseButton');
+            
             // DEMO MODE: Show confirmation but DON'T generate PDF yet
             if (confirm(`🚨 DEMO MODE 🚨\n\nIn production, this would redirect to PayPal for $47 payment.\n\nPDF will be delivered to: ${userEmail}\n\nFor demo purposes, click OK to simulate successful payment.`)) {
                 
-                // Find the button that was clicked
-                const buttons = document.querySelectorAll('button');
-                let paymentButton = null;
-                buttons.forEach(btn => {
-                    if (btn.textContent.includes('Purchase Premium Analysis')) {
-                        paymentButton = btn;
-                    }
-                });
-                
-                if (paymentButton) {
-                    const originalText = paymentButton.textContent;
-                    paymentButton.textContent = '🔄 Processing Payment...';
-                    paymentButton.disabled = true;
+                if (purchaseButton) {
+                    const originalText = purchaseButton.textContent;
+                    purchaseButton.textContent = '🔄 Processing Payment...';
+                    purchaseButton.disabled = true;
+                    
+                    console.log('🔄 Button updated, processing payment...');
                     
                     setTimeout(() => {
+                        console.log('✅ Simulating successful payment');
                         // Simulate successful payment return
                         handleSuccessfulPayment(userEmail, 'DEMO_TRANSACTION_' + Date.now());
-                        paymentButton.textContent = originalText;
-                        paymentButton.disabled = false;
+                        purchaseButton.textContent = originalText;
+                        purchaseButton.disabled = false;
                     }, 2000);
                 } else {
+                    console.warn('⚠️ Purchase button not found, proceeding anyway');
                     // Fallback if button not found
                     setTimeout(() => {
                         handleSuccessfulPayment(userEmail, 'DEMO_TRANSACTION_' + Date.now());
                     }, 1000);
                 }
+            } else {
+                console.log('❌ Payment cancelled by user');
             }
             
             // TODO: Replace with real PayPal integration for production:
