@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -767,14 +767,14 @@
     <div class="container">
         <div class="header">
             <h1>🤖 AI-Enhanced Trading Psychology Assessment</h1>
-            <p>Entdecke deine psychologischen Stärken und Schwächen beim Trading mit unserem fortschrittlichen AI-System</p>
+            <p>Discover your psychological strengths and weaknesses in trading with our advanced AI system</p>
         </div>
 
         <div class="progress-container">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div class="progress-text" id="progressText">Frage 1 von 8</div>
+            <div class="progress-text" id="progressText">Question 1 of 8</div>
         </div>
 
         <div class="content">
@@ -785,17 +785,17 @@
                 
                 <div class="navigation">
                     <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" style="display: none;">
-                        ← Zurück
+                        ← Back
                     </button>
                     <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
-                        Weiter →
+                        Next →
                     </button>
                 </div>
             </div>
 
             <!-- Results Section -->
             <div id="resultsContainer" class="results hidden">
-                <h2>🎯 Deine AI-Enhanced Analyse</h2>
+                <h2>🎯 Your AI-Enhanced Analysis</h2>
                 
                 <div class="score-display">
                     <div class="score" id="totalScore">0/320</div>
@@ -803,8 +803,8 @@
                 </div>
 
                 <div class="category">
-                    <h3>📊 <span id="categoryTitle">Trader-Kategorie</span></h3>
-                    <div id="riskLevel" class="risk-level">Wird berechnet...</div>
+                    <h3>📊 <span id="categoryTitle">Trader Category</span></h3>
+                    <div id="riskLevel" class="risk-level">Calculating...</div>
                     <div id="categoryDescription"></div>
                 </div>
 
@@ -814,60 +814,60 @@
                 </div>
 
                 <div class="category">
-                    <h3>📈 Empfehlungen</h3>
+                    <h3>📈 Recommendations</h3>
                     <div id="recommendations"></div>
                 </div>
 
                 <!-- REALISTIC: Current Available Products -->
                 <div class="category">
-                    <h3>📊 Verfügbare Trading Psychology Produkte</h3>
-                    <p style="margin-bottom: 20px; color: #6c757d;">Aktuell verfügbare Produkte für deine Trading Psychology Verbesserung:</p>
+                    <h3>📊 Available Trading Psychology Products</h3>
+                    <p style="margin-bottom: 20px; color: #6c757d;">Currently available products for your trading psychology improvement:</p>
                     
                     <div class="feature-grid">
                         <div class="feature-card">
                             <div class="feature-icon">✅</div>
-                            <div class="feature-title">AI Psychology Assessment <span class="status-badge status-available">VERFÜGBAR</span></div>
-                            <div class="feature-desc">Komplett kostenlos - analysiert deine Trading Psychology in 8 Fragen</div>
+                            <div class="feature-title">AI Psychology Assessment <span class="status-badge status-available">AVAILABLE</span></div>
+                            <div class="feature-desc">Completely free - analyzes your trading psychology in 8 questions</div>
                         </div>
                         
                         <div class="feature-card">
                             <div class="feature-icon">📄</div>
-                            <div class="feature-title">Extended AI Analysis <span class="status-badge status-coming-soon">€47</span></div>
-                            <div class="feature-desc">8-seitige detaillierte Analyse mit personalisierten Empfehlungen und 90-Tage Roadmap</div>
+                            <div class="feature-title">Extended AI Analysis <span class="status-badge status-coming-soon">$47</span></div>
+                            <div class="feature-desc">8-page detailed analysis with personalized recommendations and 90-day roadmap</div>
                         </div>
                         
                         <div class="feature-card">
                             <div class="feature-icon">🔮</div>
                             <div class="feature-title">AI-Tools Roadmap <span class="status-badge status-development">Q3/Q4 2025</span></div>
-                            <div class="feature-desc">Risk Calculator, Emotion Detector, Psychology Tracker - in Entwicklung</div>
+                            <div class="feature-desc">Risk Calculator, Emotion Detector, Psychology Tracker - in development</div>
                         </div>
                         
                         <div class="feature-card">
                             <div class="feature-icon">📧</div>
-                            <div class="feature-title">Launch Notifications <span class="status-badge status-available">KOSTENLOS</span></div>
-                            <div class="feature-desc">Sei der Erste, der über neue AI-Tools und Produkte informiert wird</div>
+                            <div class="feature-title">Launch Notifications <span class="status-badge status-available">FREE</span></div>
+                            <div class="feature-desc">Be the first to know about new AI tools and products</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Waitlist Section -->
                 <div class="waitlist-box">
-                    <h3>📄 Erweiterte AI-Analyse verfügbar!</h3>
-                    <p>Erhalte eine detaillierte 8-seitige AI-Analyse mit personalisierten Empfehlungen, 90-Tage Roadmap und Priority Access zu zukünftigen Tools.</p>
-                    <p><strong>Preis: €47 (einmalig)</strong></p>
+                    <h3>📄 Extended AI Analysis Available!</h3>
+                    <p>Get a detailed 8-page AI analysis with personalized recommendations, 90-day roadmap and priority access to future tools.</p>
+                    <p><strong>Price: $47 (one-time)</strong></p>
                     <div>
-                        <input type="email" class="email-input" id="emailInput" placeholder="Deine E-Mail Adresse">
-                        <button class="btn btn-primary" onclick="joinWaitlist()">Interesse anmelden</button>
+                        <input type="email" class="email-input" id="emailInput" placeholder="Your Email Address">
+                        <button class="btn btn-primary" onclick="joinWaitlist()">Register Interest</button>
                     </div>
                     <p style="font-size: 0.9rem; margin-top: 15px; color: #6c757d;">
-                        Wir informieren dich über die Verfügbarkeit der Extended Analysis und zukünftige AI-Tools (Q3/Q4 2025).
+                        We'll notify you about the availability of Extended Analysis and future AI tools (Q3/Q4 2025).
                     </p>
                 </div>
 
                 <!-- Development Testing -->
                 <div class="development-testing">
                     <h4>🧪 Development Testing</h4>
-                    <p>Teste die neue 8-seitige PDF mit korrigierter Scoring-Logik:</p>
+                    <p>Test the new 8-page PDF with corrected scoring logic:</p>
                     <button class="btn btn-secondary" onclick="testCurrentPDF()" style="margin-top: 10px;">
                         Generate Test PDF
                     </button>
@@ -901,9 +901,9 @@
 
                 <!-- Disclaimer -->
                 <div class="disclaimer">
-                    <strong>⚠️ Disclaimer:</strong> Diese Analyse dient nur zu Informationszwecken und stellt keine Finanz- oder Anlageberatung dar. 
-                    Trading birgt Risiken und vergangene Ergebnisse sind keine Garantie für zukünftige Gewinne. 
-                    Bei schwerwiegenden psychologischen Problemen wenden Sie sich an einen professionellen Berater.
+                    <strong>⚠️ Disclaimer:</strong> This analysis is for informational purposes only and does not constitute financial or investment advice. 
+                    Trading involves risks and past performance does not guarantee future profits. 
+                    For serious psychological concerns, please consult a licensed professional.
                 </div>
             </div>
         </div>
@@ -919,78 +919,78 @@
     </script>
 
     <script>
-        // Assessment Questions
+        // Assessment Questions in English
         const questions = [
             {
-                question: "Wie reagierst du normalerweise auf einen größeren Verlust beim Trading?",
+                question: "How do you typically react to a significant loss while trading?",
                 answers: [
-                    { text: "Ich trade sofort weiter, um den Verlust wieder reinzuholen", points: 0 },
-                    { text: "Ich ärgere mich sehr und mache erstmal eine Pause von mehreren Stunden", points: 20 },
-                    { text: "Ich analysiere den Trade und adjustiere meine Strategie entsprechend", points: 30 },
-                    { text: "Ich akzeptiere den Verlust als Teil des Spiels und trade normal weiter", points: 40 }
+                    { text: "I trade immediately to recover the loss", points: 0 },
+                    { text: "I get very angry and take a break for several hours", points: 20 },
+                    { text: "I analyze the trade and adjust my strategy accordingly", points: 30 },
+                    { text: "I accept the loss as part of trading and continue normally", points: 40 }
                 ]
             },
             {
-                question: "Wenn du eine profitable Position hast, wie gehst du damit um?",
+                question: "When you have a profitable position, how do you handle it?",
                 answers: [
-                    { text: "Ich schließe sie sofort, um den Gewinn zu sichern", points: 0 },
-                    { text: "Ich werde nervös und beobachte ständig den Chart", points: 10 },
-                    { text: "Ich verschiebe meinen Stop-Loss nach oben und lasse sie laufen", points: 30 },
-                    { text: "Ich halte mich strikt an meinen ursprünglichen Plan", points: 40 }
+                    { text: "I close it immediately to secure the profit", points: 0 },
+                    { text: "I get nervous and constantly watch the chart", points: 10 },
+                    { text: "I move my stop-loss up and let it run", points: 30 },
+                    { text: "I stick strictly to my original plan", points: 40 }
                 ]
             },
             {
-                question: "Wie oft tradest du außerhalb deiner vordefinierten Strategie?",
+                question: "How often do you trade outside your predefined strategy?",
                 answers: [
-                    { text: "Sehr oft - ich handle meist spontan nach Gefühl", points: 0 },
-                    { text: "Manchmal, besonders wenn ich eine 'gute' Gelegenheit sehe", points: 15 },
-                    { text: "Selten, nur in sehr besonderen Marktsituationen", points: 30 },
-                    { text: "Nie - ich halte mich immer an meine Strategie", points: 40 }
+                    { text: "Very often - I mostly trade spontaneously based on feeling", points: 0 },
+                    { text: "Sometimes, especially when I see a 'good' opportunity", points: 15 },
+                    { text: "Rarely, only in very special market conditions", points: 30 },
+                    { text: "Never - I always stick to my strategy", points: 40 }
                 ]
             },
             {
-                question: "Wie gehst du mit einer Serie von Verlusttrades um?",
+                question: "How do you handle a series of losing trades?",
                 answers: [
-                    { text: "Ich erhöhe meine Positionsgrößen, um schneller break-even zu werden", points: 0 },
-                    { text: "Ich werde frustriert und trade emotionaler", points: 10 },
-                    { text: "Ich reduziere meine Positionen und überprüfe meine Strategie", points: 30 },
-                    { text: "Ich bleibe ruhig und vertraue auf meine langfristige Strategie", points: 40 }
+                    { text: "I increase my position sizes to get back to break-even faster", points: 0 },
+                    { text: "I get frustrated and trade more emotionally", points: 10 },
+                    { text: "I reduce my positions and review my strategy", points: 30 },
+                    { text: "I stay calm and trust my long-term strategy", points: 40 }
                 ]
             },
             {
-                question: "Wann fühlst du FOMO (Fear of Missing Out) am stärksten?",
+                question: "When do you feel FOMO (Fear of Missing Out) most strongly?",
                 answers: [
-                    { text: "Ständig - ich will bei jedem Move dabei sein", points: 0 },
-                    { text: "Oft, besonders bei großen Marktbewegungen", points: 15 },
-                    { text: "Manchmal, aber ich kann es meist kontrollieren", points: 25 },
-                    { text: "Selten - ich trade nur meine Setup", points: 40 }
+                    { text: "Constantly - I want to be part of every move", points: 0 },
+                    { text: "Often, especially during big market movements", points: 15 },
+                    { text: "Sometimes, but I can usually control it", points: 25 },
+                    { text: "Rarely - I only trade my setups", points: 40 }
                 ]
             },
             {
-                question: "Wie planst du deine Trades?",
+                question: "How do you plan your trades?",
                 answers: [
-                    { text: "Ich trade spontan, wenn sich Gelegenheiten ergeben", points: 0 },
-                    { text: "Ich habe eine grobe Idee, aber passe während des Trades an", points: 15 },
-                    { text: "Ich plane Entry und Exit im Voraus, bin aber flexibel", points: 30 },
-                    { text: "Ich habe einen detaillierten Plan mit klaren Entry-, Exit- und Stop-Loss-Levels", points: 40 }
+                    { text: "I trade spontaneously when opportunities arise", points: 0 },
+                    { text: "I have a rough idea but adjust during the trade", points: 15 },
+                    { text: "I plan entry and exit in advance but stay flexible", points: 30 },
+                    { text: "I have a detailed plan with clear entry, exit, and stop-loss levels", points: 40 }
                 ]
             },
             {
-                question: "Wie beeinflusst dein emotionaler Zustand dein Trading?",
+                question: "How does your emotional state influence your trading?",
                 answers: [
-                    { text: "Sehr stark - je nach Laune trade ich völlig anders", points: 0 },
-                    { text: "Merklich - schlechte Stimmung führt oft zu schlechten Trades", points: 15 },
-                    { text: "Etwas - ich bemerke den Einfluss, kann ihn aber meist kontrollieren", points: 25 },
-                    { text: "Kaum - ich trade unabhängig von meiner Stimmung", points: 40 }
+                    { text: "Very strongly - I trade completely differently depending on my mood", points: 0 },
+                    { text: "Noticeably - bad mood often leads to bad trades", points: 15 },
+                    { text: "Somewhat - I notice the influence but can usually control it", points: 25 },
+                    { text: "Barely - I trade independently of my mood", points: 40 }
                 ]
             },
             {
-                question: "Wie gehst du mit der Unsicherheit des Markets um?",
+                question: "How do you deal with market uncertainty?",
                 answers: [
-                    { text: "Ich finde es sehr stressig und bin oft angespannt", points: 0 },
-                    { text: "Es macht mir Sorgen, aber ich trade trotzdem weiter", points: 15 },
-                    { text: "Ich akzeptiere es als Teil des Tradings", points: 30 },
-                    { text: "Ich sehe Unsicherheit als Chance und nutze sie für meine Strategie", points: 40 }
+                    { text: "I find it very stressful and am often tense", points: 0 },
+                    { text: "It worries me, but I continue trading anyway", points: 15 },
+                    { text: "I accept it as part of trading", points: 30 },
+                    { text: "I see uncertainty as an opportunity and use it for my strategy", points: 40 }
                 ]
             }
         ];
@@ -1323,7 +1323,7 @@
             const progressText = document.getElementById('progressText');
             
             progressFill.style.width = progress + '%';
-            progressText.textContent = `Frage ${currentQuestion + 1} von ${questions.length}`;
+            progressText.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
             
             // Add completion animation at 100%
             if (progress === 100) {
@@ -1395,30 +1395,30 @@
                 category = "VULNERABLE TRADER";
                 riskLevel = "CRITICAL";
                 riskClass = "risk-critical";
-                description = "Deine emotionale Kontrolle beim Trading zeigt kritische Schwachstellen. Es besteht akute Gefahr für dein Trading-Kapital.";
-                keyFindings = "• Kritische emotionale Vulnerabilitäten erkannt<br>• Hohe Tendenz zu impulsiven Entscheidungen<br>• Unzureichende Risikokontrolle<br>• Sofortige Intervention erforderlich";
-                recommendations = "• STOPPE das Trading sofort bis zur Verbesserung<br>• Konsultiere einen Trading Psychology Professional<br>• Entwickle einen strikten Trading Plan<br>• Übe mit Simulator vor Live-Trading<br>• Reduziere Positionsgrößen dramatisch";
+                description = "Your emotional control in trading shows critical weaknesses. There is acute danger to your trading capital.";
+                keyFindings = "• Critical emotional vulnerabilities detected<br>• High tendency to impulsive decisions<br>• Insufficient risk control<br>• Immediate intervention required";
+                recommendations = "• STOP trading immediately until improvement<br>• Consult a Trading Psychology Professional<br>• Develop a strict trading plan<br>• Practice with simulator before live trading<br>• Dramatically reduce position sizes";
             } else if (totalScore >= 81 && totalScore <= 160) {
                 category = "DEVELOPING TRADER";
                 riskLevel = "HIGH";
                 riskClass = "risk-high";
-                description = "Du zeigst einige positive Ansätze, aber deine Trading Psychology hat noch erhebliche Schwächen, die deine Performance beeinträchtigen.";
-                keyFindings = "• Signifikante emotionale Herausforderungen erkannt<br>• Inkonsistente Strategieumsetzung<br>• Verbesserungspotential bei Risikomanagement<br>• Grundlagen vorhanden, aber nicht gefestigt";
-                recommendations = "• Reduziere Positionsgrößen um 50%<br>• Implementiere strikte Stop-Loss Regeln<br>• Führe ein Trading Journal<br>• Arbeite an emotionaler Kontrolle<br>• Nutze praktische Psychology Tools";
+                description = "You show some positive approaches, but your trading psychology still has significant weaknesses affecting your performance.";
+                keyFindings = "• Significant emotional challenges detected<br>• Inconsistent strategy execution<br>• Improvement potential in risk management<br>• Foundation present but not solidified";
+                recommendations = "• Reduce position sizes by 50%<br>• Implement strict stop-loss rules<br>• Keep a trading journal<br>• Work on emotional control<br>• Use practical psychology tools";
             } else if (totalScore >= 161 && totalScore <= 240) {
                 category = "DISCIPLINED TRADER";
                 riskLevel = "MODERATE";
                 riskClass = "risk-moderate";
-                description = "Du hast eine gute Grundlage für erfolgreiches Trading entwickelt. Mit einigen Verbesserungen kannst du deine Konsistenz steigern.";
-                keyFindings = "• Solide emotionale Grundlage vorhanden<br>• Gute Strategiedisziplin mit gelegentlichen Abweichungen<br>• Verbesserungsbereiche identifiziert<br>• Potential für konsistente Profitabilität";
-                recommendations = "• Verfeinere dein Risikomanagement<br>• Arbeite an Konsistenz bei der Strategieumsetzung<br>• Nutze Performance Analytics zur Optimierung<br>• Entwickle Advanced Trading Setups<br>• Fokussiere auf kontinuierliche Verbesserung";
+                description = "You have developed a good foundation for successful trading. With some improvements you can increase your consistency.";
+                keyFindings = "• Solid emotional foundation present<br>• Good strategy discipline with occasional deviations<br>• Improvement areas identified<br>• Potential for consistent profitability";
+                recommendations = "• Refine your risk management<br>• Work on consistency in strategy execution<br>• Use performance analytics for optimization<br>• Develop advanced trading setups<br>• Focus on continuous improvement";
             } else {
                 category = "ELITE TRADER";
                 riskLevel = "LOW";
                 riskClass = "risk-low";
-                description = "Außergewöhnliche emotionale Kontrolle und Trading-Disziplin. Du zeigst die psychologischen Eigenschaften erfolgreicher professioneller Trader.";
-                keyFindings = "• Außergewöhnliche emotionale Kontrolle demonstriert<br>• Keine signifikanten negativen Muster erkannt<br>• Starke psychologische Kontrolle<br>• Fokus auf Aufrechterhaltung der aktuellen Disziplin";
-                recommendations = "• Behalte deine aktuelle Disziplin bei<br>• Teile dein Wissen mit anderen Tradern<br>• Experimentiere mit erweiterten Strategien<br>• Nutze Advanced Analytics für Feintuning<br>• Erwäge professionelles Trading";
+                description = "Exceptional emotional control and trading discipline. You show the psychological characteristics of successful professional traders.";
+                keyFindings = "• Exceptional emotional control demonstrated<br>• No significant negative patterns detected<br>• Strong psychological control<br>• Focus on maintaining current discipline";
+                recommendations = "• Maintain your current discipline<br>• Share your knowledge with other traders<br>• Experiment with advanced strategies<br>• Use advanced analytics for fine-tuning<br>• Consider professional trading";
             }
 
             // Animate score display
@@ -1454,7 +1454,7 @@
             const email = emailInput.value.trim();
             
             if (!email || !isValidEmail(email)) {
-                alert('Bitte gib eine gültige E-Mail Adresse ein.');
+                alert('Please enter a valid email address.');
                 emailInput.focus();
                 return;
             }
@@ -1464,7 +1464,7 @@
             const isDuplicate = existingSignups.some(signup => signup.email.toLowerCase() === email.toLowerCase());
             
             if (isDuplicate) {
-                alert('Diese E-Mail Adresse ist bereits angemeldet!');
+                alert('This email address is already registered!');
                 return;
             }
 
@@ -1496,7 +1496,7 @@
             emailInput.value = '';
             const button = emailInput.nextElementSibling;
             const originalText = button.textContent;
-            button.innerHTML = '<span class="success-checkmark"></span> Angemeldet!';
+            button.innerHTML = '<span class="success-checkmark"></span> Registered!';
             button.disabled = true;
             
             setTimeout(() => {
@@ -1519,7 +1519,7 @@
             return 'Elite Trader';
         }
 
-        // Enhanced PDF Generation with Realistic Content
+        // Enhanced PDF Generation with Realistic Content in English
         function generateExtendedPDFReport(email, transactionId) {
             try {
                 var jsPDF = window.jspdf.jsPDF;
@@ -1546,7 +1546,7 @@
                 
                 doc.setFont(undefined, 'normal');
                 doc.setFontSize(12);
-                doc.text('Generated: ' + new Date().toLocaleDateString('de-DE'), 105, 160, { align: 'center' });
+                doc.text('Generated: ' + new Date().toLocaleDateString('en-US'), 105, 160, { align: 'center' });
                 doc.text('Score: ' + totalScore + '/320 Points', 105, 175, { align: 'center' });
                 doc.text('AI Confidence: ' + confidenceScore.toFixed(1) + '%', 105, 190, { align: 'center' });
                 
@@ -1782,30 +1782,30 @@
                 // Current available products only
                 doc.text('IMMEDIATELY AVAILABLE:', 20, 65);
                 doc.text('• This AI Psychology Assessment (FREE)', 20, 75);
-                doc.text('• Extended 8-page AI Analysis (€47)', 20, 85);
+                doc.text('• Extended 8-page AI Analysis ($47)', 20, 85);
                 doc.text('• Email notifications for new tools', 20, 95);
                 
                 // Realistic next steps based on score
                 if (totalScore < 80) {
                     doc.text('IMMEDIATE PRIORITY FOR YOUR LEVEL:', 20, 115);
-                    doc.text('• Get the Extended Analysis (€47) for detailed roadmap', 20, 125);
+                    doc.text('• Get the Extended Analysis ($47) for detailed roadmap', 20, 125);
                     doc.text('• STOP live trading - use demo accounts only', 20, 135);
                     doc.text('• Seek professional psychology support', 20, 145);
                     doc.text('• Join waitlist for upcoming Risk Management Tools', 20, 155);
                 } else if (totalScore < 160) {
                     doc.text('RECOMMENDED FOR YOUR LEVEL:', 20, 115);
-                    doc.text('• Get Extended Analysis (€47) for improvement plan', 20, 125);
+                    doc.text('• Get Extended Analysis ($47) for improvement plan', 20, 125);
                     doc.text('• Reduce position sizes significantly', 20, 135);
                     doc.text('• Start manual trading journal', 20, 145);
                     doc.text('• Join waitlist for Psychology Tracking Tools', 20, 155);
                 } else if (totalScore < 240) {
                     doc.text('OPTIMIZATION OPPORTUNITIES:', 20, 115);
-                    doc.text('• Extended Analysis (€47) for fine-tuning', 20, 125);
+                    doc.text('• Extended Analysis ($47) for fine-tuning', 20, 125);
                     doc.text('• Manual performance tracking', 20, 135);
                     doc.text('• Join waitlist for Advanced Analytics Tools', 20, 145);
                 } else {
                     doc.text('ELITE LEVEL RECOMMENDATIONS:', 20, 115);
-                    doc.text('• Extended Analysis (€47) for edge optimization', 20, 125);
+                    doc.text('• Extended Analysis ($47) for edge optimization', 20, 125);
                     doc.text('• Share knowledge with other traders', 20, 135);
                     doc.text('• Join waitlist for Professional Suite Tools', 20, 145);
                 }
@@ -1846,7 +1846,7 @@
                     doc.text('1. STOP all live trading immediately', 20, 160);
                     doc.text('2. Switch to demo accounts only', 20, 170);
                     doc.text('3. Seek professional psychology help', 20, 180);
-                    doc.text('4. Get Extended Analysis (€47) for detailed plan', 20, 190);
+                    doc.text('4. Get Extended Analysis ($47) for detailed plan', 20, 190);
                     doc.text('5. Do NOT resume live trading without improvement', 20, 200);
                 } else {
                     doc.text('When experiencing FOMO or emotional stress:', 20, 150);
@@ -1889,7 +1889,7 @@
                 doc.text('Available Products & Services:', 20, 115);
                 doc.setFont(undefined, 'normal');
                 doc.text('• FREE: AI Psychology Assessment (unlimited retakes)', 20, 130);
-                doc.text('• €47: Extended 8-page AI Analysis with roadmap', 20, 140);
+                doc.text('• $47: Extended 8-page AI Analysis with roadmap', 20, 140);
                 doc.text('• FREE: Email updates on new tool launches', 20, 150);
                 doc.text('• 2025: AI Tools in development (Risk Calculator, etc.)', 20, 160);
 
@@ -1933,7 +1933,7 @@
                 
             } catch (error) {
                 console.error('❌ Error generating PDF:', error);
-                alert('Fehler beim Generieren der PDF. Bitte versuche es erneut.');
+                alert('Error generating PDF. Please try again.');
                 
                 gtag('event', 'pdf_error', {
                     event_category: 'Error',
@@ -1995,7 +1995,7 @@
         // Test function for current assessment
         function testCurrentPDF() {
             if (totalScore === 0 && selectedAnswers.length === 0) {
-                alert('Bitte führe zuerst das Assessment durch!');
+                alert('Please complete the assessment first!');
                 return;
             }
             
@@ -2180,7 +2180,7 @@
         // Console welcome message
         console.log(`
 🚀 Trading Psychology Assessment Tool
-📊 Version: 2.0
+📊 Version: 2.0 (English)
 🔧 Debug Commands:
 - debugInfo() - Show debug information
 - testCurrentPDF() - Generate test PDF
