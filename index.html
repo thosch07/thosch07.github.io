@@ -1029,7 +1029,7 @@
         let assessmentData = {};
         let startTime = Date.now();
         
-        // Database simulation with cookie backup
+        // Database simulation with multiple storage fallbacks
         const database = {
             data: {
                 assessments: [],
@@ -1038,46 +1038,161 @@
                 purchases: []
             },
             
-            load: function() {
-                // Try to load from cookies as backup
+            // Check what storage methods are available
+            storageAvailable: {
+                cookies: false,
+                localStorage: false,
+                sessionStorage: false
+            },
+            
+            checkStorageAvailability: function() {
+                // Test cookies
                 try {
-                    const cookieData = this.getCookie('tradingPsychologyData');
-                    if (cookieData) {
-                        const parsed = JSON.parse(cookieData);
-                        this.data = { ...this.data, ...parsed };
-                        console.log('📊 Data loaded from cookies:', this.data);
-                    }
-                } catch (error) {
-                    console.warn('Failed to load from cookies:', error);
+                    document.cookie = 'test=1';
+                    this.storageAvailable.cookies = document.cookie.indexOf('test=1') !== -1;
+                    document.cookie = 'test=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                } catch (e) {
+                    this.storageAvailable.cookies = false;
                 }
+                
+                // Test localStorage
+                try {
+                    localStorage.setItem('test', '1');
+                    localStorage.removeItem('test');
+                    this.storageAvailable.localStorage = true;
+                } catch (e) {
+                    this.storageAvailable.localStorage = false;
+                }
+                
+                // Test sessionStorage
+                try {
+                    sessionStorage.setItem('test', '1');
+                    sessionStorage.removeItem('test');
+                    this.storageAvailable.sessionStorage = true;
+                } catch (e) {
+                    this.storageAvailable.sessionStorage = false;
+                }
+                
+                console.log('💾 Storage availability:', this.storageAvailable);
+            },
+            
+            load: function() {
+                this.checkStorageAvailability();
+                
+                // Try multiple storage methods
+                let loadedData = null;
+                
+                // Try localStorage first (most reliable)
+                if (this.storageAvailable.localStorage) {
+                    try {
+                        const localData = localStorage.getItem('tradingPsychologyData');
+                        if (localData) {
+                            loadedData = JSON.parse(localData);
+                            console.log('📊 Data loaded from localStorage');
+                        }
+                    } catch (error) {
+                        console.warn('localStorage load failed:', error);
+                    }
+                }
+                
+                // Try cookies as backup
+                if (!loadedData && this.storageAvailable.cookies) {
+                    try {
+                        const cookieData = this.getCookie('tradingPsychologyData');
+                        if (cookieData) {
+                            loadedData = JSON.parse(cookieData);
+                            console.log('📊 Data loaded from cookies');
+                        }
+                    } catch (error) {
+                        console.warn('Cookie load failed:', error);
+                    }
+                }
+                
+                // Try sessionStorage as last resort
+                if (!loadedData && this.storageAvailable.sessionStorage) {
+                    try {
+                        const sessionData = sessionStorage.getItem('tradingPsychologyData');
+                        if (sessionData) {
+                            loadedData = JSON.parse(sessionData);
+                            console.log('📊 Data loaded from sessionStorage');
+                        }
+                    } catch (error) {
+                        console.warn('sessionStorage load failed:', error);
+                    }
+                }
+                
+                if (loadedData) {
+                    this.data = { ...this.data, ...loadedData };
+                }
+                
                 return this.data;
             },
             
             save: function() {
-                // Save to cookies as backup
-                try {
-                    this.setCookie('tradingPsychologyData', JSON.stringify(this.data), 30);
-                    console.log('💾 Data saved to cookies');
-                } catch (error) {
-                    console.warn('Failed to save to cookies:', error);
+                const dataString = JSON.stringify(this.data);
+                let saved = false;
+                
+                // Try localStorage first (most reliable)
+                if (this.storageAvailable.localStorage) {
+                    try {
+                        localStorage.setItem('tradingPsychologyData', dataString);
+                        console.log('💾 Data saved to localStorage');
+                        saved = true;
+                    } catch (error) {
+                        console.warn('localStorage save failed:', error);
+                    }
+                }
+                
+                // Try cookies as backup
+                if (this.storageAvailable.cookies) {
+                    try {
+                        this.setCookie('tradingPsychologyData', dataString, 30);
+                        console.log('💾 Data saved to cookies');
+                        saved = true;
+                    } catch (error) {
+                        console.warn('Cookie save failed:', error);
+                    }
+                }
+                
+                // Try sessionStorage as last resort
+                if (this.storageAvailable.sessionStorage) {
+                    try {
+                        sessionStorage.setItem('tradingPsychologyData', dataString);
+                        console.log('💾 Data saved to sessionStorage');
+                        saved = true;
+                    } catch (error) {
+                        console.warn('sessionStorage save failed:', error);
+                    }
+                }
+                
+                if (!saved) {
+                    console.warn('⚠️ No storage method available - data will be lost on refresh');
                 }
             },
             
             setCookie: function(name, value, days) {
-                const expires = new Date();
-                expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-                document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+                try {
+                    const expires = new Date();
+                    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+                    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+                } catch (error) {
+                    throw error; // Re-throw to be caught by caller
+                }
             },
             
             getCookie: function(name) {
-                const nameEQ = name + "=";
-                const ca = document.cookie.split(';');
-                for (let i = 0; i < ca.length; i++) {
-                    let c = ca[i];
-                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                try {
+                    const nameEQ = name + "=";
+                    const ca = document.cookie.split(';');
+                    for (let i = 0; i < ca.length; i++) {
+                        let c = ca[i];
+                        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                    }
+                    return null;
+                } catch (error) {
+                    throw error; // Re-throw to be caught by caller
                 }
-                return null;
             },
             
             addAssessment: function(data) {
@@ -2302,18 +2417,42 @@
             var waitlist = database.data.waitlist || [];
             var purchases = database.data.purchases || [];
             
-            // Load from cookies as backup
+            // Try to load additional data from available storage (with error handling)
             try {
-                const cookieData = database.getCookie('tradingPsychologyData');
-                if (cookieData) {
-                    const parsed = JSON.parse(cookieData);
-                    assessments = [...assessments, ...(parsed.assessments || [])];
-                    emails = [...emails, ...(parsed.emails || [])];
-                    waitlist = [...waitlist, ...(parsed.waitlist || [])];
-                    purchases = [...purchases, ...(parsed.purchases || [])];
+                let additionalData = null;
+                
+                // Try localStorage first
+                if (database.storageAvailable.localStorage) {
+                    const localData = localStorage.getItem('tradingPsychologyData');
+                    if (localData) {
+                        additionalData = JSON.parse(localData);
+                    }
+                }
+                
+                // Try cookies as backup
+                if (!additionalData && database.storageAvailable.cookies) {
+                    const cookieData = database.getCookie('tradingPsychologyData');
+                    if (cookieData) {
+                        additionalData = JSON.parse(cookieData);
+                    }
+                }
+                
+                // Try sessionStorage as last resort
+                if (!additionalData && database.storageAvailable.sessionStorage) {
+                    const sessionData = sessionStorage.getItem('tradingPsychologyData');
+                    if (sessionData) {
+                        additionalData = JSON.parse(sessionData);
+                    }
+                }
+                
+                if (additionalData) {
+                    assessments = [...assessments, ...(additionalData.assessments || [])];
+                    emails = [...emails, ...(additionalData.emails || [])];
+                    waitlist = [...waitlist, ...(additionalData.waitlist || [])];
+                    purchases = [...purchases, ...(additionalData.purchases || [])];
                 }
             } catch (error) {
-                console.warn('Cookie data load error:', error);
+                console.warn('Additional data load error:', error);
             }
             
             console.log('📊 Admin data loaded:', { 
@@ -2487,10 +2626,15 @@
             html += `
                 <h3>🔧 Debug Information</h3>
                 <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.8em;">
-                    <p>Cookie Data Available: ${database.getCookie('tradingPsychologyData') ? 'Yes' : 'No'}</p>
+                    <p>Storage Availability:</p>
+                    <p>&nbsp;&nbsp;- localStorage: ${database.storageAvailable.localStorage ? '✅ Available' : '❌ Blocked'}</p>
+                    <p>&nbsp;&nbsp;- Cookies: ${database.storageAvailable.cookies ? '✅ Available' : '❌ Blocked'}</p>
+                    <p>&nbsp;&nbsp;- sessionStorage: ${database.storageAvailable.sessionStorage ? '✅ Available' : '❌ Blocked'}</p>
                     <p>Database Initialized: ${database.data ? 'Yes' : 'No'}</p>
                     <p>Current Timestamp: ${new Date().toISOString()}</p>
                     <p>Page Load Time: ${Math.round((Date.now() - startTime) / 1000)}s ago</p>
+                    <p>Platform: ${navigator.platform}</p>
+                    <p>User Agent: ${navigator.userAgent.substring(0, 50)}...</p>
                 </div>
             `;
             
@@ -2606,10 +2750,39 @@
                     waitlist: [],
                     purchases: []
                 };
-                database.save();
-                document.cookie = 'tradingPsychologyData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                console.log('✅ All data cleared');
-                showMessage('All data has been cleared.', 'success');
+                
+                // Clear from all available storage methods
+                let cleared = [];
+                
+                if (database.storageAvailable.localStorage) {
+                    try {
+                        localStorage.removeItem('tradingPsychologyData');
+                        cleared.push('localStorage');
+                    } catch (e) {
+                        console.warn('Failed to clear localStorage:', e);
+                    }
+                }
+                
+                if (database.storageAvailable.cookies) {
+                    try {
+                        document.cookie = 'tradingPsychologyData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                        cleared.push('cookies');
+                    } catch (e) {
+                        console.warn('Failed to clear cookies:', e);
+                    }
+                }
+                
+                if (database.storageAvailable.sessionStorage) {
+                    try {
+                        sessionStorage.removeItem('tradingPsychologyData');
+                        cleared.push('sessionStorage');
+                    } catch (e) {
+                        console.warn('Failed to clear sessionStorage:', e);
+                    }
+                }
+                
+                console.log(`✅ Data cleared from: ${cleared.join(', ')}`);
+                showMessage(`All data has been cleared from: ${cleared.join(', ')}`, 'success');
             }
         };
 
