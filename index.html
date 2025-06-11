@@ -1847,7 +1847,7 @@
                 
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(12);
-                doc.text('Schnitzlein Consulting - Trading Psychology Experts', 105, 250, { align: 'center' });
+                doc.text('Schnitzlein Consulting - Trading Psychology Specialists', 105, 250, { align: 'center' });
                 doc.text(`Transaction ID: ${transactionId}`, 105, 265, { align: 'center' });
 
                 // PAGE 2: EXECUTIVE SUMMARY
@@ -2182,7 +2182,7 @@
                 });
                 
                 // Additional personalized recommendations based on specific weaknesses
-                if (yPos < 200) {
+                if (yPos < 180) {
                     doc.setFontSize(16);
                     doc.setFont(undefined, 'bold');
                     doc.text('Pattern-Specific Recommendations', 20, yPos + 10);
@@ -2194,16 +2194,23 @@
                     // Analyze answers for specific patterns
                     var specificRecs = [];
                     if (answers.some(a => a.optionIndex === 0)) { // High risk answers
-                        specificRecs.push("Your responses indicate impulsive decision-making patterns. Practice the '5-minute rule' before any trade entry.");
+                        specificRecs.push("Your responses indicate impulsive decision-making patterns. Practice the '5-minute rule' - wait 5 minutes before any trade entry to allow emotional clarity.");
                     }
                     if (answers.filter(a => a.optionIndex <= 1).length >= 3) { // Multiple high-risk answers
-                        specificRecs.push("Multiple responses suggest emotional trading. Implement mandatory emotion check-ins before every trade.");
+                        specificRecs.push("Multiple responses suggest emotional trading tendencies. Implement mandatory emotion check-ins before every trade decision.");
+                    }
+                    if (answers.some(a => a.questionIndex === 0 && a.optionIndex <= 1)) { // FOMO patterns
+                        specificRecs.push("FOMO susceptibility detected. Create a written trading plan and stick to it regardless of market movements.");
+                    }
+                    
+                    if (specificRecs.length === 0) {
+                        specificRecs.push("Overall patterns suggest good awareness with execution challenges. Focus on consistent application of your knowledge.");
                     }
                     
                     specificRecs.forEach(function(rec) {
-                        doc.text(`• ${rec}`, 25, yPos);
-                        var recLines = doc.splitTextToSize(rec, 160);
-                        yPos += recLines.length * 6 + 5;
+                        var recLines = doc.splitTextToSize(`• ${rec}`, 165);
+                        doc.text(recLines, 25, yPos);
+                        yPos += recLines.length * 6 + 8;
                     });
                 }
 
@@ -2241,16 +2248,17 @@
                 
                 doc.setFontSize(16);
                 doc.setFont(undefined, 'bold');
-                doc.text('Recommended Apps & Tools', 20, 140);
+                doc.text('Recommended Tools & Techniques', 20, 140);
                 
                 doc.setFontSize(11);
                 doc.setFont(undefined, 'normal');
                 var tools = [
-                    "• Headspace or Calm - Daily mindfulness and meditation for emotional regulation",
-                    "• Trading Journal Spreadsheet - For systematic trade and emotion tracking",
-                    "• TradingView alerts - To reduce chart watching and emotional decision making",
-                    "• Position Size Calculator - To automate risk management calculations",
-                    "• Mood tracking apps - To correlate emotional state with trading performance"
+                    "• Daily mindfulness and meditation apps - For emotional regulation and mental clarity",
+                    "• Trading journal spreadsheet or notebook - For systematic trade and emotion tracking",
+                    "• Price alerts instead of chart watching - To reduce emotional decision making",
+                    "• Position size calculator spreadsheet - To automate risk management calculations",
+                    "• Mood tracking journal - To correlate emotional state with trading performance",
+                    "• Timer apps for cooling-off periods - To enforce mandatory breaks after losses"
                 ];
                 
                 yPos = 155;
@@ -2262,16 +2270,16 @@
                 
                 doc.setFontSize(16);
                 doc.setFont(undefined, 'bold');
-                doc.text('Emergency Protocols', 20, 210);
+                doc.text('Self-Help Protocols', 20, 210);
                 
                 doc.setFontSize(11);
                 doc.setFont(undefined, 'normal');
                 var emergency = [
                     "• If you feel strong FOMO: Step away from charts for minimum 30 minutes, do breathing exercises",
                     "• After 2 consecutive losses: Mandatory stop trading for the day, analyze emotions in journal",
-                    "• If considering revenge trade: Call your trading buddy or mentor first, never trade alone",
-                    "• During high volatility: Automatically reduce position sizes by 50%, increase stop losses",
-                    "• If emotional overwhelm: Use 4-7-8 breathing technique, pause all trading activities"
+                    "• If considering revenge trade: Call a trusted friend or mentor first, never trade while emotional",
+                    "• During high volatility: Automatically reduce position sizes by 50%, tighten stop losses",
+                    "• If emotional overwhelm: Use 4-7-8 breathing technique, pause all trading activities until clarity returns"
                 ];
                 
                 yPos = 225;
@@ -2317,8 +2325,8 @@
                     "• Weekly Psychology Check-ins: Email updates on your progress and accountability",
                     "• Monthly Assessment Retakes: Track improvement over time with detailed progress reports", 
                     "• 1:1 Trading Psychology Coaching: Personalized professional support and guidance",
-                    "• Group Psychology Workshops: Learn with other traders in supportive environment",
-                    "• Emergency Psychology Hotline: For crisis trading situations and immediate support"
+                    "• Online Psychology Resources: Access to exclusive content and techniques",
+                    "• Email Support: Get answers to your psychology questions via email"
                 ];
                 
                 var yPos = 175;
@@ -2334,9 +2342,8 @@
                 
                 doc.setFontSize(12);
                 doc.setFont(undefined, 'normal');
-                doc.text('For Support: hello@schnitzlein-consulting.com', 20, 255);
-                doc.text('Website: www.schnitzlein-consulting.com', 20, 270);
-                doc.text('Emergency Psychology Support: Available 24/7 for critical situations', 20, 285);
+                doc.text('For Support: info@schnitzleinconsulting.com', 20, 255);
+                doc.text('Website: www.schnitzleinconsulting.com', 20, 270);
 
                 // Track the purchase in our database
                 if (database) {
