@@ -768,6 +768,9 @@
         <div class="header">
             <h1>🤖 AI-Enhanced Trading Psychology Assessment</h1>
             <p>Discover your psychological strengths and weaknesses in trading with our advanced AI system</p>
+            <button class="btn btn-secondary" onclick="restartAssessment()" style="margin-top: 15px; font-size: 0.9rem;">
+                🔄 Restart Assessment
+            </button>
         </div>
 
         <div class="progress-container">
@@ -832,8 +835,8 @@
                         
                         <div class="feature-card">
                             <div class="feature-icon">📄</div>
-                            <div class="feature-title">Extended AI Analysis <span class="status-badge status-coming-soon">$47</span></div>
-                            <div class="feature-desc">8-page detailed analysis with personalized recommendations and 90-day roadmap</div>
+                            <div class="feature-title">Premium Psychology Analysis <span class="status-badge status-coming-soon">$47</span></div>
+                            <div class="feature-desc">9-page professional analysis with personalized action strategies, emotional management toolkit, and 90-day implementation roadmap</div>
                         </div>
                         
                         <div class="feature-card">
@@ -852,15 +855,23 @@
 
                 <!-- Waitlist Section -->
                 <div class="waitlist-box">
-                    <h3>📄 Extended AI Analysis Available!</h3>
-                    <p>Get a detailed 8-page AI analysis with personalized recommendations, 90-day roadmap and priority access to future tools.</p>
-                    <p><strong>Price: $47 (one-time)</strong></p>
+                    <h3>📄 Premium AI Analysis Available!</h3>
+                    <p>Get a comprehensive 9-page professional analysis with:</p>
+                    <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
+                        <li><strong>Personalized Action Strategies</strong> - Custom protocols for your exact psychology level</li>
+                        <li><strong>Professional Psychology Toolkit</strong> - Advanced techniques used by elite traders</li>
+                        <li><strong>90-Day Implementation Roadmap</strong> - Step-by-step improvement plan</li>
+                        <li><strong>Emotional Management System</strong> - Proven methods for trading psychology control</li>
+                        <li><strong>Weekly Performance Tracking</strong> - Measure your psychology improvement</li>
+                        <li><strong>Priority Access</strong> to future AI trading psychology tools</li>
+                    </ul>
+                    <p><strong>Professional Value: $47 (one-time)</strong></p>
                     <div>
                         <input type="email" class="email-input" id="emailInput" placeholder="Your Email Address">
                         <button class="btn btn-primary" onclick="joinWaitlist()">Register Interest</button>
                     </div>
                     <p style="font-size: 0.9rem; margin-top: 15px; color: #6c757d;">
-                        We'll notify you about the availability of Extended Analysis and future AI tools (Q3/Q4 2025).
+                        We'll notify you about availability of the Premium Analysis and future AI tools (Q3/Q4 2025).
                     </p>
                 </div>
 
@@ -1203,16 +1214,33 @@
         function loadExistingData() {
             try {
                 // Load existing assessment data for analytics
-                const savedResults = loadData('allAssessmentData') || [];
-                allAssessmentData = Array.isArray(savedResults) ? savedResults : [];
+                const allResults = loadData('allAssessmentData') || [];
+                allAssessmentData = Array.isArray(allResults) ? allResults : [];
                 console.log(`📊 Loaded ${allAssessmentData.length} previous assessments`);
                 
-                // Load current progress if exists
+                // Load current progress if exists and incomplete
                 const savedProgress = loadData('assessmentProgress');
-                if (savedProgress && savedProgress.currentQuestion !== undefined) {
+                const savedResults = loadData('assessmentResults');
+                
+                // Only restore progress if assessment was not completed
+                if (savedProgress && savedProgress.currentQuestion !== undefined && !savedResults) {
                     currentQuestion = savedProgress.currentQuestion;
                     selectedAnswers = savedProgress.selectedAnswers || [];
-                    console.log(`🔄 Restored progress: Question ${currentQuestion + 1}`);
+                    console.log(`🔄 Restored incomplete progress: Question ${currentQuestion + 1}`);
+                    
+                    // Show restart option
+                    if (currentQuestion > 0) {
+                        console.log('💡 Tip: Use the "Restart Assessment" button to start over');
+                    }
+                } else if (savedResults) {
+                    console.log('✅ Previous assessment found - starting fresh');
+                    // Clear progress if assessment was completed
+                    try {
+                        localStorage.removeItem('assessmentProgress');
+                        sessionStorage.removeItem('assessmentProgress');
+                    } catch (e) {
+                        console.log('Note: Could not clear old progress');
+                    }
                 }
             } catch (e) {
                 console.log('Warning: Could not load existing data:', e.message);
@@ -1953,49 +1981,78 @@
                 doc.setFontSize(8);
                 doc.text('Track scores weekly to identify patterns and measure improvement over time.', 20, 260);
 
-                // Page 8: Next Steps & Contact
+                // Page 9: Enhanced Next Steps & Support
                 doc.addPage();
                 doc.setFontSize(20);
                 doc.setFont(undefined, 'bold');
-                doc.text('Next Steps & Support', 20, 30);
+                doc.text('Your Personal Action Plan', 20, 30);
                 
                 doc.setFontSize(12);
                 doc.setFont(undefined, 'bold');
-                doc.text('Immediate Actions:', 20, 50);
+                doc.text('Immediate Implementation Guide (Next 7 Days):', 20, 50);
                 
                 doc.setFont(undefined, 'normal');
                 doc.setFontSize(10);
+                
                 if (totalScore < 80) {
-                    doc.text('1. STOP live trading immediately', 20, 65);
-                    doc.text('2. Seek professional psychology support', 20, 75);
-                    doc.text('3. Join our waitlist for AI Psychology Tools', 20, 85);
-                    doc.text('4. Practice emotional control techniques daily', 20, 95);
+                    doc.text('WEEK 1 - CRISIS INTERVENTION:', 20, 65);
+                    doc.text('Day 1-2: Complete trading moratorium, set up demo account', 20, 75);
+                    doc.text('Day 3-4: Schedule professional consultation, create trigger list', 20, 85);
+                    doc.text('Day 5-7: Begin daily emotional check-ins, practice breathing techniques', 20, 95);
+                } else if (totalScore < 160) {
+                    doc.text('WEEK 1 - FOUNDATION BUILDING:', 20, 65);
+                    doc.text('Day 1-2: Implement 50% position size reduction immediately', 20, 75);
+                    doc.text('Day 3-4: Create pre-trade emotional checklist system', 20, 85);
+                    doc.text('Day 5-7: Set up daily loss limits and practice reset protocols', 20, 95);
+                } else if (totalScore < 240) {
+                    doc.text('WEEK 1 - OPTIMIZATION PHASE:', 20, 65);
+                    doc.text('Day 1-2: Set up advanced performance tracking spreadsheet', 20, 75);
+                    doc.text('Day 3-4: Begin A/B testing framework for top 2 strategies', 20, 85);
+                    doc.text('Day 5-7: Implement psychology-performance correlation tracking', 20, 95);
                 } else {
-                    doc.text('1. Implement the 30-day improvement plan', 20, 65);
-                    doc.text('2. Join our waitlist for Premium AI Tools', 20, 75);
-                    doc.text('3. Start using recommended practical tools', 20, 85);
-                    doc.text('4. Track your progress weekly', 20, 95);
+                    doc.text('WEEK 1 - ELITE ENHANCEMENT:', 20, 65);
+                    doc.text('Day 1-2: Document your psychological edge techniques', 20, 75);
+                    doc.text('Day 3-4: Begin market psychology leadership activities', 20, 85);
+                    doc.text('Day 5-7: Explore professional trading opportunities', 20, 95);
                 }
 
                 doc.setFont(undefined, 'bold');
-                doc.text('Available Products & Services:', 20, 115);
+                doc.text('30-Day Milestone Targets:', 20, 110);
                 doc.setFont(undefined, 'normal');
-                doc.text('• FREE: AI Psychology Assessment (unlimited retakes)', 20, 130);
-                doc.text('• $47: Extended 8-page AI Analysis with roadmap', 20, 140);
-                doc.text('• FREE: Email updates on new tool launches', 20, 150);
-                doc.text('• 2025: AI Tools in development (Risk Calculator, etc.)', 20, 160);
+                if (totalScore < 80) {
+                    doc.text('• Zero live trading losses (demo only)', 20, 120);
+                    doc.text('• Daily emotional rating improvement trend', 20, 130);
+                    doc.text('• Professional consultation completed', 20, 140);
+                } else if (totalScore < 160) {
+                    doc.text('• 50% reduction in emotional trading decisions', 20, 120);
+                    doc.text('• Consistent adherence to position sizing rules', 20, 130);
+                    doc.text('• Improved win rate through better selection', 20, 140);
+                } else {
+                    doc.text('• Measurable improvement in consistency metrics', 20, 120);
+                    doc.text('• Advanced strategy performance data collected', 20, 130);
+                    doc.text('• Psychology leadership activities initiated', 20, 140);
+                }
 
                 doc.setFont(undefined, 'bold');
-                doc.text('Contact & Support:', 20, 180);
+                doc.text('Exclusive Support Resources ($47 Value):', 20, 155);
                 doc.setFont(undefined, 'normal');
-                doc.text('Email: info@schnitzleinconsulting.com', 20, 195);
-                doc.text('Website: www.schnitzleinconsulting.com', 20, 205);
-                doc.text('Tool Updates: Join our email list for launch notifications', 20, 215);
+                doc.text('• Monthly re-assessment access (track improvement)', 20, 165);
+                doc.text('• Priority access to new AI psychology tools', 20, 175);
+                doc.text('• Email support for psychology questions', 20, 185);
+                doc.text('• Advanced techniques PDF library access', 20, 195);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('Contact & Professional Support:', 20, 210);
+                doc.setFont(undefined, 'normal');
+                doc.text('Psychology Questions: info@schnitzleinconsulting.com', 20, 220);
+                doc.text('Website: www.schnitzleinconsulting.com', 20, 230);
+                doc.text('Tool Updates: Join our email list for launch notifications', 20, 240);
 
                 doc.setFontSize(8);
-                doc.text('This analysis is for educational purposes only and does not constitute financial advice.', 20, 250);
-                doc.text('Trading involves risk and past performance does not guarantee future results.', 20, 260);
-                doc.text('For serious psychological concerns, please consult a licensed professional.', 20, 270);
+                doc.setFont(undefined, 'italic');
+                doc.text('This analysis is for educational purposes only and does not constitute financial advice.', 20, 260);
+                doc.text('Trading involves risk and past performance does not guarantee future results.', 20, 270);
+                doc.text('For serious psychological concerns, please consult a licensed professional.', 20, 280);
 
                 // Save the PDF
                 const fileName = 'Trading_Psychology_Analysis_' + new Date().toISOString().split('T')[0] + '.pdf';
@@ -2187,6 +2244,35 @@
             }
         }
 
+        // Restart Assessment Function
+        function restartAssessment() {
+            if (confirm('Are you sure you want to restart the assessment? This will clear your current progress.')) {
+                // Clear all progress data
+                currentQuestion = 0;
+                selectedAnswers = [];
+                totalScore = 0;
+                
+                // Clear stored data
+                clearData();
+                
+                // Reset UI
+                document.getElementById('questionContainer').classList.remove('hidden');
+                document.getElementById('resultsContainer').classList.add('hidden');
+                
+                // Restart assessment
+                assessmentStartTime = new Date();
+                showQuestion();
+                updateProgress();
+                
+                console.log('🔄 Assessment restarted');
+                
+                gtag('event', 'assessment_restarted', {
+                    event_category: 'Assessment',
+                    event_label: 'User restarted assessment'
+                });
+            }
+        }
+
         // Global functions for debugging and testing
         window.debugInfo = function() {
             console.log('=== DEBUG INFO ===');
@@ -2211,6 +2297,7 @@
         window.testCurrentPDF = testCurrentPDF;
         window.exportData = exportData;
         window.toggleAdminPanel = toggleAdminPanel;
+        window.restartAssessment = restartAssessment;
 
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
@@ -2226,6 +2313,10 @@
                 e.preventDefault();
                 clearData();
                 alert('All data cleared');
+            }
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                e.preventDefault();
+                restartAssessment();
             }
         });
 
@@ -2272,17 +2363,19 @@
         // Console welcome message
         console.log(`
 🚀 Trading Psychology Assessment Tool
-📊 Version: 2.0 (English)
+📊 Version: 2.1 (English)
 🔧 Debug Commands:
 - debugInfo() - Show debug information
 - testCurrentPDF() - Generate test PDF
 - clearData() - Clear all data
 - exportData() - Export data as JSON
+- restartAssessment() - Restart assessment
 
 🎹 Keyboard Shortcuts:
 - Ctrl+Shift+A - Open admin panel
 - Ctrl+Shift+T - Generate test PDF
 - Ctrl+Shift+C - Clear all data
+- Ctrl+Shift+R - Restart assessment
 
 © 2025 Schnitzlein Consulting
         `);
