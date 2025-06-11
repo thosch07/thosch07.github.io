@@ -1528,14 +1528,19 @@
                 // Calculate AI confidence score (realistic based on actual score)
                 var confidenceScore = Math.max(20, Math.min(95, (totalScore / 320) * 80 + 15 + (Math.random() * 10 - 5)));
                 
-                // Page 1: Cover Page
-                doc.setFillColor(44, 62, 80);
+                // Page 1: Cover Page (matching assessment colors)
+                // Create gradient-like effect with blue/purple colors
+                doc.setFillColor(102, 126, 234); // Blue
                 doc.rect(0, 0, 210, 297, 'F');
+                
+                // Add purple overlay for gradient effect
+                doc.setFillColor(118, 75, 162); // Purple
+                doc.rect(0, 0, 210, 150, 'F');
                 
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(28);
                 doc.setFont(undefined, 'bold');
-                doc.text('AI-Enhanced Trading', 105, 80, { align: 'center' });
+                doc.text('🤖 AI-Enhanced Trading', 105, 80, { align: 'center' });
                 doc.text('Psychology Analysis', 105, 95, { align: 'center' });
                 
                 doc.setFontSize(16);
@@ -1550,6 +1555,15 @@
                 doc.text('Score: ' + totalScore + '/320 Points', 105, 175, { align: 'center' });
                 doc.text('AI Confidence: ' + confidenceScore.toFixed(1) + '%', 105, 190, { align: 'center' });
                 
+                // Premium badge
+                doc.setFillColor(255, 255, 255);
+                doc.rect(80, 200, 50, 15, 'F');
+                doc.setTextColor(118, 75, 162);
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'bold');
+                doc.text('PREMIUM ANALYSIS', 105, 210, { align: 'center' });
+                
+                doc.setTextColor(255, 255, 255);
                 doc.setFontSize(14);
                 doc.text('Schnitzlein Consulting - Psychology Specialists', 105, 250, { align: 'center' });
                 doc.text('www.schnitzleinconsulting.com', 105, 265, { align: 'center' });
@@ -1681,7 +1695,7 @@
                 var impulsivityRisk = totalScore < 80 ? 'CRITICAL' : totalScore < 160 ? 'HIGH' : totalScore < 240 ? 'MODERATE' : 'LOW';
                 doc.text('Impulsivity: ' + impulsivityRisk, 20, 115);
 
-                // Risk visualization (simple text-based bars)
+                // Risk visualization (working text-based bars)
                 doc.setFontSize(12);
                 doc.setFont(undefined, 'bold');
                 doc.text('Risk Level Visualization:', 20, 140);
@@ -1698,8 +1712,8 @@
                 var barYPos = 155;
                 riskLevels.forEach(risk => {
                     doc.text(risk.name + ':', 20, barYPos);
-                    var barLength = risk.level === 'CRITICAL' ? 50 : risk.level === 'HIGH' ? 40 : risk.level === 'MODERATE' ? 25 : 15;
-                    var bar = '█'.repeat(Math.floor(barLength / 2));
+                    var barLength = risk.level === 'CRITICAL' ? 25 : risk.level === 'HIGH' ? 20 : risk.level === 'MODERATE' ? 12 : 7;
+                    var bar = '*'.repeat(barLength);
                     doc.text(bar + ' (' + risk.level + ')', 60, barYPos);
                     barYPos += 12;
                 });
@@ -1766,100 +1780,178 @@
                     doc.text('• Consider professional development', 20, 215);
                 }
 
-                // Page 6: REALISTIC Current Recommendations
+                // Page 6: ENHANCED VALUE - Specific Actionable Strategies
                 doc.addPage();
                 doc.setFontSize(20);
                 doc.setFont(undefined, 'bold');
-                doc.text('Current Available Solutions', 20, 30);
+                doc.text('Personalized Action Strategies', 20, 30);
                 
                 doc.setFontSize(12);
                 doc.setFont(undefined, 'bold');
-                doc.text('What You Can Access Right Now:', 20, 50);
+                doc.text('Custom Psychology Toolkit for Your Score Level:', 20, 50);
                 
                 doc.setFont(undefined, 'normal');
                 doc.setFontSize(10);
                 
-                // Current available products only
-                doc.text('IMMEDIATELY AVAILABLE:', 20, 65);
-                doc.text('• This AI Psychology Assessment (FREE)', 20, 75);
-                doc.text('• Extended 8-page AI Analysis ($47)', 20, 85);
-                doc.text('• Email notifications for new tools', 20, 95);
-                
-                // Realistic next steps based on score
                 if (totalScore < 80) {
-                    doc.text('IMMEDIATE PRIORITY FOR YOUR LEVEL:', 20, 115);
-                    doc.text('• Get the Extended Analysis ($47) for detailed roadmap', 20, 125);
-                    doc.text('• STOP live trading - use demo accounts only', 20, 135);
-                    doc.text('• Seek professional psychology support', 20, 145);
-                    doc.text('• Join waitlist for upcoming Risk Management Tools', 20, 155);
-                } else if (totalScore < 160) {
-                    doc.text('RECOMMENDED FOR YOUR LEVEL:', 20, 115);
-                    doc.text('• Get Extended Analysis ($47) for improvement plan', 20, 125);
-                    doc.text('• Reduce position sizes significantly', 20, 135);
-                    doc.text('• Start manual trading journal', 20, 145);
-                    doc.text('• Join waitlist for Psychology Tracking Tools', 20, 155);
-                } else if (totalScore < 240) {
-                    doc.text('OPTIMIZATION OPPORTUNITIES:', 20, 115);
-                    doc.text('• Extended Analysis ($47) for fine-tuning', 20, 125);
-                    doc.text('• Manual performance tracking', 20, 135);
-                    doc.text('• Join waitlist for Advanced Analytics Tools', 20, 145);
-                } else {
-                    doc.text('ELITE LEVEL RECOMMENDATIONS:', 20, 115);
-                    doc.text('• Extended Analysis ($47) for edge optimization', 20, 125);
-                    doc.text('• Share knowledge with other traders', 20, 135);
-                    doc.text('• Join waitlist for Professional Suite Tools', 20, 145);
-                }
-
-                doc.setFont(undefined, 'bold');
-                doc.text('Future Tool Development (2025):', 20, 175);
-                doc.setFont(undefined, 'normal');
-                doc.text('• Q3 2025: AI Risk Calculator & Emotion Detector', 20, 190);
-                doc.text('• Q4 2025: Psychology Tracker & Trading Journal', 20, 200);
-                doc.text('• 2026: Complete AI Psychology Suite', 20, 210);
-                doc.text('• Join our email list to be notified of launches', 20, 220);
-
-                // Page 7: Realistic Tools & Techniques
-                doc.addPage();
-                doc.setFontSize(20);
-                doc.setFont(undefined, 'bold');
-                doc.text('Practical Tools & Techniques', 20, 30);
-                
-                doc.setFontSize(12);
-                doc.setFont(undefined, 'bold');
-                doc.text('Tools You Can Use Right Now:', 20, 50);
-                
-                doc.setFont(undefined, 'normal');
-                doc.setFontSize(10);
-                doc.text('• Simple Excel/Google Sheets trading journal', 20, 65);
-                doc.text('• Free mindfulness apps (Insight Timer, etc.)', 20, 75);
-                doc.text('• Broker\'s built-in price alerts', 20, 85);
-                doc.text('• Basic position size calculator (2% rule)', 20, 95);
-                doc.text('• Economic calendar (investing.com, etc.)', 20, 105);
-                doc.text('• Demo trading accounts for practice', 20, 115);
-
-                doc.setFont(undefined, 'bold');
-                doc.text('Immediate Action Protocols:', 20, 135);
-                doc.setFont(undefined, 'normal');
-                
-                if (totalScore < 80) {
-                    doc.text('CRITICAL - Emergency Protocol:', 20, 150);
-                    doc.text('1. STOP all live trading immediately', 20, 160);
-                    doc.text('2. Switch to demo accounts only', 20, 170);
-                    doc.text('3. Seek professional psychology help', 20, 180);
-                    doc.text('4. Get Extended Analysis ($47) for detailed plan', 20, 190);
-                    doc.text('5. Do NOT resume live trading without improvement', 20, 200);
-                } else {
-                    doc.text('When experiencing FOMO or emotional stress:', 20, 150);
-                    doc.text('1. Step away from charts for 30+ minutes', 20, 160);
-                    doc.text('2. Review your original trading plan', 20, 170);
-                    doc.text('3. Only trade your predetermined setups', 20, 180);
-                    doc.text('4. Use smaller position sizes when unsure', 20, 190);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('CRITICAL INTERVENTION PROTOCOL:', 20, 65);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('1. Trading Moratorium: Minimum 30-day break from live trading', 20, 75);
+                    doc.text('2. Daily Emotional Check-in: Rate mood 1-10 before any market activity', 20, 85);
+                    doc.text('3. Professional Support: Schedule psychology consultation within 7 days', 20, 95);
+                    doc.text('4. Demo Trading Only: Maximum $10k virtual account until score improves', 20, 105);
+                    doc.text('5. Trigger Identification: List your top 5 emotional trading triggers', 20, 115);
                     
-                    doc.text('After 2 consecutive losses:', 20, 210);
-                    doc.text('1. Stop trading for the rest of the day', 20, 220);
-                    doc.text('2. Analyze what went wrong objectively', 20, 230);
-                    doc.text('3. Adjust strategy only if clear pattern emerges', 20, 240);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Weekly Recovery Exercises:', 20, 130);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('• Monday: Review past losing trades and identify emotional patterns', 20, 140);
+                    doc.text('• Wednesday: Practice 10-minute meditation before market analysis', 20, 150);
+                    doc.text('• Friday: Journal about emotional states during the week', 20, 160);
+                    
+                } else if (totalScore < 160) {
+                    doc.setFont(undefined, 'bold');
+                    doc.text('SKILL DEVELOPMENT PROGRAM:', 20, 65);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('1. Position Size Reduction: Cut current sizes by 50% for 30 days', 20, 75);
+                    doc.text('2. Pre-Trade Checklist: 5-point emotional readiness assessment', 20, 85);
+                    doc.text('3. Loss Limit Protocol: Maximum 2% daily loss, then mandatory stop', 20, 95);
+                    doc.text('4. Profit Target Discipline: Set and stick to 3:1 risk-reward minimum', 20, 105);
+                    doc.text('5. Emotional State Logging: Rate feelings before/after each trade', 20, 115);
+                    
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Daily Improvement Routine:', 20, 130);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('• Morning: 5-minute visualization of perfect trade execution', 20, 140);
+                    doc.text('• Pre-market: Review and confirm 3 best setups only', 20, 150);
+                    doc.text('• Evening: Analyze emotional decision points from the day', 20, 160);
+                    
+                } else if (totalScore < 240) {
+                    doc.setFont(undefined, 'bold');
+                    doc.text('OPTIMIZATION STRATEGIES:', 20, 65);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('1. Advanced Risk Management: Implement position correlation analysis', 20, 75);
+                    doc.text('2. Performance Analytics: Track win rate vs emotional state correlation', 20, 85);
+                    doc.text('3. Strategy Refinement: A/B test your best 2 setups for 30 days', 20, 95);
+                    doc.text('4. Market Condition Mapping: Define optimal psychology for each market type', 20, 105);
+                    doc.text('5. Consistency Tracking: Measure deviation from trading plan weekly', 20, 115);
+                    
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Elite Performance Habits:', 20, 130);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('• Pre-session: Rate energy/focus 1-10, adjust strategy accordingly', 20, 140);
+                    doc.text('• Mid-session: Hourly emotional state check and position review', 20, 150);
+                    doc.text('• Post-session: Document what worked vs what felt forced', 20, 160);
+                    
+                } else {
+                    doc.setFont(undefined, 'bold');
+                    doc.text('ELITE PERFORMANCE ENHANCEMENT:', 20, 65);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('1. Market Psychology Leadership: Share insights with trading community', 20, 75);
+                    doc.text('2. Advanced Strategy Testing: Explore new markets/timeframes systematically', 20, 85);
+                    doc.text('3. Performance Benchmarking: Compare results against professional traders', 20, 95);
+                    doc.text('4. Psychology Mentoring: Guide developing traders for deeper insights', 20, 105);
+                    doc.text('5. Continuous Innovation: Develop new psychological edge techniques', 20, 115);
+                    
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Professional Development:', 20, 130);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('• Consider prop trading firm applications', 20, 140);
+                    doc.text('• Document and systematize your psychological methods', 20, 150);
+                    doc.text('• Explore institutional trading opportunities', 20, 160);
                 }
+
+                doc.setFont(undefined, 'bold');
+                doc.text('Immediate Next Steps (This Week):', 20, 180);
+                doc.setFont(undefined, 'normal');
+                if (totalScore < 80) {
+                    doc.text('1. Schedule psychology consultation appointment', 20, 190);
+                    doc.text('2. Set up demo trading account with strict rules', 20, 200);
+                    doc.text('3. Create emotional trigger identification list', 20, 210);
+                } else if (totalScore < 160) {
+                    doc.text('1. Implement 50% position size reduction immediately', 20, 190);
+                    doc.text('2. Create pre-trade emotional checklist', 20, 200);
+                    doc.text('3. Set up daily loss limit alerts', 20, 210);
+                } else {
+                    doc.text('1. Begin advanced performance tracking system', 20, 190);
+                    doc.text('2. Set up A/B testing framework for strategies', 20, 200);
+                    doc.text('3. Create psychology-performance correlation spreadsheet', 20, 210);
+                }
+
+                // Page 7: ENHANCED VALUE - Specific Tools & Techniques 
+                doc.addPage();
+                doc.setFontSize(20);
+                doc.setFont(undefined, 'bold');
+                doc.text('Professional Psychology Toolkit', 20, 30);
+                
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('Advanced Techniques for Your Psychology Level:', 20, 50);
+                
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(10);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('1. Emotional State Management System:', 20, 65);
+                doc.setFont(undefined, 'normal');
+                doc.text('• Pre-Trade Emotional Checklist:', 20, 75);
+                doc.text('  - Energy level (1-10): Only trade if 7+', 25, 85);
+                doc.text('  - Stress level (1-10): Stop trading if 8+', 25, 95);
+                doc.text('  - Market clarity (1-10): Minimum 6 required', 25, 105);
+                doc.text('• Emotional Reset Protocol:', 20, 115);
+                doc.text('  - 4-7-8 Breathing: 4 counts in, 7 hold, 8 out (repeat 3x)', 25, 125);
+                doc.text('  - Physical reset: 20 pushups or 2-minute walk', 25, 135);
+                doc.text('  - Mental reset: Recite your trading rules out loud', 25, 145);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('2. Position Sizing Psychology Framework:', 20, 160);
+                doc.setFont(undefined, 'normal');
+                doc.text('• Risk Comfort Formula: Never risk more than you can lose and sleep well', 20, 170);
+                doc.text('• Confidence-Based Sizing:', 20, 180);
+                doc.text('  - High confidence setups: 2% risk maximum', 25, 190);
+                doc.text('  - Medium confidence: 1% risk maximum', 25, 200);
+                doc.text('  - Low confidence: 0.5% risk or skip entirely', 25, 210);
+                doc.text('• Emotional Position Size Test: If position size creates anxiety, reduce by 50%', 20, 220);
+
+                // Page 8 continues
+                doc.addPage();
+                doc.setFontSize(20);
+                doc.setFont(undefined, 'bold');
+                doc.text('Advanced Psychology Techniques', 20, 30);
+
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text('3. The "Trading State" Optimization System:', 20, 50);
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(10);
+                doc.text('• Peak Performance Ritual (use before each session):', 20, 65);
+                doc.text('  1. Review yesterday\'s emotional lessons (2 minutes)', 25, 75);
+                doc.text('  2. Visualize perfect trade execution (3 minutes)', 25, 85);
+                doc.text('  3. State your risk tolerance for the session out loud', 25, 95);
+                doc.text('  4. Commit to maximum 3 trades regardless of outcomes', 25, 105);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('4. Decision-Making Under Pressure Protocols:', 20, 120);
+                doc.setFont(undefined, 'normal');
+                doc.text('• The 5-Second Rule: Count backwards 5-4-3-2-1 before any emotional trade', 20, 130);
+                doc.text('• Position Exit Emergency Protocol:', 20, 140);
+                doc.text('  - If trade moves against you 1%: Review thesis in writing', 25, 150);
+                doc.text('  - If trade moves against you 1.5%: Exit half position', 25, 160);
+                doc.text('  - If trade moves against you 2%: Exit all (no exceptions)', 25, 170);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('5. Weekly Psychology Performance Review:', 20, 185);
+                doc.setFont(undefined, 'normal');
+                doc.text('Every Sunday, rate yourself 1-10 on:', 20, 195);
+                doc.text('• Emotional control during winning trades', 25, 205);
+                doc.text('• Emotional control during losing trades', 25, 215);
+                doc.text('• Adherence to position sizing rules', 25, 225);
+                doc.text('• Quality of trade selection (not quantity)', 25, 235);
+                doc.text('• Overall satisfaction with psychological performance', 25, 245);
+
+                doc.setFontSize(8);
+                doc.text('Track scores weekly to identify patterns and measure improvement over time.', 20, 260);
 
                 // Page 8: Next Steps & Contact
                 doc.addPage();
