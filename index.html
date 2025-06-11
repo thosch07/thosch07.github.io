@@ -821,34 +821,34 @@
                     <div id="recommendations"></div>
                 </div>
 
-                <!-- Current vs Future Products Overview -->
+                <!-- REALISTIC: Current Available Products -->
                 <div class="category">
-                    <h3>🎯 Available Now vs Coming Soon</h3>
-                    <p style="margin-bottom: 20px; color: #6c757d;">Clear overview of what's available today and what's coming:</p>
+                    <h3>📊 Available Trading Psychology Products</h3>
+                    <p style="margin-bottom: 20px; color: #6c757d;">Currently available products for your trading psychology improvement:</p>
                     
                     <div class="feature-grid">
                         <div class="feature-card">
                             <div class="feature-icon">✅</div>
-                            <div class="feature-title">AI Psychology Assessment <span class="status-badge status-available">FREE NOW</span></div>
-                            <div class="feature-desc">Complete 8-question analysis of your trading psychology - available immediately</div>
+                            <div class="feature-title">AI Psychology Assessment <span class="status-badge status-available">AVAILABLE</span></div>
+                            <div class="feature-desc">Completely free - analyzes your trading psychology in 8 questions</div>
                         </div>
                         
                         <div class="feature-card">
                             <div class="feature-icon">📄</div>
-                            <div class="feature-title">Premium 10-Page Analysis <span class="status-badge status-coming-soon">$47 NOW</span></div>
-                            <div class="feature-desc">Professional psychology analysis with personalized strategies - purchase below</div>
+                            <div class="feature-title">Premium Psychology Analysis <span class="status-badge status-coming-soon">$47</span></div>
+                            <div class="feature-desc">10-page professional analysis with personalized action strategies, emotional management toolkit, and 90-day implementation roadmap</div>
                         </div>
                         
                         <div class="feature-card">
-                            <div class="feature-icon">🤖</div>
-                            <div class="feature-title">AI Risk Calculator <span class="status-badge status-development">Q3/Q4 2025</span></div>
-                            <div class="feature-desc">Automated position sizing based on psychological state - in development</div>
+                            <div class="feature-icon">🔮</div>
+                            <div class="feature-title">AI-Tools Roadmap <span class="status-badge status-development">Q3/Q4 2025</span></div>
+                            <div class="feature-desc">Risk Calculator, Emotion Detector, Psychology Tracker - in development</div>
                         </div>
                         
                         <div class="feature-card">
-                            <div class="feature-icon">📊</div>
-                            <div class="feature-title">Real-time Psychology Tools <span class="status-badge status-development">Q3/Q4 2025</span></div>
-                            <div class="feature-desc">Emotion detection, performance tracking, advanced analytics - coming soon</div>
+                            <div class="feature-icon">📧</div>
+                            <div class="feature-title">Launch Notifications <span class="status-badge status-available">FREE</span></div>
+                            <div class="feature-desc">Be the first to know about new AI tools and products</div>
                         </div>
                     </div>
                 </div>
@@ -884,48 +884,30 @@
                     </button>
                 </div>
 
-                <!-- Waitlist Section for Future AI Tools -->
-                <div class="waitlist-box">
-                    <h3>🔮 Future AI Tools Coming Q3/Q4 2025!</h3>
-                    <p>Be the first to access our upcoming AI trading psychology tools:</p>
-                    <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
-                        <li><strong>AI Risk Calculator</strong> - Optimal position sizing based on psychology</li>
-                        <li><strong>Real-time Emotion Detector</strong> - Analyzes your trading messages</li>
-                        <li><strong>AI Psychology Tracker</strong> - Track emotional patterns over time</li>
-                        <li><strong>Advanced Trading Dashboard</strong> - Psychology-performance correlation</li>
-                    </ul>
-                    <div>
-                        <input type="email" class="email-input" id="emailInput" placeholder="Your Email Address">
-                        <button class="btn btn-primary" onclick="joinWaitlist()">Get Early Access</button>
-                    </div>
-                    <p style="font-size: 0.9rem; margin-top: 15px; color: #6c757d;">
-                        Join 500+ traders waiting for our AI tools. No spam, just early access notifications.
-                    </p>
-                </div>
-
-                <!-- PayPal Integration for Current Premium Analysis -->
+                <!-- PayPal Integration for Production -->
                 <div class="waitlist-box">
                     <h3>🚀 Get Your Premium Analysis Now!</h3>
                     <p>Ready to unlock your complete 10-page professional analysis?</p>
-                    <ul style="text-align: left; margin: 15px 0; padding-left: 20px;">
-                        <li><strong>Personalized Action Strategies</strong> - Custom protocols for your exact psychology level</li>
-                        <li><strong>Professional Psychology Toolkit</strong> - Advanced techniques used by elite traders</li>
-                        <li><strong>90-Day Implementation Roadmap</strong> - Step-by-step improvement plan</li>
-                        <li><strong>Emotional Management System</strong> - Proven methods for trading psychology control</li>
-                        <li><strong>Weekly Performance Tracking</strong> - Measure your psychology improvement</li>
-                    </ul>
                     
-                    <!-- PayPal Purchase Section -->
-                    <div style="margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.4); border-radius: 12px;">
-                        <p style="margin-bottom: 15px; font-weight: 600;">Professional Value: $47 (one-time)</p>
-                        <div style="margin-bottom: 15px;">
-                            <input type="email" class="email-input" id="purchaseEmailInput" placeholder="Email for PDF delivery" style="width: 70%; margin-right: 10px;">
-                        </div>
-                        <button class="btn btn-primary" onclick="initiatePayPalPayment()" style="font-size: 1.1rem; padding: 16px 40px; width: 100%;">
+                    <!-- PayPal Button Integration -->
+                    <div style="margin: 20px 0;">
+                        <button class="btn btn-primary" onclick="initiatePayPalPayment()" style="font-size: 1.1rem; padding: 16px 40px;">
                             💳 Purchase Premium Analysis - $47
                         </button>
+                    </div>
+                    
+                    <p style="font-size: 0.9rem; margin-top: 15px; color: #6c757d;">
+                        Secure payment via PayPal. Instant PDF delivery after successful payment.
+                    </p>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.3); border-radius: 8px;">
+                        <p style="margin: 0; font-weight: 600;">Don't want to pay yet?</p>
+                        <div style="margin-top: 10px;">
+                            <input type="email" class="email-input" id="emailInput" placeholder="Your Email Address" style="margin-right: 10px;">
+                            <button class="btn btn-secondary" onclick="joinWaitlist()">Get Notified When Available</button>
+                        </div>
                         <p style="font-size: 0.85rem; margin-top: 10px; color: #6c757d;">
-                            Secure payment via PayPal. Instant PDF delivery after successful payment.
+                            We'll notify you about special offers and new AI tools (Q3/Q4 2025).
                         </p>
                     </div>
                 </div>
