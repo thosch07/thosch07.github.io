@@ -384,6 +384,58 @@
         .manual-paypal-button:hover {
             background: #FFB000;
         }
+
+        /* Launch Week Special Styles */
+        .launch-special {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #f59e0b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .launch-special h3 {
+            color: #000;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .launch-special p {
+            color: #000;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        #countdown {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #ef4444;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #94a3b8;
+            font-size: 18px;
+        }
+
+        .new-price {
+            color: #4ade80;
+            font-size: 28px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -440,6 +492,18 @@
 
             <div class="insights" id="insights"></div>
 
+            <!-- Launch Week Special Banner -->
+            <div class="launch-special">
+                <h3>🚀 LAUNCH WEEK SPECIAL - 25% OFF!</h3>
+                <p>Get your complete 10-page analysis for only $35 (normally $47)</p>
+                <p style="font-size: 14px; margin-top: 10px;">⏰ Offer expires Sunday, June 16th at midnight</p>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div style="text-align: center; margin: 20px 0;">
+                <div id="countdown"></div>
+            </div>
+
             <!-- Purchase Section -->
             <div class="purchase-section">
                 <h3 class="cta-title">📄 Want a Detailed Professional Analysis?</h3>
@@ -447,11 +511,12 @@
                     Get your complete 10-page AI-generated psychology report with personalized strategies, 
                     90-day improvement roadmap, and professional trading toolkit.
                 </p>
-                <p style="font-size: 20px; color: #4ade80; margin: 15px 0;">
-                    <strong>One-time payment: $47</strong>
+                <p style="font-size: 20px; margin: 15px 0;">
+                    <span class="old-price">$47</span>
+                    <span class="new-price">NOW: $35</span>
                 </p>
                 <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
-                    Included in Your $47 Premium Package:
+                    Included in Your Premium Package:
                 </p>
                 <ul style="text-align: left; display: inline-block; color: #cbd5e1; margin-bottom: 20px;">
                     <li>Complete 10-page professional psychology analysis</li>
@@ -466,7 +531,7 @@
                 
                 <!-- Manual PayPal Button (Backup) -->
                 <button class="manual-paypal-button" id="manualPayPalButton" onclick="manualPayPalCheckout()">
-                    Pay with PayPal - $47
+                    Pay with PayPal - $35
                 </button>
                 
                 <!-- Admin test button (hidden by default) -->
@@ -651,9 +716,31 @@
         let paypalRetryCount = 0;
         const maxPaypalRetries = 10;
 
-        // Initialize PayPal with retry logic
+        // Countdown Timer
+        function updateCountdown() {
+            const deadline = new Date('2025-06-16T00:00:00+02:00'); // Sunday midnight MEZ
+            const now = new Date();
+            const diff = deadline - now;
+            
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('countdown').innerHTML = 
+                    `⏰ OFFER ENDS IN: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                document.getElementById('countdown').innerHTML = 'OFFER EXPIRED';
+                // Reset to normal price
+                document.querySelector('.new-price').textContent = '$47';
+                document.querySelector('.old-price').style.display = 'none';
+            }
+        }
+
+        // Initialize PayPal with Launch Price
         function initializePayPal() {
-            console.log('🔄 Attempting to initialize PayPal... (Attempt ' + (paypalRetryCount + 1) + ')');
+            console.log('🔄 Attempting to initialize PayPal with Launch Special price...');
             
             // Check if container exists
             const container = document.getElementById('paypal-button-container');
@@ -678,7 +765,7 @@
             // Clear loading message
             container.innerHTML = '';
             
-            console.log('✅ PayPal SDK loaded, initializing buttons...');
+            console.log('✅ PayPal SDK loaded, initializing buttons with $35 launch price...');
             
             try {
                 paypal.Buttons({
@@ -694,10 +781,10 @@
                         return actions.order.create({
                             purchase_units: [{
                                 amount: {
-                                    value: '47.00',
+                                    value: '35.00', // LAUNCH SPECIAL PRICE!
                                     currency_code: 'USD'
                                 },
-                                description: 'Trading Psychology Premium Analysis'
+                                description: 'Trading Psychology Premium Analysis - Launch Week Special'
                             }]
                         });
                     },
@@ -718,7 +805,7 @@
                         console.log('❌ Payment cancelled by user');
                     }
                 }).render('#paypal-button-container').then(function() {
-                    console.log('✅ PayPal buttons rendered successfully');
+                    console.log('✅ PayPal buttons rendered successfully with launch price');
                     paypalButtonsInitialized = true;
                 }).catch(function(err) {
                     console.error('❌ Failed to render PayPal buttons:', err);
@@ -737,7 +824,7 @@
             document.getElementById('manualPayPalButton').style.display = 'block';
         }
 
-        // Manual PayPal checkout
+        // Manual PayPal checkout with launch price
         function manualPayPalCheckout() {
             const email = document.getElementById('purchaseEmailInput').value;
             if (!email) {
@@ -748,12 +835,12 @@
             // Your PayPal email
             const paypalEmail = 'th.schnitzlein@gmail.com';
             
-            // Create PayPal payment URL
+            // Create PayPal payment URL with launch price
             const paypalUrl = 'https://www.paypal.com/cgi-bin/webscr?' + 
                 'cmd=_xclick' +
                 '&business=' + encodeURIComponent(paypalEmail) +
-                '&item_name=' + encodeURIComponent('Trading Psychology Premium Analysis') +
-                '&amount=47.00' +
+                '&item_name=' + encodeURIComponent('Trading Psychology Premium Analysis - Launch Special') +
+                '&amount=35.00' + // LAUNCH PRICE!
                 '&currency_code=USD' +
                 '&return=' + encodeURIComponent(window.location.href + '?success=true') +
                 '&cancel_return=' + encodeURIComponent(window.location.href) +
@@ -764,7 +851,7 @@
             // Save email for later
             sessionStorage.setItem('pendingPurchaseEmail', email);
             
-            console.log('🔗 Redirecting to PayPal:', paypalUrl);
+            console.log('🔗 Redirecting to PayPal with launch price:', paypalUrl);
             
             // Redirect to PayPal
             window.location.href = paypalUrl;
@@ -955,6 +1042,10 @@
             
             // Initialize PayPal after results are shown
             setTimeout(initializePayPal, 500);
+            
+            // Start countdown timer
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
         }
 
         function handleSuccessfulPayment(email, transactionId) {
@@ -1488,7 +1579,7 @@
             const assessments = getAssessments();
             const purchases = assessments.filter(a => a.purchase).length;
             const waitlist = assessments.filter(a => a.waitlist).length;
-            const revenue = purchases * 47;
+            const revenue = purchases * 35; // Launch price!
             const conversionRate = assessments.length > 0 ? 
                 ((purchases / assessments.length) * 100).toFixed(1) : 0;
             
@@ -1552,6 +1643,18 @@
             }
         }
 
+        // Check for admin parameter on page load
+        function checkAdminParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true') {
+                setTimeout(() => {
+                    toggleAdminPanel();
+                }, 500);
+                // Remove parameter from URL
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        }
+
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey) {
@@ -1571,9 +1674,12 @@
 
         // Initialize on page load
         window.addEventListener('load', function() {
-            console.log('🚀 Trading Psychology Assessment v5.0 - Live PayPal Ready');
-            console.log('💳 PayPal Client ID: Live Integration Active');
+            console.log('🚀 Trading Psychology Assessment v5.0 - Launch Week Special!');
+            console.log('💳 PayPal Integration: $35 Launch Price Active');
             console.log('📊 Press Ctrl+Shift+A to open Admin Panel');
+            
+            // Check for admin parameter
+            checkAdminParam();
             
             // Check for payment return
             checkPaymentReturn();
