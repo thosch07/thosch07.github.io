@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-Enhanced Trading Psychology Assessment</title>
+    <title>AI Trading Psychology Assessment - Discover Your Trading Personality</title>
+    <meta name="description" content="Free AI-powered trading psychology assessment. Discover your trader personality type and emotional patterns in 2 minutes.">
     
-    <!-- PayPal SDK with your LIVE Client ID -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AQ7d8ZPGOLBz3AC4uVlNgysPHMDEXUvqc2auLwqra9Ou_Wg4qIBNAAcjdAxwgKBIzISotkfcM8x0QgYm&currency=USD"></script>
-    
-    <!-- jsPDF for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX'); // Replace with your GA ID
+    </script>
     
     <style>
         * {
@@ -20,1675 +24,1926 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0f1c 0%, #1a2332 100%);
-            color: #ffffff;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
 
         .container {
-            background: rgba(26, 35, 50, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 700px;
-            width: 100%;
-            padding: 40px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .header {
             text-align: center;
+            padding: 60px 20px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
             margin-bottom: 40px;
+            backdrop-filter: blur(10px);
         }
 
         h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #4ade80, #3b82f6);
+            font-size: 3em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: 800;
         }
 
         .subtitle {
-            color: #94a3b8;
-            font-size: 18px;
-        }
-
-        .progress-bar {
-            background: rgba(255, 255, 255, 0.1);
-            height: 8px;
-            border-radius: 4px;
+            font-size: 1.3em;
+            color: #a0a0a0;
             margin-bottom: 30px;
-            overflow: hidden;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4ade80, #3b82f6);
-            width: 0%;
-            transition: width 0.3s ease;
+        .start-button, .next-button, .purchase-button {
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            color: #000;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
         }
 
-        .question-container {
+        .start-button:hover, .next-button:hover, .purchase-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.4);
+        }
+
+        .assessment-container {
             display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .question-container.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .question {
-            font-size: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+        }
+
+        .question h3 {
+            font-size: 1.4em;
             margin-bottom: 20px;
-            line-height: 1.5;
+            color: #333;
         }
 
         .options {
             display: grid;
-            gap: 12px;
+            gap: 15px;
         }
 
         .option {
-            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            background: #f8f9fa;
             border: 2px solid transparent;
-            padding: 16px 20px;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 16px;
+            font-size: 1.1em;
         }
 
         .option:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(74, 222, 128, 0.5);
+            border-color: #00d4ff;
+            background: #f0f8ff;
             transform: translateX(5px);
         }
 
         .option.selected {
-            background: rgba(74, 222, 128, 0.2);
-            border-color: #4ade80;
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 10px;
-        }
-
-        button {
-            background: linear-gradient(135deg, #4ade80, #3b82f6);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #00ff8810 0%, #00d4ff10 100%);
+            border-color: #00d4ff;
             font-weight: 600;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(74, 222, 128, 0.3);
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
         }
 
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            transition: width 0.5s ease;
+            border-radius: 10px;
         }
 
         .results {
             display: none;
             text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .score-circle {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 30px;
-            position: relative;
+        .score-display {
+            font-size: 4em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
         }
 
-        .score-value {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            font-weight: bold;
+        .trader-type {
+            font-size: 2em;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
         }
 
         .insights {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 12px;
-            margin: 20px 0;
             text-align: left;
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            line-height: 1.8;
         }
 
-        .insight-item {
-            margin-bottom: 20px;
-            padding-left: 25px;
-            position: relative;
-        }
-
-        .insight-item:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #4ade80;
-            font-size: 20px;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(59, 130, 246, 0.1));
-            padding: 30px;
-            border-radius: 12px;
-            margin-top: 30px;
-            border: 1px solid rgba(74, 222, 128, 0.3);
-        }
-
-        .cta-title {
-            font-size: 24px;
+        .insights h3 {
+            color: #1a1a1a;
             margin-bottom: 15px;
-            color: #4ade80;
+            font-size: 1.4em;
         }
 
-        .cta-description {
-            color: #cbd5e1;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        input[type="email"] {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-
-        input[type="email"]:focus {
-            outline: none;
-            border-color: #4ade80;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        input[type="email"]::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .tool-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(74, 222, 128, 0.3);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .tool-name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #4ade80;
-        }
-
-        .tool-date {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .tool-description {
-            color: #cbd5e1;
-            line-height: 1.5;
-        }
-
-        .admin-panel {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: #1a2332;
-            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .admin-panel.active {
-            right: 0;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .close-admin {
-            cursor: pointer;
-            font-size: 24px;
-            color: #94a3b8;
-            transition: color 0.3s ease;
-        }
-
-        .close-admin:hover {
-            color: #ffffff;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 8px;
+        .insights p {
             margin-bottom: 15px;
         }
 
-        .stat-label {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #4ade80;
-        }
-
-        .assessment-list {
-            max-height: 300px;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .assessment-item {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 14px;
-            color: #cbd5e1;
-        }
-
-        .assessment-item:last-child {
-            border-bottom: none;
-        }
-
-        /* PayPal Button Container */
-        #paypal-button-container {
-            margin-top: 20px;
-            min-height: 50px;
-        }
-
-        .paypal-loading {
-            text-align: center;
-            color: #94a3b8;
-            padding: 20px;
-        }
-
-        .purchase-section {
-            background: linear-gradient(135deg, rgba(74, 222, 128, 0.1), rgba(59, 130, 246, 0.1));
-            padding: 30px;
-            border-radius: 12px;
-            margin-top: 30px;
-            border: 1px solid rgba(74, 222, 128, 0.3);
-            text-align: center;
-        }
-
-        /* Manual PayPal Button */
-        .manual-paypal-button {
-            width: 100%;
-            padding: 15px;
-            background: #FFC439;
-            color: #111;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            display: none;
-        }
-
-        .manual-paypal-button:hover {
-            background: #FFB000;
-        }
-
-        /* Launch Week Special Styles */
         .launch-special {
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            border: 2px solid #f59e0b;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            color: #000;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
         }
 
         .launch-special h3 {
-            color: #000;
-            margin: 0 0 10px 0;
-            font-size: 24px;
+            font-size: 1.8em;
+            margin-bottom: 15px;
         }
 
-        .launch-special p {
-            color: #000;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        #countdown {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
-            padding: 10px 20px;
-            border-radius: 8px;
-            display: inline-block;
+        .price-display {
+            font-size: 1.5em;
             margin: 15px 0;
-            font-weight: bold;
-            color: #ef4444;
         }
 
         .old-price {
             text-decoration: line-through;
-            color: #94a3b8;
-            font-size: 18px;
+            color: #666;
+            margin-right: 10px;
         }
 
         .new-price {
-            color: #4ade80;
-            font-size: 28px;
+            color: #059669;
+            font-weight: 800;
+        }
+
+        .countdown {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        .purchase-section {
+            margin: 40px 0;
+        }
+
+        .purchase-section h3 {
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .purchase-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .purchase-section li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .purchase-section li:before {
+            content: "✓ ";
+            color: #00ff88;
             font-weight: bold;
-            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+
+        #paypal-button-container {
+            margin: 20px 0;
+            min-height: 50px;
+        }
+
+        .waitlist-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .waitlist-section h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .admin-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: #1a1f2e;
+            color: #fff;
+            padding: 30px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .admin-panel.open {
+            right: 0;
+        }
+
+        .admin-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+        }
+
+        .admin-stats {
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .admin-button {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .admin-button:hover {
+            background: #00d4ff;
+        }
+
+        .manual-paypal-button {
+            background: #ffc439;
+            color: #000;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 20px auto;
+            box-shadow: 0 10px 30px rgba(255, 196, 57, 0.3);
+        }
+
+        .manual-paypal-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 196, 57, 0.4);
+        }
+
+        .success-message {
+            background: #00ff88;
+            color: #000;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .error-message {
+            background: #ef4444;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .subtitle { font-size: 1.1em; }
+            .question h2 { font-size: 1.4em; }
+            .question h3 { font-size: 1.2em; }
+            .admin-panel { width: 100%; }
+            .container { padding: 10px; }
+            .header { padding: 40px 20px 30px; }
+            .assessment-container, .results { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container" id="mainContainer">
-        <!-- Start Screen -->
-        <div id="startScreen" class="start-screen">
-            <div class="header">
-                <h1>AI-Enhanced Trading Psychology Assessment</h1>
-                <p class="subtitle">Discover your psychological trading patterns in 2 minutes</p>
-            </div>
-            <div style="text-align: center; margin-top: 40px;">
-                <button onclick="startAssessment()" style="padding: 16px 40px; font-size: 18px;">
-                    Start Free Assessment
-                </button>
-                <p style="margin-top: 20px; color: #94a3b8; font-size: 14px;">
-                    No email required • 100% free • Instant results
-                </p>
-            </div>
+    <div class="container">
+        <div class="header" id="header">
+            <h1>AI Trading Psychology Assessment</h1>
+            <p class="subtitle">Discover your trader personality type and unlock your potential</p>
+            <button class="start-button" onclick="startAssessment()">Start Free Assessment</button>
+            <p style="color: #a0a0a0; margin-top: 20px;">Takes only 2 minutes • No email required • 100% Free</p>
         </div>
 
-        <!-- Assessment Screen -->
-        <div id="assessmentScreen" style="display: none;">
+        <div class="assessment-container" id="assessmentContainer">
             <div class="progress-bar">
-                <div class="progress-fill" id="progressBar"></div>
+                <div class="progress" id="progressBar"></div>
             </div>
-            
             <div id="questionContainer"></div>
-            
-            <div class="navigation">
-                <button id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
-                <button id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
-            </div>
+            <button class="next-button" id="nextButton" onclick="nextQuestion()" style="display: none;">Next Question</button>
         </div>
 
-        <!-- Results Screen -->
-        <div id="resultsScreen" class="results">
-            <h2 style="font-size: 36px; margin-bottom: 30px;">Your Psychology Profile</h2>
-            
-            <div class="score-circle">
-                <svg width="200" height="200">
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="20"/>
-                    <circle id="scoreCircle" cx="100" cy="100" r="90" fill="none" stroke="url(#gradient)" stroke-width="20" 
-                            stroke-dasharray="565" stroke-dashoffset="565" transform="rotate(-90 100 100)"
-                            style="transition: stroke-dashoffset 1s ease"/>
-                    <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <div class="score-value" id="scoreValue">0</div>
-            </div>
-
+        <div class="results" id="results">
+            <h2>Your Trading Psychology Analysis</h2>
+            <div class="score-display" id="scoreDisplay"></div>
+            <div class="trader-type" id="traderType"></div>
             <div class="insights" id="insights"></div>
-
+            
             <!-- Launch Week Special Banner -->
             <div class="launch-special">
                 <h3>🚀 LAUNCH WEEK SPECIAL - 25% OFF!</h3>
-                <p>Get your complete 10-page analysis for only $35 (normally $47)</p>
-                <p style="font-size: 14px; margin-top: 10px;">⏰ Offer expires Sunday, June 16th at midnight</p>
+                <p style="font-size: 1.2em; font-weight: 600;">Get your complete 10-page analysis for only $35 (normally $47)</p>
+                <div class="countdown" id="countdown"></div>
             </div>
 
-            <!-- Countdown Timer -->
-            <div style="text-align: center; margin: 20px 0;">
-                <div id="countdown"></div>
-            </div>
-
-            <!-- Purchase Section -->
             <div class="purchase-section">
-                <h3 class="cta-title">📄 Want a Detailed Professional Analysis?</h3>
-                <p class="cta-description">
-                    Get your complete 10-page AI-generated psychology report with personalized strategies, 
-                    90-day improvement roadmap, and professional trading toolkit.
-                </p>
-                <p style="font-size: 20px; margin: 15px 0;">
+                <h3>Get Your Complete 10-Page Psychology Analysis</h3>
+                <p>Unlock deeper insights with your personalized report:</p>
+                <ul style="text-align: left; margin: 20px auto; max-width: 500px;">
+                    <li>Detailed personality breakdown with specific examples</li>
+                    <li>Custom 90-day improvement plan tailored to your score</li>
+                    <li>Risk management strategies designed for your personality type</li>
+                    <li>Pattern recognition exercises to identify emotional triggers</li>
+                    <li>Professional psychology toolkit with daily practices</li>
+                    <li>Bonus: Access to future updates and tools</li>
+                </ul>
+                
+                <div class="price-display">
                     <span class="old-price">$47</span>
                     <span class="new-price">NOW: $35</span>
-                </p>
-                <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">
-                    Included in Your Premium Package:
-                </p>
-                <ul style="text-align: left; display: inline-block; color: #cbd5e1; margin-bottom: 20px;">
-                    <li>Complete 10-page professional psychology analysis</li>
-                    <li>Unlimited assessment retakes to track progress</li>
-                    <li>Priority email notifications for new AI tools (Q3/Q4 2025)</li>
-                    <li>Access to updated assessment versions when available</li>
-                </ul>
-                <input type="email" id="purchaseEmailInput" placeholder="Enter your email address" />
-                <div id="paypal-button-container">
-                    <div class="paypal-loading">Loading PayPal...</div>
                 </div>
+
+                <input type="email" 
+                       id="emailInput" 
+                       class="email-input" 
+                       placeholder="Enter your email to receive your report" 
+                       required>
                 
-                <!-- Manual PayPal Button (Backup) -->
-                <button class="manual-paypal-button" id="manualPayPalButton" onclick="manualPayPalCheckout()">
-                    Pay with PayPal - $35
-                </button>
+                <div id="paypal-button-container"></div>
                 
-                <!-- Admin test button (hidden by default) -->
-                <button id="testPurchaseBtn" onclick="testPurchase()" style="display: none; margin-top: 15px; background: #666;">
-                    Test Purchase (Admin Only)
-                </button>
+                <!-- Manual PayPal Fallback -->
+                <div id="manual-paypal" style="display: none;">
+                    <p style="color: #666; margin: 20px 0;">Or use PayPal directly:</p>
+                    <button class="manual-paypal-button" onclick="manualPayPal()">
+                        Pay with PayPal ($35)
+                    </button>
+                </div>
             </div>
 
-            <!-- Waitlist Section -->
-            <div class="cta-section" style="margin-top: 20px;">
-                <h3 class="cta-title">🔮 AI Tools Coming Q3/Q4 2025!</h3>
-                <p class="cta-description">
-                    Be first to access our revolutionary AI-powered trading psychology tools. 
-                    No spam, just early access notifications.
-                </p>
-                
-                <div class="tool-card">
-                    <div class="tool-name">🧮 AI Risk Calculator</div>
-                    <div class="tool-date">Coming Q3 2025</div>
-                    <div class="tool-description">
-                        Instantly calculate optimal position sizes based on your psychology profile
-                    </div>
-                </div>
-                
-                <div class="tool-card">
-                    <div class="tool-name">🎯 Real-time Emotion Detector</div>
-                    <div class="tool-date">Coming Q4 2025</div>
-                    <div class="tool-description">
-                        Analyze your trading messages and alerts for emotional bias
-                    </div>
-                </div>
-                
-                <div class="tool-card">
-                    <div class="tool-name">📊 Psychology Analytics Dashboard</div>
-                    <div class="tool-date">Coming Q4 2025</div>
-                    <div class="tool-description">
-                        Track your daily mood patterns vs trading performance
-                    </div>
-                </div>
-                
-                <input type="email" id="waitlistEmailInput" placeholder="Enter your email for early access" />
-                <button onclick="joinWaitlist()" style="width: 100%;">
-                    Get Early Access 🚀
-                </button>
+            <div class="waitlist-section">
+                <h3>Join the Waitlist for AI Trading Tools</h3>
+                <p>Be first to access our upcoming AI-powered trading psychology tools:</p>
+                <ul style="text-align: left; margin: 15px 0;">
+                    <li>AI Psychology Tracker - Daily mood vs performance analysis</li>
+                    <li>Real-time Emotion Monitor - Alerts before emotional trades</li>
+                    <li>Advanced Risk Calculator - Based on your psychology profile</li>
+                </ul>
+                <form id="waitlistForm">
+                    <input type="email" 
+                           id="waitlistEmail" 
+                           class="email-input" 
+                           placeholder="Enter your email for early access" 
+                           required>
+                    <button type="submit" class="purchase-button">Join Waitlist</button>
+                </form>
             </div>
         </div>
     </div>
 
     <!-- Admin Panel -->
     <div class="admin-panel" id="adminPanel">
-        <div class="admin-header">
-            <h2>Admin Dashboard</h2>
-            <span class="close-admin" onclick="toggleAdminPanel()">×</span>
+        <button class="admin-close" onclick="toggleAdminPanel()">&times;</button>
+        <h2>Admin Dashboard</h2>
+        <div class="admin-stats">
+            <div class="stat-item">
+                <div class="stat-label">Total Assessments</div>
+                <div class="stat-value" id="totalAssessments">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Revenue</div>
+                <div class="stat-value" id="totalRevenue">$0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Conversion Rate</div>
+                <div class="stat-value" id="conversionRate">0%</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Waitlist Signups</div>
+                <div class="stat-value" id="waitlistCount">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Average Score</div>
+                <div class="stat-value" id="avgScore">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Score Distribution</div>
+                <div id="scoreDistribution" style="font-size: 0.9em; margin-top: 10px;"></div>
+            </div>
         </div>
-        
-        <div class="stat-card">
-            <div class="stat-label">Total Assessments</div>
-            <div class="stat-value" id="totalAssessments">0</div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-label">Revenue</div>
-            <div class="stat-value" id="totalRevenue">$0</div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-label">Waitlist Signups</div>
-            <div class="stat-value" id="waitlistCount">0</div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-label">Purchase Conversion</div>
-            <div class="stat-value" id="conversionRate">0%</div>
-        </div>
-        
-        <button onclick="exportData()" style="width: 100%; margin-top: 20px;">
-            Export All Data (CSV)
-        </button>
-        
-        <button onclick="clearAllData()" style="width: 100%; margin-top: 10px; background: #ef4444;">
-            Clear All Data
-        </button>
-        
-        <div class="assessment-list" id="assessmentList">
-            <h3 style="margin-bottom: 10px;">Recent Assessments</h3>
-        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 15px;">Actions</h3>
+        <button class="admin-button" onclick="exportData()">Export All Data (CSV)</button>
+        <button class="admin-button" onclick="testPurchase()">Test Purchase (Admin Only)</button>
+        <button class="admin-button" onclick="clearAllData()">Clear All Data</button>
+        <button class="admin-button" onclick="debugInfo()">Show Debug Info</button>
+        <button class="admin-button" onclick="showDetailedStats()">Detailed Statistics</button>
     </div>
 
-    <script>
-        const { jsPDF } = window.jspdf;
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AQ7d8ZPGOLBz3AC4uVlNgysPHMDEXUvqc2auLwqra9Ou_Wg4qIBNAAcjdAxwgKBIzISotkfcM8x0QgYm&currency=USD"></script>
+    
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+    <script>
+        // ===== CONFIGURATION =====
+        const CONFIG = {
+            launchPrice: 35,
+            regularPrice: 47,
+            launchEndDate: '2025-06-16T00:00:00',
+            paypalEmail: 'th.schnitzlein@gmail.com',
+            adminPassword: 'trading123',
+            version: '4.0.1',
+            analyticsEnabled: true
+        };
+
+        // ===== MAILERLITE INTEGRATION =====
+        const MAILERLITE_CONFIG = {
+            apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWI0MDljMDMxZTViNjI5M2EyOWM3MjkzMTA4ZDFmN2M3NmYwMjczNTU3NGI1NmFhYjVjZGY3ZDljOGQ3NGIxNDhjMDI0MTU0ZTcwNTMwNzciLCJpYXQiOjE3NDk3MzI3ODEuMjk1NzcyLCJuYmYiOjE3NDk3MzI3ODEuMjk1Nzc2LCJleHAiOjQ5MDU0MDYzODEuMjg5ODI2LCJzdWIiOiIxNTgxMjY5Iiwic2NvcGVzIjpbXX0.g64vCpQu8KxSIqctKKk03QyBKhgmEF6sfyN6rl68FraHRFRN1VbgCl-EgXXeo6aWUsW3PKotGcdbB0QXoi7Do21z6VQ7YctLspe8kyriSYILMV7k53zXgoxXe24puXA8bclXCsPaIO1uNepwZXNDAWaMHjY6DF9hdwFEh3ZedjnAB535UGzzU37wd-jQod_oVmbQznaRSyoWPz3JKMHgG345TZqgUdfLsrrm4zKdzJWWKfKVgxo7BoTKKrQhcBbRC3uRs3fTOQU9E_2D1HRDXFGhcHBwF5V3W973q8g9ADdXBw6zCIOvRrT88s7RvWUtOaEIn7s-_PqhXk4Y6KklunyFPzTccD6TzdOG5vTJnt3kfVGClTR1JcbnlBSzRsl2fXLoKlNQWKl5ectJvJ33snMlc2xBv4LmnrXKqGJOQB93YTOHuqLE6swJTZLDlVC2TibGOh4MejZDgDUNI8hQo1eCniLJ7JlJ1nbBcZo-6tkBF6PZhDeagQioajoR8nQTQ_kt1TBBn1l9uJbCJnPajDlYamLNfvcD-8JwJltWRIkCkUNqTmPKHmDo4w6-rq97-yww9untRWuFvKU-z59WA1C9_lCldf--X9zBHJj69i7rIgM_Hx9STXCOd5sa4WjsnmXkKE0RcqhKE_oujxzta5NujlgwpZPCCmTzw6GBgWs',
+            apiUrl: 'https://connect.mailerlite.com/api',
+            groups: {
+                vulnerable: '156171765135967438', // 0-39: Risk Seeker
+                developing: '156171536177300596', // 40-59: Emotional Challenger
+                solid: '156171186694259782',      // 60-79: Evolving Trader
+                champion: '156165764502521533'    // 80-100: Disciplined Strategist
+            }
+        };
+
+        // Function to add subscriber to MailerLite
+        async function addToMailerLite(email, score, traderType) {
+            console.log('Adding to MailerLite:', email, score, traderType);
+            
+            // Determine which group based on score
+            let groupId;
+            if (score < 40) {
+                groupId = MAILERLITE_CONFIG.groups.vulnerable;
+            } else if (score < 60) {
+                groupId = MAILERLITE_CONFIG.groups.developing;
+            } else if (score < 80) {
+                groupId = MAILERLITE_CONFIG.groups.solid;
+            } else {
+                groupId = MAILERLITE_CONFIG.groups.champion;
+            }
+
+            try {
+                const response = await fetch(`${MAILERLITE_CONFIG.apiUrl}/subscribers`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MAILERLITE_CONFIG.apiKey}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        groups: [groupId],
+                        fields: {
+                            score: score,
+                            trader_type: traderType,
+                            assessment_date: new Date().toISOString()
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Successfully added to MailerLite group');
+                    trackEvent('mailerlite_success', { score, traderType });
+                } else {
+                    const error = await response.text();
+                    console.error('MailerLite API error:', response.status, error);
+                    trackEvent('mailerlite_error', { status: response.status });
+                }
+            } catch (error) {
+                console.error('MailerLite integration error:', error);
+                trackEvent('mailerlite_exception', { error: error.message });
+            }
+        }
+
+        // ===== ANALYTICS TRACKING =====
+        function trackEvent(eventName, parameters = {}) {
+            if (CONFIG.analyticsEnabled && typeof gtag !== 'undefined') {
+                gtag('event', eventName, parameters);
+            }
+            console.log('Event tracked:', eventName, parameters);
+        }
+
+        // ===== ASSESSMENT QUESTIONS =====
         const questions = [
             {
-                question: "When you see your trade moving against you, what's your first instinct?",
+                question: "After a losing trade, your first instinct is to:",
                 options: [
-                    "Close immediately to minimize losses",
-                    "Add to the position (average down)",
-                    "Wait and hope it reverses",
-                    "Check my original analysis before deciding"
+                    { text: "Immediately enter another trade to recover losses", value: 10 },
+                    { text: "Take a break and analyze what went wrong", value: 30 },
+                    { text: "Stick to your plan and wait for the next setup", value: 40 },
+                    { text: "Review your rules and only trade if criteria are met", value: 50 }
                 ]
             },
             {
-                question: "How do you typically feel after a winning trade?",
+                question: "When you see others making profits on a trade you missed:",
                 options: [
-                    "Confident and ready to trade more",
-                    "Lucky and worried it won't happen again",
-                    "Analytical - I review what went right",
-                    "Frustrated I didn't position bigger"
+                    { text: "Jump in immediately, fearing you'll miss more", value: 10 },
+                    { text: "Feel frustrated but wait for your own setup", value: 30 },
+                    { text: "Analyze why you missed it for future improvement", value: 40 },
+                    { text: "Stay focused on your own trading plan", value: 50 }
                 ]
             },
             {
-                question: "What describes your trade planning process?",
+                question: "Your position sizing is determined by:",
                 options: [
-                    "I have detailed plans with entry, stop loss, and targets",
-                    "I have a general idea but adjust as I go",
-                    "I rely mainly on instinct and market feel",
-                    "I follow others' recommendations"
+                    { text: "How confident I feel about the trade", value: 10 },
+                    { text: "Recent wins or losses", value: 20 },
+                    { text: "A fixed percentage, but I sometimes adjust", value: 35 },
+                    { text: "Strict risk management rules, no exceptions", value: 50 }
                 ]
             },
             {
-                question: "After a losing streak, you typically:",
+                question: "When a trade moves against you:",
                 options: [
-                    "Take a break to reset mentally",
-                    "Trade smaller until confidence returns",
-                    "Trade bigger to recover losses quickly",
-                    "Switch strategies completely"
+                    { text: "Move your stop loss to avoid taking the loss", value: 10 },
+                    { text: "Add to the position to average down", value: 15 },
+                    { text: "Exit if it hits your stop, but it's painful", value: 35 },
+                    { text: "Execute your exit plan without emotion", value: 50 }
                 ]
             },
             {
-                question: "Your biggest trading weakness is probably:",
+                question: "Your trading journal includes:",
                 options: [
-                    "Cutting profits too early",
-                    "Holding losses too long",
-                    "Overtrading when emotional",
-                    "Analysis paralysis"
+                    { text: "I don't keep a trading journal", value: 10 },
+                    { text: "Basic trade entries and exits", value: 25 },
+                    { text: "Trades, results, and occasional notes", value: 35 },
+                    { text: "Detailed analysis including emotional state", value: 50 }
                 ]
             },
             {
-                question: "How do you handle FOMO (Fear of Missing Out)?",
+                question: "After three winning trades in a row:",
                 options: [
-                    "I stick to my plan regardless",
-                    "Sometimes chase if the setup looks really good",
-                    "Often jump in late and regret it",
-                    "I've learned to wait for the next opportunity"
+                    { text: "Increase position size - I'm on a hot streak", value: 10 },
+                    { text: "Feel invincible and trade more frequently", value: 20 },
+                    { text: "Stay cautious but feel more confident", value: 35 },
+                    { text: "Maintain discipline - past results don't affect future trades", value: 50 }
                 ]
             },
             {
-                question: "What percentage of your trades follow your predefined rules?",
+                question: "Weekend planning consists of:",
                 options: [
-                    "90-100% - I'm very disciplined",
-                    "70-89% - Mostly disciplined",
-                    "50-69% - About half the time",
-                    "Less than 50% - I often trade on feel"
+                    { text: "No planning - I react to the market", value: 10 },
+                    { text: "Quick look at charts Sunday night", value: 25 },
+                    { text: "Review last week and identify key levels", value: 35 },
+                    { text: "Comprehensive analysis, journaling, and strategy review", value: 50 }
                 ]
             },
             {
-                question: "When you're having a great trading day, you:",
+                question: "When you break your trading rules:",
                 options: [
-                    "Stick to my daily limits and stop",
-                    "Trade a bit more but stay careful",
-                    "Increase position sizes significantly",
-                    "Keep trading until I have a loss"
+                    { text: "Justify it based on market conditions", value: 10 },
+                    { text: "Feel guilty but do it anyway sometimes", value: 25 },
+                    { text: "Rarely happens, but I document when it does", value: 40 },
+                    { text: "Almost never - rules are non-negotiable", value: 50 }
                 ]
             }
         ];
 
         let currentQuestion = 0;
         let answers = [];
-        let assessmentData = {
-            timestamp: null,
-            answers: [],
-            score: null,
-            profile: null,
-            email: null,
-            waitlist: false,
-            purchase: false,
-            transactionId: null
-        };
-        
-        // PayPal initialization variables
-        let paypalButtonsInitialized = false;
-        let paypalRetryCount = 0;
-        const maxPaypalRetries = 10;
+        let assessmentData = {};
+        let startTime = null;
 
-        // Countdown Timer
-        function updateCountdown() {
-            const deadline = new Date('2025-06-16T00:00:00+02:00'); // Sunday midnight MEZ
-            const now = new Date();
-            const diff = deadline - now;
+        // ===== DATA MANAGEMENT =====
+        function getStoredData() {
+            const stored = sessionStorage.getItem('tradingPsychologyData');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            return {
+                assessments: [],
+                revenue: 0,
+                waitlist: [],
+                purchases: 0,
+                version: CONFIG.version
+            };
+        }
+
+        function saveData(data) {
+            data.lastUpdated = new Date().toISOString();
+            sessionStorage.setItem('tradingPsychologyData', JSON.stringify(data));
+        }
+
+        function saveAssessment(score, traderType) {
+            const data = getStoredData();
+            const completionTime = startTime ? (Date.now() - startTime) / 1000 : 0;
             
-            if (diff > 0) {
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            data.assessments.push({
+                score: score,
+                traderType: traderType,
+                timestamp: new Date().toISOString(),
+                answers: answers,
+                completionTime: completionTime,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer || 'direct'
+            });
+            
+            saveData(data);
+            updateAdminPanel();
+            trackEvent('assessment_completed', { score, traderType, completionTime });
+        }
+
+        function savePurchase(email, transactionId = null) {
+            const data = getStoredData();
+            data.revenue += CONFIG.launchPrice;
+            data.purchases += 1;
+            
+            if (!data.purchaseDetails) data.purchaseDetails = [];
+            data.purchaseDetails.push({
+                email: email,
+                amount: CONFIG.launchPrice,
+                timestamp: new Date().toISOString(),
+                transactionId: transactionId,
+                score: window.currentScore,
+                traderType: window.currentTraderType
+            });
+            
+            saveData(data);
+            updateAdminPanel();
+            trackEvent('purchase_completed', { amount: CONFIG.launchPrice, score: window.currentScore });
+        }
+
+        function saveWaitlist(email) {
+            const data = getStoredData();
+            if (!data.waitlist.includes(email)) {
+                data.waitlist.push(email);
+                saveData(data);
+                updateAdminPanel();
+                trackEvent('waitlist_joined', { score: window.currentScore });
+            }
+        }
+
+        function updateAdminPanel() {
+            const data = getStoredData();
+            
+            document.getElementById('totalAssessments').textContent = data.assessments.length;
+            document.getElementById('totalRevenue').textContent = `$${data.revenue}`;
+            document.getElementById('waitlistCount').textContent = data.waitlist.length;
+            
+            const convRate = data.assessments.length > 0 
+                ? ((data.purchases / data.assessments.length) * 100).toFixed(1) 
+                : 0;
+            document.getElementById('conversionRate').textContent = `${convRate}%`;
+            
+            const avgScore = data.assessments.length > 0
+                ? Math.round(data.assessments.reduce((sum, a) => sum + a.score, 0) / data.assessments.length)
+                : 0;
+            document.getElementById('avgScore').textContent = avgScore;
+            
+            // Score distribution
+            updateScoreDistribution(data);
+        }
+
+        function updateScoreDistribution(data) {
+            const distribution = {
+                'Risk Seeker': 0,
+                'Emotional Challenger': 0,
+                'Evolving Trader': 0,
+                'Disciplined Strategist': 0
+            };
+            
+            data.assessments.forEach(assessment => {
+                distribution[assessment.traderType]++;
+            });
+            
+            const html = Object.entries(distribution)
+                .map(([type, count]) => `${type}: ${count}`)
+                .join('<br>');
                 
-                document.getElementById('countdown').innerHTML = 
-                    `⏰ OFFER ENDS IN: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-            } else {
-                document.getElementById('countdown').innerHTML = 'OFFER EXPIRED';
-                // Reset to normal price
-                document.querySelector('.new-price').textContent = '$47';
-                document.querySelector('.old-price').style.display = 'none';
-            }
+            document.getElementById('scoreDistribution').innerHTML = html;
         }
 
-        // Initialize PayPal with Launch Price
-        function initializePayPal() {
-            console.log('🔄 Attempting to initialize PayPal with Launch Special price...');
-            
-            // Check if container exists
-            const container = document.getElementById('paypal-button-container');
-            if (!container) {
-                console.error('❌ PayPal container not found');
-                return;
-            }
-            
-            // Check if PayPal SDK is loaded
-            if (typeof paypal === 'undefined') {
-                paypalRetryCount++;
-                if (paypalRetryCount < maxPaypalRetries) {
-                    console.warn('⏳ PayPal SDK not loaded yet. Retrying in 1 second...');
-                    setTimeout(initializePayPal, 1000);
-                } else {
-                    console.error('❌ PayPal SDK failed to load after ' + maxPaypalRetries + ' attempts');
-                    showManualPayPalButton();
-                }
-                return;
-            }
-            
-            // Clear loading message
-            container.innerHTML = '';
-            
-            console.log('✅ PayPal SDK loaded, initializing buttons with $35 launch price...');
-            
-            try {
-                paypal.Buttons({
-                    createOrder: function(data, actions) {
-                        const email = document.getElementById('purchaseEmailInput').value;
-                        if (!email) {
-                            alert('Please enter your email address');
-                            return;
-                        }
-                        
-                        console.log('📦 Creating order for:', email);
-                        
-                        return actions.order.create({
-                            purchase_units: [{
-                                amount: {
-                                    value: '35.00', // LAUNCH SPECIAL PRICE!
-                                    currency_code: 'USD'
-                                },
-                                description: 'Trading Psychology Premium Analysis - Launch Week Special'
-                            }]
-                        });
-                    },
-                    onApprove: function(data, actions) {
-                        console.log('✅ Payment approved, capturing...');
-                        
-                        return actions.order.capture().then(function(details) {
-                            const email = document.getElementById('purchaseEmailInput').value;
-                            console.log('💰 Payment captured:', details);
-                            handleSuccessfulPayment(email, details.id);
-                        });
-                    },
-                    onError: function(err) {
-                        console.error('❌ PayPal error:', err);
-                        alert('Payment failed. Please try again.');
-                    },
-                    onCancel: function(data) {
-                        console.log('❌ Payment cancelled by user');
-                    }
-                }).render('#paypal-button-container').then(function() {
-                    console.log('✅ PayPal buttons rendered successfully with launch price');
-                    paypalButtonsInitialized = true;
-                }).catch(function(err) {
-                    console.error('❌ Failed to render PayPal buttons:', err);
-                    showManualPayPalButton();
-                });
-            } catch (error) {
-                console.error('❌ Error initializing PayPal:', error);
-                showManualPayPalButton();
-            }
-        }
-
-        // Show manual PayPal button as fallback
-        function showManualPayPalButton() {
-            console.log('📱 Showing manual PayPal button as fallback');
-            document.getElementById('paypal-button-container').style.display = 'none';
-            document.getElementById('manualPayPalButton').style.display = 'block';
-        }
-
-        // Manual PayPal checkout with launch price
-        function manualPayPalCheckout() {
-            const email = document.getElementById('purchaseEmailInput').value;
-            if (!email) {
-                alert('Please enter your email address');
-                return;
-            }
-            
-            // Your PayPal email
-            const paypalEmail = 'th.schnitzlein@gmail.com';
-            
-            // Create PayPal payment URL with launch price
-            const paypalUrl = 'https://www.paypal.com/cgi-bin/webscr?' + 
-                'cmd=_xclick' +
-                '&business=' + encodeURIComponent(paypalEmail) +
-                '&item_name=' + encodeURIComponent('Trading Psychology Premium Analysis - Launch Special') +
-                '&amount=35.00' + // LAUNCH PRICE!
-                '&currency_code=USD' +
-                '&return=' + encodeURIComponent(window.location.href + '?success=true') +
-                '&cancel_return=' + encodeURIComponent(window.location.href) +
-                '&custom=' + encodeURIComponent(email) +
-                '&no_note=1' +
-                '&no_shipping=1';
-            
-            // Save email for later
-            sessionStorage.setItem('pendingPurchaseEmail', email);
-            
-            console.log('🔗 Redirecting to PayPal with launch price:', paypalUrl);
-            
-            // Redirect to PayPal
-            window.location.href = paypalUrl;
-        }
-
-        // Check for successful payment return
-        function checkPaymentReturn() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('success') === 'true') {
-                const email = sessionStorage.getItem('pendingPurchaseEmail');
-                if (email) {
-                    console.log('✅ Payment successful return detected');
-                    handleSuccessfulPayment(email, 'PAYPAL-' + Date.now());
-                    sessionStorage.removeItem('pendingPurchaseEmail');
-                    // Remove success parameter from URL
-                    window.history.replaceState({}, '', window.location.pathname);
-                }
-            }
-        }
-
+        // ===== ASSESSMENT FUNCTIONS =====
         function startAssessment() {
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('assessmentScreen').style.display = 'block';
+            startTime = Date.now();
+            document.getElementById('header').style.display = 'none';
+            document.getElementById('assessmentContainer').style.display = 'block';
+            currentQuestion = 0;
+            answers = [];
             showQuestion();
+            trackEvent('assessment_started');
         }
 
         function showQuestion() {
             const container = document.getElementById('questionContainer');
-            const progressBar = document.getElementById('progressBar');
-            
-            progressBar.style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+            const question = questions[currentQuestion];
             
             container.innerHTML = `
-                <div class="question-container active">
-                    <h2 class="question">${questions[currentQuestion].question}</h2>
+                <div class="question active">
+                    <h2>Question ${currentQuestion + 1} of ${questions.length}</h2>
+                    <h3>${question.question}</h3>
                     <div class="options">
-                        ${questions[currentQuestion].options.map((option, index) => `
-                            <div class="option" onclick="selectOption(${index})">${option}</div>
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index}, ${option.value})">
+                                ${option.text}
+                            </div>
                         `).join('')}
                     </div>
                 </div>
             `;
             
-            updateButtons();
+            updateProgressBar();
         }
 
-        function selectOption(index) {
-            answers[currentQuestion] = index;
+        function selectOption(index, value) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
             
-            document.querySelectorAll('.option').forEach((opt, i) => {
-                opt.classList.toggle('selected', i === index);
-            });
+            answers[currentQuestion] = value;
             
-            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextButton').style.display = 'block';
         }
 
         function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
                 showQuestion();
+                document.getElementById('nextButton').style.display = 'none';
             } else {
                 showResults();
             }
         }
 
-        function previousQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion();
-            }
-        }
-
-        function updateButtons() {
-            document.getElementById('prevBtn').disabled = currentQuestion === 0;
-            document.getElementById('nextBtn').disabled = answers[currentQuestion] === undefined;
-            document.getElementById('nextBtn').textContent = 
-                currentQuestion === questions.length - 1 ? 'See Results' : 'Next';
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
         }
 
         function calculateScore() {
-            const scoreMap = {
-                0: [3, 2, 1, 4],
-                1: [3, 2, 4, 1],
-                2: [4, 3, 2, 1],
-                3: [4, 3, 1, 2],
-                4: [3, 2, 1, 4],
-                5: [4, 2, 1, 3],
-                6: [4, 3, 2, 1],
-                7: [4, 3, 2, 1]
-            };
-            
-            let totalScore = 0;
-            answers.forEach((answer, questionIndex) => {
-                totalScore += scoreMap[questionIndex][answer];
-            });
-            
-            return Math.round((totalScore / 32) * 100);
+            const sum = answers.reduce((a, b) => a + b, 0);
+            const maxPossible = questions.length * 50;
+            return Math.round((sum / maxPossible) * 100);
         }
 
-        function getProfile(score) {
-            if (score >= 80) {
-                return {
-                    type: "Disciplined Strategist",
-                    description: "You demonstrate exceptional emotional control and systematic approach to trading.",
-                    strengths: ["Excellent risk management", "Consistent rule following", "Emotional stability"],
-                    weaknesses: ["Possible over-cautiousness", "May miss opportunities"],
-                    color: "#4ade80"
-                };
-            } else if (score >= 60) {
-                return {
-                    type: "Evolving Trader",
-                    description: "You show good foundation but struggle with consistency under pressure.",
-                    strengths: ["Growing discipline", "Learning from mistakes", "Developing systems"],
-                    weaknesses: ["Occasional emotional trading", "Inconsistent execution"],
-                    color: "#3b82f6"
-                };
-            } else if (score >= 40) {
-                return {
-                    type: "Emotional Challenger",
-                    description: "Your trading is significantly impacted by emotions and lacks systematic approach.",
-                    strengths: ["High motivation", "Quick decision making", "Adaptability"],
-                    weaknesses: ["Poor risk management", "Impulsive decisions", "Revenge trading"],
-                    color: "#f59e0b"
-                };
-            } else {
-                return {
-                    type: "Risk Seeker",
-                    description: "Your trading style is highly risky and driven by emotions rather than strategy.",
-                    strengths: ["Bold approach", "Quick to act", "High risk tolerance"],
-                    weaknesses: ["No risk management", "Gambling mentality", "Ignore rules"],
-                    color: "#ef4444"
-                };
-            }
+        function getTraderType(score) {
+            if (score >= 80) return { type: "Disciplined Strategist", color: "#00ff88" };
+            if (score >= 60) return { type: "Evolving Trader", color: "#00d4ff" };
+            if (score >= 40) return { type: "Emotional Challenger", color: "#fbbf24" };
+            return { type: "Risk Seeker", color: "#ef4444" };
+        }
+
+        function getInsights(score, traderType) {
+            const insights = {
+                "Risk Seeker": {
+                    strengths: "You're willing to take risks and have high energy for trading. Your enthusiasm and market engagement are assets that, when properly channeled, can lead to significant opportunities.",
+                    weaknesses: "Emotional decision-making, revenge trading, and poor risk management are costing you money. You tend to let losses affect your judgment and often trade to 'get even' with the market.",
+                    improvement: "Start with strict position sizing rules (never risk more than 1% per trade) and mandatory cool-down periods after losses. Consider paper trading for a week to practice discipline without financial risk.",
+                    characteristics: "Risk Seekers often experience the highest highs and lowest lows in trading. Your emotional intensity can be both your greatest asset and biggest liability."
+                },
+                "Emotional Challenger": {
+                    strengths: "You recognize that psychology matters and are working on improvement. This self-awareness puts you ahead of many traders who blame external factors for their losses.",
+                    weaknesses: "Inconsistent discipline and emotional reactions still impact your results. You know the rules but struggle to follow them when emotions run high.",
+                    improvement: "Implement a detailed trading journal including emotional states before, during, and after trades. Create a pre-market routine that includes meditation or breathing exercises.",
+                    characteristics: "Emotional Challengers are in a transition phase. You're aware of your psychological challenges but haven't yet developed consistent habits to overcome them."
+                },
+                "Evolving Trader": {
+                    strengths: "You have solid fundamentals and good awareness of trading psychology. Your discipline is improving, and you're beginning to see consistent results.",
+                    weaknesses: "Occasional lapses in discipline during high-stress market conditions. You may still overtrade during volatile periods or hold onto losing positions too long.",
+                    improvement: "Focus on advanced risk management techniques like portfolio heat and correlation analysis. Consider implementing a tier system for trade confidence levels.",
+                    characteristics: "Evolving Traders are on the cusp of professional-level performance. Your main challenge is maintaining consistency across all market conditions."
+                },
+                "Disciplined Strategist": {
+                    strengths: "Exceptional emotional control and consistent execution of your trading plan. You've mastered the psychological aspects that derail most traders.",
+                    weaknesses: "May miss opportunities due to over-cautiousness. Sometimes your discipline can turn into rigidity, preventing adaptation to changing market conditions.",
+                    improvement: "Consider gradually expanding your strategy repertoire while maintaining discipline. Explore systematic ways to identify and capitalize on higher-probability setups.",
+                    characteristics: "Disciplined Strategists represent the top tier of trading psychology. Your challenge now is optimizing and scaling your approach."
+                }
+            };
+            
+            return insights[traderType];
         }
 
         function showResults() {
             const score = calculateScore();
-            const profile = getProfile(score);
+            const traderInfo = getTraderType(score);
+            const insights = getInsights(score, traderInfo.type);
+            
+            // Store for later use
+            window.currentScore = score;
+            window.currentTraderType = traderInfo.type;
             
             assessmentData = {
-                timestamp: new Date().toISOString(),
-                answers: answers,
                 score: score,
-                profile: profile.type,
-                email: null,
-                waitlist: false,
-                purchase: false,
-                transactionId: null
+                traderType: traderInfo.type,
+                timestamp: new Date().toISOString(),
+                answers: answers
             };
             
-            saveAssessment();
+            saveAssessment(score, traderInfo.type);
             
-            document.getElementById('assessmentScreen').style.display = 'none';
-            document.getElementById('resultsScreen').style.display = 'block';
+            document.getElementById('assessmentContainer').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
             
-            // Animate score circle
-            setTimeout(() => {
-                const circle = document.getElementById('scoreCircle');
-                const offset = 565 - (565 * score / 100);
-                circle.style.strokeDashoffset = offset;
-                
-                // Animate score number
-                let currentScore = 0;
-                const increment = score / 50;
-                const timer = setInterval(() => {
-                    currentScore += increment;
-                    if (currentScore >= score) {
-                        currentScore = score;
-                        clearInterval(timer);
-                    }
-                    document.getElementById('scoreValue').textContent = Math.round(currentScore);
-                }, 20);
-            }, 100);
+            document.getElementById('scoreDisplay').textContent = `${score}/100`;
+            document.getElementById('scoreDisplay').style.color = traderInfo.color;
+            document.getElementById('traderType').textContent = traderInfo.type;
             
-            // Show insights
-            const insightsHTML = `
-                <h3 style="color: ${profile.color}; margin-bottom: 20px;">${profile.type}</h3>
-                <p style="color: #cbd5e1; margin-bottom: 20px; line-height: 1.6;">${profile.description}</p>
-                
-                <h4 style="color: #4ade80; margin-bottom: 15px;">Your Strengths:</h4>
-                ${profile.strengths.map(s => `<div class="insight-item">${s}</div>`).join('')}
-                
-                <h4 style="color: #f59e0b; margin-bottom: 15px; margin-top: 25px;">Areas for Improvement:</h4>
-                ${profile.weaknesses.map(w => `<div class="insight-item">${w}</div>`).join('')}
+            document.getElementById('insights').innerHTML = `
+                <h3>Your Psychology Profile:</h3>
+                <p><strong>Strengths:</strong> ${insights.strengths}</p>
+                <p><strong>Weaknesses:</strong> ${insights.weaknesses}</p>
+                <p><strong>Improvement Focus:</strong> ${insights.improvement}</p>
+                <p><strong>Your Profile:</strong> ${insights.characteristics}</p>
             `;
             
-            document.getElementById('insights').innerHTML = insightsHTML;
-            
-            // Initialize PayPal after results are shown
-            setTimeout(initializePayPal, 500);
-            
-            // Start countdown timer
-            setInterval(updateCountdown, 1000);
-            updateCountdown();
+            initializePayPal();
+            startCountdown();
         }
 
-        function handleSuccessfulPayment(email, transactionId) {
-            assessmentData.email = email;
-            assessmentData.purchase = true;
-            assessmentData.transactionId = transactionId;
-            saveAssessment();
+        // ===== COUNTDOWN TIMER =====
+        function startCountdown() {
+            const endDate = new Date(CONFIG.launchEndDate);
             
-            // Generate and download PDF
-            generatePDF(email);
+            function updateCountdown() {
+                const now = new Date();
+                const timeLeft = endDate - now;
+                
+                if (timeLeft > 0) {
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('countdown').textContent = 
+                        `OFFER ENDS IN: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                } else {
+                    document.getElementById('countdown').textContent = 'OFFER EXPIRED';
+                    document.querySelector('.new-price').textContent = `NOW: $${CONFIG.regularPrice}`;
+                    CONFIG.launchPrice = CONFIG.regularPrice;
+                }
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // ===== PAYPAL INTEGRATION =====
+        let paypalLoaded = false;
+        let paypalRetries = 0;
+
+        function initializePayPal() {
+            if (typeof paypal !== 'undefined') {
+                paypalLoaded = true;
+                console.log('✅ PayPal SDK loaded successfully');
+                renderPayPalButtons();
+            } else {
+                paypalRetries++;
+                console.log(`⏳ Waiting for PayPal SDK... (attempt ${paypalRetries})`);
+                
+                if (paypalRetries < 10) {
+                    setTimeout(initializePayPal, 1000);
+                } else {
+                    console.error('❌ PayPal SDK failed to load');
+                    document.getElementById('manual-paypal').style.display = 'block';
+                    trackEvent('paypal_sdk_failed');
+                }
+            }
+        }
+
+        function renderPayPalButtons() {
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    const email = document.getElementById('emailInput').value;
+                    if (!email || !validateEmail(email)) {
+                        alert('Please enter a valid email address');
+                        return false;
+                    }
+                    
+                    trackEvent('paypal_checkout_started');
+                    
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: CONFIG.launchPrice.toFixed(2)
+                            },
+                            description: 'AI Trading Psychology Analysis - Launch Special'
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        handleSuccessfulPayment(details);
+                    });
+                },
+                onCancel: function(data) {
+                    console.log('Payment cancelled by user');
+                    trackEvent('paypal_checkout_cancelled');
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    alert('Payment failed. Please try again or use the manual PayPal option below.');
+                    document.getElementById('manual-paypal').style.display = 'block';
+                    trackEvent('paypal_checkout_error', { error: err.message });
+                }
+            }).render('#paypal-button-container');
+        }
+
+        // Manual PayPal fallback
+        function manualPayPal() {
+            const email = document.getElementById('emailInput').value;
+            if (!email || !validateEmail(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            trackEvent('manual_paypal_clicked');
+            
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${CONFIG.paypalEmail}&item_name=AI Trading Psychology Analysis&amount=${CONFIG.launchPrice}&currency_code=USD&return=${window.location.href}&cancel_return=${window.location.href}`;
+            
+            window.open(paypalUrl, '_blank');
+            
+            setTimeout(() => {
+                if (confirm('Did you complete the PayPal payment?')) {
+                    handleSuccessfulPayment({ manual: true });
+                }
+            }, 3000);
+        }
+
+        // Handle successful payment
+        async function handleSuccessfulPayment(details) {
+            const email = document.getElementById('emailInput').value;
+            const score = window.currentScore || 0;
+            const traderType = window.currentTraderType || '';
+            
+            // Add to MailerLite
+            await addToMailerLite(email, score, traderType);
+            
+            const transactionId = details.id || 'manual_' + Date.now();
+            savePurchase(email, transactionId);
+            
+            // Generate PDF
+            generatePDF();
             
             // Show success message
-            alert(`✅ Payment successful! Your premium analysis has been sent to ${email}`);
+            const successHtml = `
+                <div class="success-message">
+                    <h3>✅ Payment Successful!</h3>
+                    <p>Thank you for your purchase! Your personalized 10-page report has been generated and downloaded.</p>
+                    <p>Check your email at <strong>${email}</strong> for additional resources and your welcome sequence.</p>
+                    <p>Transaction ID: ${transactionId}</p>
+                </div>
+            `;
             
-            // Update UI
-            const container = document.getElementById('paypal-button-container');
-            if (container) {
-                container.innerHTML = '<p style="color: #4ade80;">✅ Purchase complete! Check your downloads.</p>';
-            }
-            document.getElementById('manualPayPalButton').style.display = 'none';
+            document.querySelector('.purchase-section').innerHTML = successHtml;
+            trackEvent('purchase_success', { transactionId });
         }
 
-        function testPurchase() {
-            const email = document.getElementById('purchaseEmailInput').value;
-            if (!email) {
-                alert('Please enter your email address');
-                return;
-            }
-            
-            console.log('🧪 Test purchase initiated');
-            handleSuccessfulPayment(email, 'TEST-' + Date.now());
-        }
-
-        function generatePDF(email) {
+        // ===== PDF GENERATION =====
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const profile = getProfile(assessmentData.score);
             
-            // Cover Page
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
+            const score = window.currentScore;
+            const traderType = window.currentTraderType;
+            const insights = getInsights(score, traderType);
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(32);
-            doc.setFont(undefined, 'bold');
-            doc.text('AI-Enhanced Trading', 105, 80, { align: 'center' });
-            doc.text('Psychology Analysis', 105, 95, { align: 'center' });
+            // Custom colors based on trader type
+            const colors = {
+                'Risk Seeker': [239, 68, 68],
+                'Emotional Challenger': [251, 191, 36],
+                'Evolving Trader': [0, 212, 255],
+                'Disciplined Strategist': [0, 255, 136]
+            };
             
-            doc.setTextColor(148, 163, 184);
-            doc.setFontSize(16);
-            doc.setFont(undefined, 'normal');
-            doc.text('Professional Report', 105, 115, { align: 'center' });
+            const typeColor = colors[traderType] || [0, 0, 0];
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(48);
-            doc.setFont(undefined, 'bold');
-            doc.text(`${assessmentData.score}`, 105, 145, { align: 'center' });
+            // Page 1 - Cover
+            doc.setFillColor(...typeColor);
+            doc.rect(0, 0, 210, 40, 'F');
             
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(20);
-            doc.text(profile.type, 105, 165, { align: 'center' });
+            doc.setFontSize(30);
+            doc.text('AI Trading Psychology', 105, 25, { align: 'center' });
             
-            doc.setTextColor(148, 163, 184);
-            doc.setFontSize(12);
-            doc.text(`Generated: ${new Date().toLocaleDateString()}`, 105, 250, { align: 'center' });
-            doc.text(email, 105, 260, { align: 'center' });
-            
-            // Page 2: Executive Summary
-            doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
-            
-            doc.setTextColor(74, 222, 128);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
+            doc.text('Personalized Analysis Report', 105, 60, { align: 'center' });
+            
+            doc.setFontSize(20);
+            doc.text(`Your Score: ${score}/100`, 105, 100, { align: 'center' });
+            
+            doc.setTextColor(...typeColor);
+            doc.setFontSize(22);
+            doc.text(traderType, 105, 120, { align: 'center' });
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            doc.text('Generated on: ' + new Date().toLocaleDateString(), 105, 140, { align: 'center' });
+            doc.text('Schnitzlein Consulting - Trading Psychology Experts', 105, 150, { align: 'center' });
+            
+            // Page 2 - Executive Summary
+            doc.addPage();
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
             doc.text('Executive Summary', 20, 30);
             
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
+            const summaryText = `Your trading psychology assessment reveals that you are a ${traderType} with a score of ${score}/100. This comprehensive analysis will help you understand your psychological strengths and weaknesses, providing actionable insights to improve your trading performance.
+
+This report is personalized based on your specific responses and designed to give you a clear roadmap for psychological improvement in your trading journey.`;
             
-            const summaryText = [
-                `Psychology Score: ${assessmentData.score}/100`,
-                `Profile Type: ${profile.type}`,
-                '',
-                'Key Findings:',
-                `• ${profile.description}`,
-                '',
-                'Critical Action Items:',
-                '• Implement strict risk management rules',
-                '• Create detailed trading plan',
-                '• Track emotional patterns daily',
-                '• Review trades weekly'
-            ];
+            const summaryLines = doc.splitTextToSize(summaryText, 170);
+            doc.text(summaryLines, 20, 50);
             
+            // Score interpretation
+            doc.setFontSize(14);
+            doc.text('Score Interpretation:', 20, 100);
+            doc.setFontSize(12);
+            const interpretation = `Your score of ${score} places you in the ${
+                score >= 80 ? 'top 5%' : 
+                score >= 60 ? 'top 30%' : 
+                score >= 40 ? 'middle 40%' : 
+                'bottom 30%'
+            } of traders from a psychological perspective. ${
+                score >= 80 ? 'This is an exceptional score indicating strong emotional control and discipline.' :
+                score >= 60 ? 'This is a solid score showing good psychological foundations with room for improvement.' :
+                score >= 40 ? 'This score indicates you\'re aware of psychology\'s importance but need to develop better habits.' :
+                'This score suggests significant psychological challenges that are likely impacting your trading results.'
+            }`;
+            
+            const interpretationLines = doc.splitTextToSize(interpretation, 170);
+            doc.text(interpretationLines, 20, 110);
+            
+            // Page 3 - Detailed Profile Analysis
+            doc.addPage();
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Your Detailed Profile Analysis', 20, 30);
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(14);
+            doc.text('Personality Type: ' + traderType, 20, 50);
+            
+            doc.setFontSize(12);
+            doc.text('Profile Characteristics:', 20, 65);
+            const characteristicsLines = doc.splitTextToSize(insights.characteristics, 170);
+            doc.text(characteristicsLines, 20, 75);
+            
+            doc.setFontSize(14);
+            doc.text('Your Strengths:', 20, 110);
+            doc.setFontSize(12);
+            const strengthLines = doc.splitTextToSize(insights.strengths, 170);
+            doc.text(strengthLines, 20, 120);
+            
+            doc.setFontSize(14);
+            doc.text('Areas for Improvement:', 20, 160);
+            doc.setFontSize(12);
+            const weaknessLines = doc.splitTextToSize(insights.weaknesses, 170);
+            doc.text(weaknessLines, 20, 170);
+            
+            // Page 4 - Question-by-Question Analysis
+            doc.addPage();
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Your Response Analysis', 20, 30);
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
             let yPos = 50;
-            summaryText.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
+            
+            answers.forEach((answer, index) => {
+                if (yPos > 250) {
+                    doc.addPage();
+                    yPos = 30;
+                }
+                
+                const question = questions[index];
+                doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text(`Q${index + 1}: ${question.question}`, 20, yPos);
+                
+                doc.setFont(undefined, 'normal');
+                const selectedOption = question.options.find(opt => opt.value === answer);
+                doc.text(`Your answer: ${selectedOption.text}`, 20, yPos + 10);
+                
+                const analysis = getQuestionAnalysis(index, answer);
+                const analysisLines = doc.splitTextToSize(analysis, 170);
+                doc.text(analysisLines, 20, yPos + 20);
+                
+                yPos += 40 + (analysisLines.length * 5);
             });
             
-            // Page 3: Detailed Pattern Analysis
+            // Page 5 - 30-Day Action Plan
             doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Your 30-Day Action Plan', 20, 30);
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Pattern Analysis', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
-            
-            const patterns = [
-                'Trading Behavior Patterns:',
-                '',
-                '1. Emotional Response Pattern:',
-                `   Your score indicates ${profile.type} tendencies.`,
-                '   This means you tend to react to market movements with',
-                `   ${score >= 60 ? 'controlled' : 'emotional'} responses.`,
-                '',
-                '2. Risk Management Pattern:',
-                `   Your risk tolerance appears to be ${score >= 60 ? 'balanced' : 'excessive'}.`,
-                '   This impacts your position sizing and stop loss placement.',
-                '',
-                '3. Decision Making Pattern:',
-                `   You show ${score >= 60 ? 'systematic' : 'impulsive'} decision making.`,
-                '   This affects your trade entry and exit timing.'
-            ];
-            
+            const actionPlan = getActionPlan(traderType);
             yPos = 50;
-            patterns.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
+            
+            actionPlan.forEach((week, index) => {
+                if (yPos > 240) {
+                    doc.addPage();
+                    yPos = 30;
+                }
+                
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'bold');
+                doc.text(`Week ${index + 1}:`, 20, yPos);
+                yPos += 10;
+                
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(12);
+                week.forEach(task => {
+                    const taskLines = doc.splitTextToSize(`• ${task}`, 160);
+                    doc.text(taskLines, 30, yPos);
+                    yPos += taskLines.length * 5 + 5;
+                });
+                
+                yPos += 10;
             });
             
-            // Page 4: Psychology Risk Assessment
+            // Page 6 - Risk Management Guidelines
             doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Risk Management for Your Profile', 20, 30);
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Psychology Risk Assessment', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
+            const riskGuidelines = getRiskGuidelines(traderType);
+            const riskLines = doc.splitTextToSize(riskGuidelines, 170);
+            doc.text(riskLines, 20, 50);
             
-            // Risk visualization
-            const riskLevel = score < 40 ? 'HIGH' : score < 60 ? 'MEDIUM' : score < 80 ? 'LOW' : 'MINIMAL';
-            const riskColor = score < 40 ? [239, 68, 68] : score < 60 ? [245, 158, 11] : score < 80 ? [59, 130, 246] : [74, 222, 128];
-            
-            doc.setTextColor(...riskColor);
-            doc.setFontSize(36);
-            doc.setFont(undefined, 'bold');
-            doc.text(`${riskLevel} RISK`, 105, 70, { align: 'center' });
-            
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
-            
-            const riskFactors = [
-                '',
-                'Key Risk Factors:',
-                '',
-                `• Emotional Control: ${score >= 60 ? 'Good' : 'Needs improvement'}`,
-                `• Discipline Level: ${score >= 60 ? 'Adequate' : 'Low'}`,
-                `• Risk Management: ${score >= 60 ? 'Present' : 'Lacking'}`,
-                `• Trading Plan: ${score >= 60 ? 'Structured' : 'Undefined'}`,
-                '',
-                'Risk Management Priorities:',
-                '',
-                '1. Always use stop losses',
-                '2. Risk only 1-2% per trade',
-                '3. Keep a trading journal',
-                '4. Review trades weekly',
-                '5. Take breaks after losses'
-            ];
-            
-            yPos = 100;
-            riskFactors.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
-            });
-            
-            // Page 5: 90-Day Improvement Roadmap
+            // Page 7 - Emotional Control Techniques
             doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Emotional Control Techniques', 20, 30);
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('90-Day Improvement Roadmap', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
+            const emotionalTechniques = getEmotionalTechniques(traderType);
+            const emotionalLines = doc.splitTextToSize(emotionalTechniques, 170);
+            doc.text(emotionalLines, 20, 50);
             
-            const roadmap = [
-                'Days 1-30: Foundation Building',
-                '',
-                '• Create written trading plan',
-                '• Set daily loss limits',
-                '• Start trading journal',
-                '• Practice with smaller positions',
-                '',
-                'Days 31-60: Habit Formation',
-                '',
-                '• Review trades every weekend',
-                '• Track emotional states before trading',
-                '• Implement pre-trade checklist',
-                '• Focus on process over profits',
-                '',
-                'Days 61-90: Advanced Development',
-                '',
-                '• Analyze win/loss patterns',
-                '• Optimize entry/exit rules',
-                '• Develop personal trading edge',
-                '• Build confidence through consistency'
-            ];
-            
-            yPos = 50;
-            roadmap.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
-            });
-            
-            // Page 6: Personalized Action Strategies
+            // Page 8 - Daily Routines
             doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Recommended Daily Routines', 20, 30);
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Personalized Action Strategies', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
+            const dailyRoutines = getDailyRoutines(traderType);
+            const routineLines = doc.splitTextToSize(dailyRoutines, 170);
+            doc.text(routineLines, 20, 50);
             
-            const strategies = profile.type === "Disciplined Strategist" ? [
-                'Your Personalized Strategies:',
-                '',
-                '1. Leverage Your Strengths:',
-                '   • Continue systematic approach',
-                '   • Mentor other traders',
-                '   • Document your process',
-                '',
-                '2. Address Weaknesses:',
-                '   • Be open to calculated risks',
-                '   • Avoid over-analysis',
-                '   • Trust your system',
-                '',
-                '3. Daily Actions:',
-                '   • Morning market analysis',
-                '   • Set daily goals',
-                '   • Evening performance review'
-            ] : profile.type === "Evolving Trader" ? [
-                'Your Personalized Strategies:',
-                '',
-                '1. Build Consistency:',
-                '   • Create strict trading rules',
-                '   • Follow them for 30 days',
-                '   • Track compliance daily',
-                '',
-                '2. Emotional Management:',
-                '   • Pre-trade breathing exercise',
-                '   • Set alerts instead of watching',
-                '   • Take breaks after 3 trades',
-                '',
-                '3. Skill Development:',
-                '   • Focus on one strategy',
-                '   • Master before adding more',
-                '   • Review successful trades'
-            ] : [
-                'Your Personalized Strategies:',
-                '',
-                '1. Risk Control First:',
-                '   • Reduce position sizes by 50%',
-                '   • Use hard stop losses',
-                '   • Maximum 3 trades per day',
-                '',
-                '2. Build Discipline:',
-                '   • Write rules before trading',
-                '   • No trades without plan',
-                '   • Review every trade',
-                '',
-                '3. Emotional Reset:',
-                '   • Morning meditation',
-                '   • Physical exercise',
-                '   • Trading accountability partner'
-            ];
-            
-            yPos = 50;
-            strategies.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
-            });
-            
-            // Page 7: Professional Psychology Toolkit
+            // Page 9 - Progress Tracking
             doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Progress Tracking Guide', 20, 30);
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Professional Psychology Toolkit', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
+            const progressGuide = `To ensure continuous improvement, track these key metrics:
+
+1. Daily Emotional State (1-10 scale before trading)
+2. Number of Rules Followed vs Broken
+3. Revenge Trading Incidents
+4. Position Sizing Adherence
+5. Stop Loss Discipline
+6. Profit Taking According to Plan
+7. Journal Completion Rate
+
+Create a simple spreadsheet to track these daily. After 30 days, retake the assessment to measure your improvement. Most traders see a 15-25 point improvement in their first month of conscious practice.`;
             
-            const toolkit = [
-                'Essential Tools for Trading Psychology:',
-                '',
-                '1. Pre-Trade Checklist:',
-                '   □ Market conditions favorable?',
-                '   □ Setup meets all criteria?',
-                '   □ Risk/reward acceptable?',
-                '   □ Position size calculated?',
-                '   □ Stop loss determined?',
-                '',
-                '2. Emotional State Check:',
-                '   Rate yourself 1-10:',
-                '   • Confidence level: ___',
-                '   • Stress level: ___',
-                '   • Focus level: ___',
-                '   If any score <7, reduce size or skip',
-                '',
-                '3. Post-Trade Review:',
-                '   • What went right?',
-                '   • What could improve?',
-                '   • Emotional state during trade?',
-                '   • Lessons learned?'
-            ];
+            const progressLines = doc.splitTextToSize(progressGuide, 170);
+            doc.text(progressLines, 20, 50);
             
-            yPos = 50;
-            toolkit.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
-            });
-            
-            // Page 8: Advanced Psychology Techniques
+            // Page 10 - Resources and Next Steps
             doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
+            doc.setFontSize(20);
+            doc.setTextColor(...typeColor);
+            doc.text('Resources and Next Steps', 20, 30);
             
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Advanced Psychology Techniques', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
+            doc.setTextColor(0, 0, 0);
             doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
+            const resources = `Recommended Reading:
+- "Trading in the Zone" by Mark Douglas
+- "The Disciplined Trader" by Mark Douglas
+- "Thinking, Fast and Slow" by Daniel Kahneman
+- "The Psychology of Trading" by Brett Steenbarger
+
+Online Resources:
+- Join our waitlist for upcoming AI trading tools
+- Follow daily psychology tips on Twitter @schnicon
+- Visit schnitzleinconsulting.com for more resources
+
+Next Steps:
+1. Implement your 30-day action plan starting tomorrow
+2. Set up your progress tracking system today
+3. Schedule a weekly review of this report
+4. Consider joining a trading psychology community
+5. Retake the assessment in 30 days to measure progress
+
+Remember: Psychology improvement is a journey, not a destination. Small daily improvements compound into significant long-term results.
+
+For questions or support: info@schnitzleinconsulting.com`;
             
-            const techniques = [
-                'Professional Techniques:',
-                '',
-                '1. Visualization Exercise:',
-                '   • Close eyes before trading',
-                '   • Visualize perfect execution',
-                '   • See yourself following rules',
-                '   • Feel the calm confidence',
-                '',
-                '2. Anchor Technique:',
-                '   • Create physical anchor (fist)',
-                '   • Use when feeling confident',
-                '   • Trigger before trades',
-                '   • Builds state control',
-                '',
-                '3. Loss Recovery Protocol:',
-                '   • Stop after 2 consecutive losses',
-                '   • 15-minute break minimum',
-                '   • Physical movement',
-                '   • Review rules before returning',
-                '',
-                '4. Win Momentum Management:',
-                '   • Stick to normal size',
-                '   • Take partial profits',
-                '   • Avoid overconfidence'
-            ];
+            const resourceLines = doc.splitTextToSize(resources, 170);
+            doc.text(resourceLines, 20, 50);
             
-            yPos = 50;
-            techniques.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
-            });
-            
-            // Page 9: Personal Action Plan
-            doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
-            
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Your Personal Action Plan', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
-            
-            const actionPlan = [
-                'Immediate Actions (This Week):',
-                '',
-                '□ Print this report and review daily',
-                '□ Set up trading journal',
-                '□ Define your trading rules',
-                '□ Calculate proper position sizes',
-                '□ Create pre-trade checklist',
-                '',
-                'Month 1 Goals:',
-                '',
-                '□ Follow rules for 20 trading days',
-                '□ Complete trade journal daily',
-                '□ Maintain consistent position sizes',
-                '□ Review performance weekly',
-                '',
-                'Success Metrics:',
-                '',
-                '• Rule compliance: Target 90%+',
-                '• Emotional control: Track daily',
-                '• Profit/Loss: Secondary to process',
-                '• Consistency: Primary focus',
-                '',
-                'Remember: Psychology drives performance.',
-                'Master your mind, master the markets.'
-            ];
-            
-            yPos = 50;
-            actionPlan.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
-            });
-            
-            // Page 10: Resources and Contact
-            doc.addPage();
-            doc.setFillColor(10, 15, 28);
-            doc.rect(0, 0, 210, 297, 'F');
-            
-            doc.setTextColor(74, 222, 128);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Resources & Next Steps', 20, 30);
-            
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
-            
-            const resources = [
-                'Recommended Resources:',
-                '',
-                'Books:',
-                '• Trading in the Zone - Mark Douglas',
-                '• The Disciplined Trader - Mark Douglas',
-                '• Market Wizards - Jack Schwager',
-                '',
-                'Daily Practices:',
-                '• Morning meditation (10 min)',
-                '• Trading journal review',
-                '• Physical exercise',
-                '• Gratitude practice',
-                '',
-                'Your Premium Package Includes:',
-                '',
-                '• This comprehensive 10-page analysis',
-                '• Unlimited assessment retakes',
-                '• Priority access to new AI tools (2025)',
-                '• Free updates to this report',
-                '',
-                'Contact & Automated Services:',
-                'Website: www.schnitzleinconsulting.com',
-                '',
-                'Thank you for trusting our AI analysis.',
-                'Your journey to trading mastery begins now!'
-            ];
-            
-            yPos = 50;
-            resources.forEach(line => {
-                doc.text(line, 20, yPos);
-                yPos += 8;
-            });
+            // Footer on last page
+            doc.setFontSize(10);
+            doc.text('© 2025 Schnitzlein Consulting - All Rights Reserved', 105, 280, { align: 'center' });
             
             // Save the PDF
-            doc.save(`Trading_Psychology_Analysis_${assessmentData.score}.pdf`);
+            doc.save(`Trading_Psychology_Report_${score}_${traderType.replace(/\s+/g, '_')}.pdf`);
+            trackEvent('pdf_generated', { score, traderType });
         }
 
-        function joinWaitlist() {
-            const email = document.getElementById('waitlistEmailInput').value;
-            if (!email) {
-                alert('Please enter your email address');
+        // Helper functions for PDF generation
+        function getQuestionAnalysis(questionIndex, answer) {
+            const analyses = {
+                0: {
+                    10: "This response indicates a strong tendency toward revenge trading, one of the most destructive patterns in trading psychology.",
+                    30: "Taking a break shows some awareness, but you need to develop a more structured approach to loss management.",
+                    40: "Good discipline! Sticking to your plan after losses is a key trait of successful traders.",
+                    50: "Excellent! Your systematic approach to losses demonstrates professional-level emotional control."
+                },
+                1: {
+                    10: "FOMO (Fear of Missing Out) is controlling your decisions. This leads to poor entries and emotional trading.",
+                    30: "You recognize the FOMO but still let it affect you emotionally. Work on detachment from others' results.",
+                    40: "Good analytical approach! Learning from missed opportunities without emotional reaction is valuable.",
+                    50: "Perfect mindset! Focusing on your own plan regardless of others' profits shows maturity."
+                },
+                // Add more question-specific analyses...
+            };
+            
+            return analyses[questionIndex]?.[answer] || "Your response indicates room for improvement in this area.";
+        }
+
+        function getRiskGuidelines(traderType) {
+            const guidelines = {
+                "Risk Seeker": `As a Risk Seeker, your biggest challenge is controlling position sizes when emotions run high. Implement these strict rules:
+
+1. Never risk more than 1% of your account per trade (0.5% while learning discipline)
+2. Use a position size calculator before every trade - no exceptions
+3. Set daily loss limits at 2% of your account
+4. If you hit daily limit, close all positions and stop for the day
+5. Reduce position size by 50% after any losing day
+6. Only return to normal size after two consecutive winning days
+7. Keep a "revenge trade journal" - document every time you feel the urge
+8. Use wider stops but smaller positions to reduce emotional pressure`,
+                
+                "Emotional Challenger": `Your risk management should focus on consistency and gradual improvement:
+
+1. Start with 0.5-1% risk per trade maximum
+2. Create a pre-trade checklist that includes position sizing
+3. Use alerts to remind you of risk rules
+4. Practice with smaller position sizes until emotional control improves
+5. Implement a "cooling off" period after losses
+6. Track your actual risk vs planned risk for each trade
+7. Gradually increase position size only after 20 trades following rules
+8. Focus on win rate improvement before increasing risk`,
+                
+                "Evolving Trader": `You're ready for more sophisticated risk management:
+
+1. Implement variable position sizing based on setup quality (0.5-2%)
+2. Use portfolio heat concept - never risk more than 6% across all positions
+3. Consider correlation in your positions
+4. Add volatility-based position sizing
+5. Create risk tiers for different market conditions
+6. Implement trailing stop strategies
+7. Begin scaling in/out of positions
+8. Track risk-adjusted returns, not just profits`,
+                
+                "Disciplined Strategist": `Advanced risk management for optimal performance:
+
+1. Implement Kelly Criterion-based position sizing
+2. Use options for risk management in specific scenarios
+3. Develop multiple risk models for different market regimes
+4. Create systematic rebalancing rules
+5. Implement portfolio-level hedging strategies
+6. Use risk parity concepts across strategies
+7. Develop mean reversion and momentum risk models
+8. Consider tail risk hedging for black swan events`
+            };
+            
+            return guidelines[traderType] || "";
+        }
+
+        function getEmotionalTechniques(traderType) {
+            const techniques = {
+                "Risk Seeker": `Specific techniques to control your emotional intensity:
+
+1. Morning Meditation (10 minutes minimum):
+   - Focus on breathing exercises
+   - Visualize successful, calm trading
+   - Set emotional intention for the day
+
+2. The 5-5-5 Rule:
+   - Before any trade: 5 deep breaths
+   - After any loss: 5 minute break
+   - After any win: 5 minute celebration limit
+
+3. Physical Anchoring:
+   - Stand up after every closed trade
+   - Do 10 push-ups after losses
+   - Take a short walk after 3 consecutive trades
+
+4. Emotion Labeling:
+   - Say out loud: "I feel [emotion] because [reason]"
+   - Rate emotion intensity 1-10
+   - Only trade when below 5
+
+5. Emergency Protocol:
+   - Create "break glass" rules for extreme emotions
+   - Have a trusted friend you can call
+   - Pre-written reminder notes for tough moments`,
+                
+                "Emotional Challenger": `Building emotional awareness and control:
+
+1. Emotion Journal:
+   - Log emotions before, during, after each trade
+   - Identify patterns over time
+   - Rate emotional intensity 1-10
+
+2. Progressive Relaxation:
+   - Practice daily, not just when trading
+   - Start with 5 minutes, build to 15
+   - Use guided apps initially
+
+3. Cognitive Reframing:
+   - Challenge negative thoughts
+   - Write alternative interpretations
+   - Focus on process, not outcomes
+
+4. Accountability Partner:
+   - Daily check-ins about emotional state
+   - Share your trading plan
+   - Report rule breaks honestly
+
+5. Gradual Exposure:
+   - Start with smaller positions
+   - Increase only when emotions stable
+   - Track comfort levels at each size`,
+                
+                "Evolving Trader": `Refining your emotional edge:
+
+1. Advanced Mindfulness:
+   - Body scan techniques during trading
+   - Notice subtle emotional shifts
+   - Develop intuition vs emotion distinction
+
+2. Performance Psychology:
+   - Pre-trade routines like athletes
+   - Visualization of various scenarios
+   - Post-trade analysis without judgment
+
+3. Stress Inoculation:
+   - Deliberately practice in challenging conditions
+   - Simulate worst-case scenarios
+   - Build confidence through preparation
+
+4. Flow State Cultivation:
+   - Identify your flow triggers
+   - Create optimal environment
+   - Track when you enter flow
+
+5. Emotional Intelligence Development:
+   - Study others' emotional patterns
+   - Mentor newer traders
+   - Develop market empathy`,
+                
+                "Disciplined Strategist": `Optimizing your psychological edge:
+
+1. Meta-Awareness Training:
+   - Observe your thoughts observing the market
+   - Develop multiple perspective taking
+   - Question your own assumptions
+
+2. Neuroplasticity Optimization:
+   - Learn new analysis methods regularly
+   - Cross-train in different markets
+   - Challenge comfortable patterns
+
+3. Peak Performance Protocols:
+   - Optimize sleep, nutrition, exercise
+   - Track biomarkers and trading performance
+   - Experiment with performance enhancement
+
+4. Wisdom Development:
+   - Study market history and psychology
+   - Develop market philosophy
+   - Write about your insights
+
+5. Legacy Building:
+   - Document your methods
+   - Teach others your approach
+   - Create systems beyond yourself`
+            };
+            
+            return techniques[traderType] || "";
+        }
+
+        function getDailyRoutines(traderType) {
+            const routines = {
+                "Risk Seeker": `Your daily routine needs structure to contain emotional volatility:
+
+Pre-Market Routine (30 minutes):
+- 10 min: Meditation or breathing exercises
+- 5 min: Review yesterday's trades and emotions
+- 10 min: Market analysis (facts only, no predictions)
+- 5 min: Write trading plan with specific rules
+
+During Market Hours:
+- Check emotional state every 30 minutes
+- Stand up and stretch after each trade
+- Maximum 10 trades per day (reduce as needed)
+- Mandatory 15-min break after any loss
+- No trading in first/last 30 minutes
+
+Post-Market Routine (20 minutes):
+- 10 min: Journal all trades and emotions
+- 5 min: Calculate daily statistics
+- 5 min: Prepare for tomorrow
+- No checking markets after routine
+
+Evening Routine:
+- Physical exercise (crucial for Risk Seekers)
+- Avoid trading-related content after 8 PM
+- Practice gratitude for learning, not just profits`,
+                
+                "Emotional Challenger": `Building consistent habits for emotional stability:
+
+Morning Routine (25 minutes):
+- 5 min: Gratitude practice
+- 10 min: Review trading rules and goals
+- 5 min: Market overview (no position taking)
+- 5 min: Set emotional intention
+
+Trading Hours Structure:
+- Trade only during your best hours (track these)
+- Use a checklist before every trade
+- Limit to 5-7 trades daily initially
+- Take 5-min breaks every hour
+- Use timer for breaks (don't skip them)
+
+End of Day Review (15 minutes):
+- Grade each trade A-F for emotional control
+- Note one improvement for tomorrow
+- Celebrate following rules (not just profits)
+
+Weekly Routine:
+- Sunday: Plan the week ahead
+- Wednesday: Mid-week review
+- Friday: Weekly performance analysis
+- One day completely off from markets`,
+                
+                "Evolving Trader": `Optimizing performance through routine:
+
+Early Morning (45 minutes):
+- 15 min: Physical exercise or yoga
+- 10 min: Market meditation
+- 10 min: Review multiple timeframes
+- 10 min: Identify key levels and scenarios
+
+Professional Trading Hours:
+- Pre-session game plan for each market
+- Structured break schedule
+- Position size adjustment based on market conditions
+- Real-time performance tracking
+- Collaborative idea sharing (if applicable)
+
+Continuous Improvement Time (30 minutes):
+- Review one aspect of trading in detail
+- Study market psychology patterns
+- Analyze other traders' mistakes
+- Refine trading systems
+
+Weekly Development:
+- Monday: Strategy refinement
+- Wednesday: Risk management review
+- Friday: Psychology assessment
+- Weekend: Education and planning`,
+                
+                "Disciplined Strategist": `Elite performance optimization:
+
+Pre-Dawn Routine (60 minutes):
+- 20 min: Physical training
+- 15 min: Meditation or flow state practice
+- 15 min: Global market synthesis
+- 10 min: Scenario planning and preparation
+
+Trading Excellence Protocols:
+- Multiple strategy deployment
+- Real-time risk monitoring across portfolios
+- Systematic opportunity scanning
+- Mentor session or team collaboration
+- Innovation time for new strategies
+
+Afternoon Analysis (45 minutes):
+- Quantitative performance review
+- Market microstructure analysis
+- Correlation and regime assessment
+- Strategy optimization backtesting
+
+Evening Mastery Practice:
+- Study one new concept daily
+- Write or teach about insights
+- Network with other elite traders
+- Plan next day's campaigns
+- Complete disconnect time for recovery`
+            };
+            
+            return routines[traderType] || "";
+        }
+
+        function getActionPlan(traderType) {
+            const plans = {
+                "Risk Seeker": [
+                    ["Implement strict 1% position sizing rule", "Take mandatory 30-minute break after any loss", "Start basic trading journal with emotions"],
+                    ["Add stop-loss to EVERY trade before entry", "Practice 10-minute meditation before trading", "Review and document all rule breaks"],
+                    ["Reduce trading frequency by 50%", "Focus on highest probability setups only", "Begin paper trading new strategies"],
+                    ["Evaluate progress and adjust rules", "Consider finding accountability partner", "Plan for next month's improvements"]
+                ],
+                "Emotional Challenger": [
+                    ["Create detailed pre-market routine", "Document emotional state before each trade", "Set daily loss limits at 2%"],
+                    ["Implement mandatory cooling-off periods", "Practice visualization techniques", "Review weekly performance with mentor"],
+                    ["Add position sizing rules based on confidence", "Focus on process over profits", "Identify and avoid trigger patterns"],
+                    ["Refine your trading plan based on data", "Celebrate small wins and rule-following", "Set specific goals for next phase"]
+                ],
+                "Evolving Trader": [
+                    ["Optimize entry and exit rules with data", "Test advanced position sizing methods", "Study market psychology deeply"],
+                    ["Implement scaling strategies for winners", "Practice stress management techniques", "Analyze best and worst trades patterns"],
+                    ["Experiment with new markets carefully", "Develop contingency plans for scenarios", "Focus on consistency over profits"],
+                    ["Review and refine entire system", "Plan for increased volatility periods", "Set higher but realistic goals"]
+                ],
+                "Disciplined Strategist": [
+                    ["Explore additional complementary strategies", "Begin mentoring other traders", "Study institutional trading methods"],
+                    ["Test portfolio diversification approaches", "Implement advanced analytics", "Research algorithmic trading integration"],
+                    ["Optimize tax and legal structures", "Build professional trading network", "Consider proprietary trading opportunities"],
+                    ["Plan business scaling strategies", "Review yearly goals and adjust", "Explore passive income from trading"]
+                ]
+            };
+            
+            return plans[traderType] || plans["Emotional Challenger"];
+        }
+
+        function getAdditionalContent(pageNum, traderType) {
+            const content = {
+                5: "Risk Management Strategies: The foundation of successful trading lies in protecting your capital. This section covers advanced position sizing techniques, portfolio heat management, and correlation analysis to ensure you never risk more than you can afford to lose. Remember that risk management is not just about stop losses - it's about understanding your psychological tolerance for drawdowns and building a system that keeps you in the game long enough to succeed.",
+                6: "Emotional Control Techniques: Learn proven methods from sports psychology and neuroscience to maintain composure during volatile markets. This includes breathing exercises, visualization techniques, and cognitive reframing strategies. The key is not to eliminate emotions but to understand and channel them productively. Emotions provide valuable information about market conditions and your own state - learning to interpret them correctly is a crucial skill.",
+                7: "Building Your Trading Routine: Consistency comes from routine. This section provides detailed templates for pre-market preparation, in-market execution protocols, and post-market review processes tailored to your personality type. A good routine reduces decision fatigue and creates a framework for continuous improvement. The best traders treat their trading like professional athletes treat their sport.",
+                8: "Pattern Recognition Training: Develop your ability to spot both market patterns and personal behavioral patterns. This includes exercises to improve pattern recognition skills and tools to track your progress. Understanding your own patterns is just as important as understanding market patterns. Most traders lose money not because they can't see market opportunities, but because they can't see their own destructive behaviors.",
+                9: "Advanced Psychology Concepts: Explore concepts like loss aversion, confirmation bias, anchoring, and the disposition effect. Understanding these psychological phenomena will help you recognize and counteract them in your trading. These biases are hardwired into human psychology through evolution - acknowledging them is the first step to overcoming them. The market often rewards behavior that feels unnatural.",
+                10: "Long-term Success Blueprint: Your roadmap to sustained profitability covers goal setting, performance tracking, continuous education, and building a support network of like-minded traders. Success in trading is not about finding a perfect system but about continuous adaptation and improvement. The markets evolve, and so must you. Build systems that grow with you and can withstand the test of time."
+            };
+            
+            return content[pageNum] + ` Remember, as a ${traderType}, your unique strengths can be leveraged for consistent profitability when combined with proper risk management and emotional control. The journey to trading mastery is personal - what works for others may not work for you. Focus on developing your own edge based on your psychological profile.`;
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // ===== WAITLIST FUNCTIONALITY =====
+        document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('waitlistEmail').value;
+            
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address');
                 return;
             }
             
-            assessmentData.email = email;
-            assessmentData.waitlist = true;
-            saveAssessment();
+            const score = window.currentScore || 0;
+            const traderType = window.currentTraderType || '';
             
-            alert('✅ You\'re on the waitlist! We\'ll notify you when new AI tools launch.');
-            document.getElementById('waitlistEmailInput').value = '';
-        }
+            // Add to MailerLite
+            await addToMailerLite(email, score, traderType);
+            
+            saveWaitlist(email);
+            
+            document.getElementById('waitlistForm').innerHTML = 
+                '<p style="color: #00ff88; font-weight: 600;">✓ Successfully joined waitlist! Check your email for confirmation.</p>';
+        });
 
-        function saveAssessment() {
-            const assessments = getAssessments();
-            assessments.push(assessmentData);
-            // Note: localStorage won't work on GitHub Pages, this is for demo
-            try {
-                localStorage.setItem('tradingAssessments', JSON.stringify(assessments));
-            } catch(e) {
-                console.log('Storage not available');
-            }
-            updateAdminStats();
-        }
-
-        function getAssessments() {
-            try {
-                return JSON.parse(localStorage.getItem('tradingAssessments') || '[]');
-            } catch(e) {
-                return [];
-            }
-        }
-
-        function updateAdminStats() {
-            const assessments = getAssessments();
-            const purchases = assessments.filter(a => a.purchase).length;
-            const waitlist = assessments.filter(a => a.waitlist).length;
-            const revenue = purchases * 35; // Launch price!
-            const conversionRate = assessments.length > 0 ? 
-                ((purchases / assessments.length) * 100).toFixed(1) : 0;
-            
-            document.getElementById('totalAssessments').textContent = assessments.length;
-            document.getElementById('totalRevenue').textContent = `$${revenue}`;
-            document.getElementById('waitlistCount').textContent = waitlist;
-            document.getElementById('conversionRate').textContent = `${conversionRate}%`;
-            
-            // Update assessment list
-            const listHTML = assessments.slice(-10).reverse().map(a => `
-                <div class="assessment-item">
-                    ${new Date(a.timestamp).toLocaleString()} - 
-                    Score: ${a.score} - 
-                    ${a.purchase ? '💰 Purchased' : a.waitlist ? '📧 Waitlist' : '👤 Free'}
-                </div>
-            `).join('');
-            
-            document.getElementById('assessmentList').innerHTML = 
-                '<h3 style="margin-bottom: 10px;">Recent Assessments</h3>' + listHTML;
+        // ===== ADMIN PANEL FUNCTIONS =====
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('open');
         }
 
         function exportData() {
-            const assessments = getAssessments();
-            const csv = [
-                ['Timestamp', 'Score', 'Profile', 'Email', 'Waitlist', 'Purchase', 'Transaction ID'],
-                ...assessments.map(a => [
-                    a.timestamp,
-                    a.score,
-                    a.profile,
-                    a.email || '',
-                    a.waitlist ? 'Yes' : 'No',
-                    a.purchase ? 'Yes' : 'No',
-                    a.transactionId || ''
-                ])
-            ].map(row => row.join(',')).join('\n');
+            const data = getStoredData();
             
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `trading_assessments_${new Date().toISOString()}.csv`;
-            a.click();
+            // Create CSV content
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Type,Score,TraderType,Timestamp,CompletionTime,Referrer,Email,Amount\n";
+            
+            // Add assessments
+            data.assessments.forEach(assessment => {
+                csvContent += `Assessment,${assessment.score},"${assessment.traderType}","${assessment.timestamp}",${assessment.completionTime || ''},"${assessment.referrer || ''}","",""\n`;
+            });
+            
+            // Add purchases
+            if (data.purchaseDetails) {
+                data.purchaseDetails.forEach(purchase => {
+                    csvContent += `Purchase,${purchase.score || ''},"${purchase.traderType || ''}","${purchase.timestamp}","","","${purchase.email}",${purchase.amount}\n`;
+                });
+            }
+            
+            // Add waitlist
+            data.waitlist.forEach(email => {
+                csvContent += `Waitlist,"","","${new Date().toISOString()}","","","${email}",""\n`;
+            });
+            
+            // Download CSV
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `trading_assessments_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            trackEvent('data_exported');
+        }
+
+        function testPurchase() {
+            if (confirm('This will simulate a purchase for testing. Continue?')) {
+                handleSuccessfulPayment({ test: true, id: 'TEST_' + Date.now() });
+            }
         }
 
         function clearAllData() {
-            if (confirm('Are you sure you want to delete all data? This cannot be undone.')) {
-                localStorage.removeItem('tradingAssessments');
-                updateAdminStats();
-                alert('All data cleared');
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                const password = prompt('Enter admin password:');
+                if (password === CONFIG.adminPassword) {
+                    sessionStorage.removeItem('tradingPsychologyData');
+                    updateAdminPanel();
+                    alert('All data cleared successfully');
+                    trackEvent('data_cleared');
+                } else {
+                    alert('Incorrect password');
+                }
             }
         }
 
-        function toggleAdminPanel() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('active');
-            if (panel.classList.contains('active')) {
-                updateAdminStats();
-                // Show test button for admins
-                const testBtn = document.getElementById('testPurchaseBtn');
-                if (testBtn) testBtn.style.display = 'block';
-            }
+        function debugInfo() {
+            const data = getStoredData();
+            console.log('=== Debug Information ===');
+            console.log('Version:', CONFIG.version);
+            console.log('Data:', data);
+            console.log('Current Score:', window.currentScore);
+            console.log('Current Trader Type:', window.currentTraderType);
+            console.log('PayPal Loaded:', paypalLoaded);
+            console.log('User Agent:', navigator.userAgent);
+            console.log('Referrer:', document.referrer);
+            console.log('URL Parameters:', new URLSearchParams(window.location.search).toString());
+            
+            alert('Debug information logged to console (Press F12 to view)');
         }
 
-        // Check for admin parameter on page load
-        function checkAdminParam() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'true') {
-                setTimeout(() => {
-                    toggleAdminPanel();
-                }, 500);
-                // Remove parameter from URL
-                window.history.replaceState({}, '', window.location.pathname);
+        function showDetailedStats() {
+            const data = getStoredData();
+            
+            let stats = '=== Detailed Statistics ===\n\n';
+            stats += `Total Assessments: ${data.assessments.length}\n`;
+            stats += `Total Revenue: $${data.revenue}\n`;
+            stats += `Conversion Rate: ${data.assessments.length > 0 ? ((data.purchases / data.assessments.length) * 100).toFixed(1) : 0}%\n`;
+            stats += `Average Score: ${data.assessments.length > 0 ? Math.round(data.assessments.reduce((sum, a) => sum + a.score, 0) / data.assessments.length) : 0}\n\n`;
+            
+            stats += 'Score Distribution:\n';
+            const distribution = {
+                'Risk Seeker': 0,
+                'Emotional Challenger': 0,
+                'Evolving Trader': 0,
+                'Disciplined Strategist': 0
+            };
+            
+            data.assessments.forEach(assessment => {
+                distribution[assessment.traderType]++;
+            });
+            
+            Object.entries(distribution).forEach(([type, count]) => {
+                const percentage = data.assessments.length > 0 ? ((count / data.assessments.length) * 100).toFixed(1) : 0;
+                stats += `${type}: ${count} (${percentage}%)\n`;
+            });
+            
+            if (data.assessments.length > 0) {
+                stats += '\nAverage Completion Time: ' + 
+                    (data.assessments.reduce((sum, a) => sum + (a.completionTime || 0), 0) / 
+                    data.assessments.filter(a => a.completionTime).length).toFixed(1) + ' seconds\n';
             }
+            
+            stats += `\nWaitlist Signups: ${data.waitlist.length}\n`;
+            stats += `Unique Purchases: ${data.purchases}\n`;
+            
+            alert(stats);
         }
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey) {
                 switch(e.key) {
                     case 'A':
+                        e.preventDefault();
                         toggleAdminPanel();
                         break;
                     case 'R':
-                        location.reload();
+                        e.preventDefault();
+                        if (confirm('Restart assessment?')) {
+                            location.reload();
+                        }
                         break;
                     case 'C':
+                        e.preventDefault();
                         clearAllData();
+                        break;
+                    case 'E':
+                        e.preventDefault();
+                        exportData();
+                        break;
+                    case 'D':
+                        e.preventDefault();
+                        debugInfo();
+                        break;
+                    case 'S':
+                        e.preventDefault();
+                        showDetailedStats();
                         break;
                 }
             }
         });
 
-        // Initialize on page load
+        // ===== INITIALIZE ON LOAD =====
         window.addEventListener('load', function() {
-            console.log('🚀 Trading Psychology Assessment v5.0 - Launch Week Special!');
-            console.log('💳 PayPal Integration: $35 Launch Price Active');
+            console.log('🚀 Trading Psychology Assessment v' + CONFIG.version);
+            console.log('💳 PayPal Integration: Ready');
+            console.log('📧 MailerLite Integration: Ready');
             console.log('📊 Press Ctrl+Shift+A to open Admin Panel');
+            console.log('📋 Keyboard Shortcuts:');
+            console.log('   Ctrl+Shift+A: Admin Panel');
+            console.log('   Ctrl+Shift+R: Restart Assessment');
+            console.log('   Ctrl+Shift+E: Export Data');
+            console.log('   Ctrl+Shift+D: Debug Info');
+            console.log('   Ctrl+Shift+S: Detailed Stats');
+            
+            updateAdminPanel();
             
             // Check for admin parameter
-            checkAdminParam();
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true') {
+                toggleAdminPanel();
+                // Remove parameter from URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
             
-            // Check for payment return
-            checkPaymentReturn();
-            
-            // Check if PayPal SDK is available
+            // Check if PayPal SDK is already loaded
             if (typeof paypal !== 'undefined') {
-                console.log('✅ PayPal SDK loaded successfully on page load');
+                console.log('✅ PayPal SDK already loaded');
+                paypalLoaded = true;
             } else {
-                console.warn('⏳ PayPal SDK still loading...');
+                console.log('⚠️ PayPal SDK not loaded yet');
+            }
+            
+            // Track page view
+            trackEvent('page_view', {
+                referrer: document.referrer,
+                url: window.location.href
+            });
+        });
+
+        // ===== ERROR HANDLING =====
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e);
+            trackEvent('javascript_error', {
+                message: e.message,
+                source: e.filename,
+                line: e.lineno,
+                column: e.colno
+            });
+        });
+
+        // ===== PERFORMANCE MONITORING =====
+        window.addEventListener('beforeunload', function() {
+            if (startTime && currentQuestion > 0) {
+                const timeSpent = (Date.now() - startTime) / 1000;
+                trackEvent('assessment_abandoned', {
+                    question: currentQuestion,
+                    timeSpent: timeSpent
+                });
             }
         });
     </script>
