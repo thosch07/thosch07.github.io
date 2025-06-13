@@ -1594,7 +1594,7 @@
             
             // ========== PAGE 9 - PROGRESS TRACKING ==========
             doc.addPage();
-            drawSectionHeader('Progress Tracking Guide', 30, '📈');
+            drawSectionHeader('Progress Tracking Guide', 30);
             
             const progressGuide = `To ensure continuous improvement, track these key metrics:`;
             
@@ -1602,7 +1602,7 @@
             doc.setFontSize(12);
             doc.text(progressGuide, 20, 50);
             
-            // Metrics cards
+            // Metrics cards - FIXED LAYOUT
             const metrics = [
                 { title: 'Daily Emotional State', desc: '1-10 scale before trading' },
                 { title: 'Rules Adherence', desc: 'Number followed vs broken' },
@@ -1613,50 +1613,58 @@
                 { title: 'Journal Completion', desc: 'Daily entry rate' }
             ];
             
-            yPos = 65;
-            metrics.forEach((metric, index) => {
-                if (index % 2 === 0) {
-                    // Left column
+            yPos = 75; // Start lower to avoid overlapping with text
+            
+            // Process metrics in pairs
+            for (let i = 0; i < metrics.length; i += 2) {
+                // Left column
+                if (i < metrics.length) {
+                    const leftMetric = metrics[i];
                     doc.setFillColor(...typeColors.light);
                     drawRoundedRect(15, yPos, 85, 25, 5);
                     
                     doc.setTextColor(...typeColors.dark);
                     doc.setFontSize(11);
                     doc.setFont(undefined, 'bold');
-                    doc.text(metric.title, 20, yPos + 8);
+                    doc.text(leftMetric.title, 20, yPos + 8);
                     
                     doc.setFont(undefined, 'normal');
                     doc.setFontSize(9);
                     doc.setTextColor(102, 102, 102);
-                    doc.text(metric.desc, 20, yPos + 16);
-                } else {
-                    // Right column
+                    doc.text(leftMetric.desc, 20, yPos + 16);
+                }
+                
+                // Right column - SAME yPos!
+                if (i + 1 < metrics.length) {
+                    const rightMetric = metrics[i + 1];
                     doc.setFillColor(...typeColors.light);
-                    drawRoundedRect(110, yPos - 25, 85, 25, 5);
+                    drawRoundedRect(110, yPos, 85, 25, 5);
                     
                     doc.setTextColor(...typeColors.dark);
                     doc.setFontSize(11);
                     doc.setFont(undefined, 'bold');
-                    doc.text(metric.title, 115, yPos - 17);
+                    doc.text(rightMetric.title, 115, yPos + 8);
                     
                     doc.setFont(undefined, 'normal');
                     doc.setFontSize(9);
                     doc.setTextColor(102, 102, 102);
-                    doc.text(metric.desc, 115, yPos - 9);
-                    
-                    yPos += 30;
+                    doc.text(rightMetric.desc, 115, yPos + 16);
                 }
-            });
+                
+                // Move down for next row
+                yPos += 30;
+            }
             
-            // Progress note
-            drawInfoBox(15, 230, 180, 35,
+            // Progress note - adjusted position
+            const finalYPos = 75 + (Math.ceil(metrics.length / 2) * 30) + 10;
+            drawInfoBox(15, finalYPos, 180, 35,
                 'Create a simple spreadsheet to track these daily. After 30 days, retake the assessment to measure your improvement. Most traders see a 15-25 point improvement in their first month of conscious practice.',
                 [220, 252, 231]
             );
             
             // ========== PAGE 10 - RESOURCES WITH FINAL COMPLIANCE ==========
             doc.addPage();
-            drawSectionHeader('Resources and Next Steps', 30, '🎯');
+            drawSectionHeader('Resources and Next Steps', 30);
             
             // Book recommendations
             doc.setFillColor(...typeColors.light);
@@ -1962,7 +1970,7 @@ Post-Market Routine (20 minutes):
 - 10 min: Journal all trades and emotions
 - 5 min: Calculate daily statistics
 - 5 min: Prepare for tomorrow
-- No checking markets after routine
+- Close all trading platforms until next session
 
 Evening Routine:
 - Physical exercise (crucial for Risk Seekers)
