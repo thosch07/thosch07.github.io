@@ -80,6 +80,22 @@
             box-shadow: 0 15px 40px rgba(0, 255, 136, 0.4);
         }
 
+        .disclaimer-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9em;
+            color: #a0a0a0;
+            text-align: center;
+        }
+
+        .disclaimer-box a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
         .assessment-container {
             display: none;
             background: rgba(255, 255, 255, 0.95);
@@ -200,6 +216,20 @@
 
         .insights p {
             margin-bottom: 15px;
+        }
+
+        .compliance-notice {
+            background: #f0f8ff;
+            border: 1px solid #00d4ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.85em;
+            color: #333;
+        }
+
+        .compliance-notice strong {
+            color: #0066cc;
         }
 
         .launch-special {
@@ -430,6 +460,13 @@
             <p class="subtitle">Discover your trader personality type and unlock your potential</p>
             <button class="start-button" onclick="startAssessment()">Start Free Assessment</button>
             <p style="color: #a0a0a0; margin-top: 20px;">Takes only 2 minutes • No email required • 100% Free</p>
+            
+            <!-- Compliance Disclaimer -->
+            <div class="disclaimer-box">
+                <strong>Educational Purpose Only:</strong> This assessment provides psychological insights for educational purposes. 
+                Not financial advice. Trading involves risk. 
+                <a href="#" onclick="alert('This tool analyzes psychological patterns in trading behavior for educational purposes only. It does not provide financial advice, trading recommendations, or guarantee trading success. Always consult qualified financial advisors for investment decisions.')">Learn more</a>
+            </div>
         </div>
 
         <div class="assessment-container" id="assessmentContainer">
@@ -445,6 +482,13 @@
             <div class="score-display" id="scoreDisplay"></div>
             <div class="trader-type" id="traderType"></div>
             <div class="insights" id="insights"></div>
+            
+            <!-- Compliance Notice in Results -->
+            <div class="compliance-notice">
+                <strong>Important Notice:</strong> This psychological assessment is for educational and self-improvement purposes only. 
+                Results should not be interpreted as financial advice or trading recommendations. 
+                Past performance does not guarantee future results. Trading carries substantial risk of loss.
+            </div>
             
             <!-- Launch Week Special Banner -->
             <div class="launch-special">
@@ -559,7 +603,7 @@
             launchEndDate: '2025-06-16T00:00:00',
             paypalEmail: 'th.schnitzlein@gmail.com',
             adminPassword: 'trading123',
-            version: '4.0.1',
+            version: '4.1.0',
             analyticsEnabled: true
         };
 
@@ -1098,7 +1142,7 @@
             trackEvent('purchase_success', { transactionId });
         }
 
-        // ===== PDF GENERATION =====
+        // ===== ENHANCED PDF GENERATION WITH PREMIUM DESIGN =====
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -1109,57 +1153,170 @@
             
             // Custom colors based on trader type
             const colors = {
-                'Risk Seeker': [239, 68, 68],
-                'Emotional Challenger': [251, 191, 36],
-                'Evolving Trader': [0, 212, 255],
-                'Disciplined Strategist': [0, 255, 136]
+                'Risk Seeker': { main: [239, 68, 68], light: [254, 226, 226], dark: [127, 29, 29] },
+                'Emotional Challenger': { main: [251, 191, 36], light: [254, 243, 199], dark: [146, 64, 14] },
+                'Evolving Trader': { main: [0, 212, 255], light: [224, 242, 254], dark: [7, 89, 133] },
+                'Disciplined Strategist': { main: [0, 255, 136], light: [220, 252, 231], dark: [5, 150, 105] }
             };
             
-            const typeColor = colors[traderType] || [0, 0, 0];
+            const typeColors = colors[traderType] || colors['Evolving Trader'];
             
-            // Page 1 - Cover
-            doc.setFillColor(...typeColor);
-            doc.rect(0, 0, 210, 40, 'F');
+            // Helper function for gradient backgrounds
+            function drawGradientRect(x, y, w, h, color1, color2) {
+                const steps = 20;
+                const stepHeight = h / steps;
+                for (let i = 0; i < steps; i++) {
+                    const ratio = i / steps;
+                    const r = Math.round(color1[0] + (color2[0] - color1[0]) * ratio);
+                    const g = Math.round(color1[1] + (color2[1] - color1[1]) * ratio);
+                    const b = Math.round(color1[2] + (color2[2] - color1[2]) * ratio);
+                    doc.setFillColor(r, g, b);
+                    doc.rect(x, y + (i * stepHeight), w, stepHeight, 'F');
+                }
+            }
             
+            // Helper function for rounded rectangles
+            function drawRoundedRect(x, y, w, h, r, style = 'F') {
+                doc.roundedRect(x, y, w, h, r, r, style);
+            }
+            
+            // Helper function for section headers
+            function drawSectionHeader(title, y, icon = '') {
+                // Background gradient
+                drawGradientRect(0, y - 10, 210, 25, typeColors.light, [255, 255, 255]);
+                
+                // Left accent bar
+                doc.setFillColor(...typeColors.main);
+                doc.rect(0, y - 10, 3, 25, 'F');
+                
+                // Icon circle
+                if (icon) {
+                    doc.setFillColor(...typeColors.main);
+                    doc.circle(15, y + 2, 8, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(14);
+                    doc.text(icon, 15, y + 6, { align: 'center' });
+                }
+                
+                // Title
+                doc.setTextColor(...typeColors.dark);
+                doc.setFontSize(22);
+                doc.setFont(undefined, 'bold');
+                doc.text(title, icon ? 30 : 15, y + 5);
+                doc.setFont(undefined, 'normal');
+            }
+            
+            // Helper function for info boxes
+            function drawInfoBox(x, y, w, h, content, bgColor = typeColors.light) {
+                doc.setFillColor(...bgColor);
+                doc.setDrawColor(...typeColors.main);
+                doc.setLineWidth(0.5);
+                drawRoundedRect(x, y, w, h, 5, 'FD');
+                
+                doc.setTextColor(51, 51, 51);
+                doc.setFontSize(11);
+                const lines = doc.splitTextToSize(content, w - 10);
+                doc.text(lines, x + 5, y + 8);
+            }
+            
+            // ========== PAGE 1 - COVER ==========
+            // Full page gradient background
+            drawGradientRect(0, 0, 210, 297, typeColors.dark, typeColors.main);
+            
+            // White card in center
+            doc.setFillColor(255, 255, 255);
+            drawRoundedRect(20, 50, 170, 180, 10);
+            
+            // Logo area (gradient circle)
+            doc.setFillColor(...typeColors.main);
+            doc.circle(105, 90, 25, 'F');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(30);
-            doc.text('AI Trading Psychology', 105, 25, { align: 'center' });
+            doc.setFontSize(36);
+            doc.text('AI', 105, 98, { align: 'center' });
             
-            doc.setTextColor(0, 0, 0);
+            // Title
+            doc.setTextColor(51, 51, 51);
+            doc.setFontSize(28);
+            doc.setFont(undefined, 'bold');
+            doc.text('Trading Psychology', 105, 130, { align: 'center' });
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'normal');
+            doc.text('Personalized Analysis Report', 105, 145, { align: 'center' });
+            
+            // Score display with circular progress
+            doc.setDrawColor(...typeColors.main);
+            doc.setLineWidth(8);
+            doc.circle(105, 180, 20, 'S');
+            
+            doc.setTextColor(...typeColors.main);
             doc.setFontSize(24);
-            doc.text('Personalized Analysis Report', 105, 60, { align: 'center' });
-            
-            doc.setFontSize(20);
-            doc.text(`Your Score: ${score}/100`, 105, 100, { align: 'center' });
-            
-            doc.setTextColor(...typeColor);
-            doc.setFontSize(22);
-            doc.text(traderType, 105, 120, { align: 'center' });
-            
-            doc.setTextColor(0, 0, 0);
+            doc.setFont(undefined, 'bold');
+            doc.text(`${score}`, 105, 185, { align: 'center' });
             doc.setFontSize(12);
-            doc.text('Generated on: ' + new Date().toLocaleDateString(), 105, 140, { align: 'center' });
-            doc.text('Schnitzlein Consulting - Trading Psychology Experts', 105, 150, { align: 'center' });
+            doc.setFont(undefined, 'normal');
+            doc.text('/100', 105, 195, { align: 'center' });
             
-            // Page 2 - Executive Summary
-            doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Executive Summary', 20, 30);
-            
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
-            const summaryText = `Your trading psychology assessment reveals that you are a ${traderType} with a score of ${score}/100. This comprehensive analysis will help you understand your psychological strengths and weaknesses, providing actionable insights to improve your trading performance.
-
-This report is personalized based on your specific responses and designed to give you a clear roadmap for psychological improvement in your trading journey.`;
-            
-            const summaryLines = doc.splitTextToSize(summaryText, 170);
-            doc.text(summaryLines, 20, 50);
-            
-            // Score interpretation
+            // Trader type badge
+            doc.setFillColor(...typeColors.main);
+            drawRoundedRect(40, 205, 130, 15, 7);
+            doc.setTextColor(255, 255, 255);
             doc.setFontSize(14);
-            doc.text('Score Interpretation:', 20, 100);
+            doc.setFont(undefined, 'bold');
+            doc.text(traderType, 105, 215, { align: 'center' });
+            
+            // Footer
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text('Generated on: ' + new Date().toLocaleDateString(), 105, 250, { align: 'center' });
+            doc.text('© 2025 Schnitzlein Consulting', 105, 260, { align: 'center' });
+            
+            // ========== PAGE 2 - EXECUTIVE SUMMARY WITH COMPLIANCE ==========
+            doc.addPage();
+            
+            // Top gradient bar
+            drawGradientRect(0, 0, 210, 40, typeColors.main, typeColors.light);
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('Executive Summary', 105, 25, { align: 'center' });
+            
+            // Summary box
+            drawInfoBox(15, 50, 180, 80, 
+                `Your trading psychology assessment reveals that you are a ${traderType} with a score of ${score}/100. This comprehensive analysis will help you understand your psychological strengths and weaknesses, providing actionable insights to improve your trading performance.\n\nThis report is personalized based on your specific responses and designed to give you a clear roadmap for psychological improvement in your trading journey.`,
+                [248, 250, 252]
+            );
+            
+            // COMPLIANCE NOTICE
+            doc.setFillColor(255, 245, 245);
+            doc.setDrawColor(220, 53, 69);
+            doc.setLineWidth(1);
+            drawRoundedRect(15, 140, 180, 30, 5, 'FD');
+            
+            doc.setTextColor(139, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text('IMPORTANT LEGAL NOTICE', 105, 150, { align: 'center' });
+            
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(9);
+            const complianceText = 'This report is for educational purposes only. It does not constitute financial advice, investment recommendations, or trading guidance. Past performance does not guarantee future results. Trading involves substantial risk of loss.';
+            const complianceLines = doc.splitTextToSize(complianceText, 170);
+            doc.text(complianceLines, 20, 157);
+            
+            // Score interpretation section
+            doc.setFillColor(...typeColors.main);
+            doc.rect(15, 180, 5, 30, 'F');
+            
+            doc.setTextColor(...typeColors.dark);
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Score Interpretation', 25, 190);
+            
+            doc.setFont(undefined, 'normal');
             doc.setFontSize(12);
+            doc.setTextColor(51, 51, 51);
+            
             const interpretation = `Your score of ${score} places you in the ${
                 score >= 80 ? 'top 5%' : 
                 score >= 60 ? 'top 30%' : 
@@ -1173,195 +1330,407 @@ This report is personalized based on your specific responses and designed to giv
             }`;
             
             const interpretationLines = doc.splitTextToSize(interpretation, 170);
-            doc.text(interpretationLines, 20, 110);
+            doc.text(interpretationLines, 25, 205);
             
-            // Page 3 - Detailed Profile Analysis
+            // Visual score indicator
+            doc.setFillColor(...typeColors.light);
+            drawRoundedRect(15, 235, 180, 40, 5);
+            
+            // Score bar
+            const barWidth = (score / 100) * 160;
+            doc.setFillColor(...typeColors.main);
+            drawRoundedRect(25, 250, barWidth, 10, 5);
+            
+            doc.setDrawColor(200, 200, 200);
+            doc.setLineWidth(0.5);
+            drawRoundedRect(25, 250, 160, 10, 5, 'S');
+            
+            // Score markers
+            doc.setTextColor(150, 150, 150);
+            doc.setFontSize(9);
+            doc.text('0', 25, 270, { align: 'center' });
+            doc.text('40', 89, 270, { align: 'center' });
+            doc.text('60', 129, 270, { align: 'center' });
+            doc.text('80', 169, 270, { align: 'center' });
+            doc.text('100', 185, 270, { align: 'center' });
+            
+            // ========== PAGE 3 - DETAILED PROFILE ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Your Detailed Profile Analysis', 20, 30);
             
-            doc.setTextColor(0, 0, 0);
+            drawSectionHeader('Your Detailed Profile Analysis', 30, '👤');
+            
+            // Profile card
+            doc.setFillColor(...typeColors.light);
+            drawRoundedRect(15, 45, 180, 30, 5);
+            
+            doc.setTextColor(...typeColors.dark);
+            doc.setFontSize(18);
+            doc.setFont(undefined, 'bold');
+            doc.text('Personality Type:', 25, 58);
+            doc.setTextColor(...typeColors.main);
+            doc.text(traderType, 25, 68);
+            
+            // Characteristics box
+            doc.setFont(undefined, 'normal');
             doc.setFontSize(14);
-            doc.text('Personality Type: ' + traderType, 20, 50);
+            doc.setTextColor(...typeColors.dark);
+            doc.text('Profile Characteristics:', 20, 90);
             
-            doc.setFontSize(12);
-            doc.text('Profile Characteristics:', 20, 65);
-            const characteristicsLines = doc.splitTextToSize(insights.characteristics, 170);
-            doc.text(characteristicsLines, 20, 75);
+            drawInfoBox(15, 95, 180, 35, insights.characteristics);
             
+            // Strengths section
+            doc.setFillColor(...[220, 252, 231]);
+            doc.rect(15, 140, 5, 40, 'F');
+            doc.setTextColor(...[5, 150, 105]);
             doc.setFontSize(14);
-            doc.text('Your Strengths:', 20, 110);
-            doc.setFontSize(12);
-            const strengthLines = doc.splitTextToSize(insights.strengths, 170);
-            doc.text(strengthLines, 20, 120);
+            doc.setFont(undefined, 'bold');
+            doc.text('Your Strengths:', 25, 150);
             
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(51, 51, 51);
+            const strengthLines = doc.splitTextToSize(insights.strengths, 165);
+            doc.text(strengthLines, 25, 160);
+            
+            // Improvement areas section
+            doc.setFillColor(...[254, 226, 226]);
+            doc.rect(15, 190, 5, 50, 'F');
+            doc.setTextColor(...[127, 29, 29]);
             doc.setFontSize(14);
-            doc.text('Areas for Improvement:', 20, 160);
-            doc.setFontSize(12);
-            const weaknessLines = doc.splitTextToSize(insights.weaknesses, 170);
-            doc.text(weaknessLines, 20, 170);
+            doc.setFont(undefined, 'bold');
+            doc.text('Areas for Improvement:', 25, 200);
             
-            // Page 4 - Question-by-Question Analysis
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(51, 51, 51);
+            const weaknessLines = doc.splitTextToSize(insights.weaknesses, 165);
+            doc.text(weaknessLines, 25, 210);
+            
+            // ========== PAGE 4+ - QUESTION ANALYSIS ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Your Response Analysis', 20, 30);
+            drawSectionHeader('Your Response Analysis', 30, '📊');
             
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
             let yPos = 50;
             
             answers.forEach((answer, index) => {
-                if (yPos > 250) {
+                if (yPos > 240) {
                     doc.addPage();
-                    yPos = 30;
+                    drawSectionHeader('Response Analysis (cont.)', 30, '📊');
+                    yPos = 50;
                 }
                 
                 const question = questions[index];
-                doc.setFontSize(12);
-                doc.setFont(undefined, 'bold');
-                doc.text(`Q${index + 1}: ${question.question}`, 20, yPos);
-                
-                doc.setFont(undefined, 'normal');
                 const selectedOption = question.options.find(opt => opt.value === answer);
-                doc.text(`Your answer: ${selectedOption.text}`, 20, yPos + 10);
+                const isGoodAnswer = answer >= 40;
                 
+                // Question box
+                doc.setFillColor(248, 250, 252);
+                drawRoundedRect(15, yPos, 180, 12, 3);
+                
+                doc.setTextColor(51, 51, 51);
+                doc.setFontSize(11);
+                doc.setFont(undefined, 'bold');
+                doc.text(`Q${index + 1}: ${question.question}`, 20, yPos + 8);
+                
+                // Answer with color coding
+                doc.setFont(undefined, 'normal');
+                doc.setTextColor(isGoodAnswer ? 5 : 127, isGoodAnswer ? 150 : 29, isGoodAnswer ? 105 : 29);
+                doc.text(`Your answer: ${selectedOption.text}`, 20, yPos + 18);
+                
+                // Analysis
                 const analysis = getQuestionAnalysis(index, answer);
+                doc.setTextColor(102, 102, 102);
+                doc.setFontSize(10);
                 const analysisLines = doc.splitTextToSize(analysis, 170);
-                doc.text(analysisLines, 20, yPos + 20);
+                doc.text(analysisLines, 20, yPos + 26);
                 
-                yPos += 40 + (analysisLines.length * 5);
+                yPos += 40 + (analysisLines.length * 4);
             });
             
-            // Page 5 - 30-Day Action Plan
+            // ========== PAGE 5 - 30-DAY ACTION PLAN ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Your 30-Day Action Plan', 20, 30);
+            drawSectionHeader('Your 30-Day Action Plan', 30, '📅');
             
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
             const actionPlan = getActionPlan(traderType);
             yPos = 50;
             
             actionPlan.forEach((week, index) => {
-                if (yPos > 240) {
+                if (yPos > 230) {
                     doc.addPage();
-                    yPos = 30;
+                    drawSectionHeader('30-Day Action Plan (cont.)', 30, '📅');
+                    yPos = 50;
                 }
                 
-                doc.setFontSize(14);
-                doc.setFont(undefined, 'bold');
-                doc.text(`Week ${index + 1}:`, 20, yPos);
-                yPos += 10;
-                
-                doc.setFont(undefined, 'normal');
+                // Week header
+                doc.setFillColor(...typeColors.main);
+                drawRoundedRect(15, yPos, 180, 12, 3);
+                doc.setTextColor(255, 255, 255);
                 doc.setFontSize(12);
+                doc.setFont(undefined, 'bold');
+                doc.text(`Week ${index + 1}`, 20, yPos + 8);
+                
+                yPos += 18;
+                
+                // Tasks
+                doc.setFont(undefined, 'normal');
+                doc.setTextColor(51, 51, 51);
+                doc.setFontSize(11);
+                
                 week.forEach(task => {
-                    const taskLines = doc.splitTextToSize(`• ${task}`, 160);
-                    doc.text(taskLines, 30, yPos);
-                    yPos += taskLines.length * 5 + 5;
+                    // Checkbox
+                    doc.setDrawColor(...typeColors.main);
+                    doc.setLineWidth(1);
+                    doc.rect(20, yPos - 4, 4, 4, 'S');
+                    
+                    const taskLines = doc.splitTextToSize(task, 155);
+                    doc.text(taskLines, 28, yPos);
+                    yPos += taskLines.length * 5 + 3;
                 });
                 
                 yPos += 10;
             });
             
-            // Page 6 - Risk Management Guidelines
+            // ========== PAGE 6 - RISK MANAGEMENT ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Risk Management for Your Profile', 20, 30);
+            drawSectionHeader('Risk Management Guidelines', 30, '⚡');
             
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
             const riskGuidelines = getRiskGuidelines(traderType);
-            const riskLines = doc.splitTextToSize(riskGuidelines, 170);
-            doc.text(riskLines, 20, 50);
+            drawInfoBox(15, 45, 180, 220, riskGuidelines, [248, 250, 252]);
             
-            // Page 7 - Emotional Control Techniques
+            // ========== PAGE 7 - EMOTIONAL CONTROL ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Emotional Control Techniques', 20, 30);
+            drawSectionHeader('Emotional Control Techniques', 30, '🧠');
             
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
             const emotionalTechniques = getEmotionalTechniques(traderType);
             const emotionalLines = doc.splitTextToSize(emotionalTechniques, 170);
-            doc.text(emotionalLines, 20, 50);
             
-            // Page 8 - Daily Routines
+            // Split into sections with colored headers
+            yPos = 50;
+            let currentSection = 1;
+            
+            emotionalLines.forEach((line, index) => {
+                if (yPos > 260) {
+                    doc.addPage();
+                    drawSectionHeader('Emotional Techniques (cont.)', 30, '🧠');
+                    yPos = 50;
+                }
+                
+                // Check if it's a numbered section
+                if (line.match(/^\d\./)) {
+                    doc.setFillColor(...typeColors.light);
+                    drawRoundedRect(15, yPos - 5, 180, 12, 3);
+                    doc.setTextColor(...typeColors.dark);
+                    doc.setFont(undefined, 'bold');
+                    doc.setFontSize(12);
+                    currentSection++;
+                } else {
+                    doc.setTextColor(51, 51, 51);
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(11);
+                }
+                
+                doc.text(line, 20, yPos);
+                yPos += 6;
+            });
+            
+            // ========== PAGE 8 - DAILY ROUTINES ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Recommended Daily Routines', 20, 30);
+            drawSectionHeader('Recommended Daily Routines', 30, '📆');
             
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
             const dailyRoutines = getDailyRoutines(traderType);
             const routineLines = doc.splitTextToSize(dailyRoutines, 170);
-            doc.text(routineLines, 20, 50);
             
-            // Page 9 - Progress Tracking
+            yPos = 50;
+            routineLines.forEach((line, index) => {
+                if (yPos > 260) {
+                    doc.addPage();
+                    drawSectionHeader('Daily Routines (cont.)', 30, '📆');
+                    yPos = 50;
+                }
+                
+                // Style section headers
+                if (line.includes(':') && line.indexOf(':') < 30) {
+                    doc.setTextColor(...typeColors.dark);
+                    doc.setFont(undefined, 'bold');
+                    doc.setFontSize(12);
+                } else if (line.startsWith('-')) {
+                    doc.setTextColor(51, 51, 51);
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(11);
+                    // Add bullet point
+                    doc.setFillColor(...typeColors.main);
+                    doc.circle(20, yPos - 2, 1.5, 'F');
+                    doc.text(line.substring(1), 25, yPos);
+                    yPos += 6;
+                    return;
+                } else {
+                    doc.setTextColor(51, 51, 51);
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(11);
+                }
+                
+                doc.text(line, 20, yPos);
+                yPos += 6;
+            });
+            
+            // ========== PAGE 9 - PROGRESS TRACKING ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Progress Tracking Guide', 20, 30);
+            drawSectionHeader('Progress Tracking Guide', 30, '📈');
             
-            doc.setTextColor(0, 0, 0);
+            const progressGuide = `To ensure continuous improvement, track these key metrics:`;
+            
+            doc.setTextColor(51, 51, 51);
             doc.setFontSize(12);
-            const progressGuide = `To ensure continuous improvement, track these key metrics:
-
-1. Daily Emotional State (1-10 scale before trading)
-2. Number of Rules Followed vs Broken
-3. Revenge Trading Incidents
-4. Position Sizing Adherence
-5. Stop Loss Discipline
-6. Profit Taking According to Plan
-7. Journal Completion Rate
-
-Create a simple spreadsheet to track these daily. After 30 days, retake the assessment to measure your improvement. Most traders see a 15-25 point improvement in their first month of conscious practice.`;
+            doc.text(progressGuide, 20, 50);
             
-            const progressLines = doc.splitTextToSize(progressGuide, 170);
-            doc.text(progressLines, 20, 50);
+            // Metrics cards
+            const metrics = [
+                { title: 'Daily Emotional State', desc: '1-10 scale before trading' },
+                { title: 'Rules Adherence', desc: 'Number followed vs broken' },
+                { title: 'Revenge Trading', desc: 'Track incidents daily' },
+                { title: 'Position Sizing', desc: 'Adherence to plan' },
+                { title: 'Stop Loss Discipline', desc: 'Exits as planned' },
+                { title: 'Profit Taking', desc: 'According to strategy' },
+                { title: 'Journal Completion', desc: 'Daily entry rate' }
+            ];
             
-            // Page 10 - Resources and Next Steps
+            yPos = 65;
+            metrics.forEach((metric, index) => {
+                if (index % 2 === 0) {
+                    // Left column
+                    doc.setFillColor(...typeColors.light);
+                    drawRoundedRect(15, yPos, 85, 25, 5);
+                    
+                    doc.setTextColor(...typeColors.dark);
+                    doc.setFontSize(11);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(metric.title, 20, yPos + 8);
+                    
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(9);
+                    doc.setTextColor(102, 102, 102);
+                    doc.text(metric.desc, 20, yPos + 16);
+                } else {
+                    // Right column
+                    doc.setFillColor(...typeColors.light);
+                    drawRoundedRect(110, yPos - 25, 85, 25, 5);
+                    
+                    doc.setTextColor(...typeColors.dark);
+                    doc.setFontSize(11);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(metric.title, 115, yPos - 17);
+                    
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(9);
+                    doc.setTextColor(102, 102, 102);
+                    doc.text(metric.desc, 115, yPos - 9);
+                    
+                    yPos += 30;
+                }
+            });
+            
+            // Progress note
+            drawInfoBox(15, 230, 180, 35,
+                'Create a simple spreadsheet to track these daily. After 30 days, retake the assessment to measure your improvement. Most traders see a 15-25 point improvement in their first month of conscious practice.',
+                [220, 252, 231]
+            );
+            
+            // ========== PAGE 10 - RESOURCES WITH FINAL COMPLIANCE ==========
             doc.addPage();
-            doc.setFontSize(20);
-            doc.setTextColor(...typeColor);
-            doc.text('Resources and Next Steps', 20, 30);
+            drawSectionHeader('Resources and Next Steps', 30, '🎯');
             
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(12);
-            const resources = `Recommended Reading:
-- "Trading in the Zone" by Mark Douglas
-- "The Disciplined Trader" by Mark Douglas
-- "Thinking, Fast and Slow" by Daniel Kahneman
-- "The Psychology of Trading" by Brett Steenbarger
-
-Online Resources:
-- Join our waitlist for upcoming AI trading tools
-- Follow daily psychology tips on Twitter @schnicon
-- Visit schnitzleinconsulting.com for more resources
-
-Next Steps:
-1. Implement your 30-day action plan starting tomorrow
-2. Set up your progress tracking system today
-3. Schedule a weekly review of this report
-4. Consider joining a trading psychology community
-5. Retake the assessment in 30 days to measure progress
-
-Remember: Psychology improvement is a journey, not a destination. Small daily improvements compound into significant long-term results.
-
-For questions or support: info@schnitzleinconsulting.com`;
+            // Book recommendations
+            doc.setFillColor(...typeColors.light);
+            drawRoundedRect(15, 50, 180, 50, 5);
+            doc.setTextColor(...typeColors.dark);
+            doc.setFontSize(13);
+            doc.setFont(undefined, 'bold');
+            doc.text('📚 Recommended Reading:', 20, 60);
             
-            const resourceLines = doc.splitTextToSize(resources, 170);
-            doc.text(resourceLines, 20, 50);
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(51, 51, 51);
+            const books = [
+                '"Trading in the Zone" by Mark Douglas',
+                '"The Disciplined Trader" by Mark Douglas',
+                '"Thinking, Fast and Slow" by Daniel Kahneman',
+                '"The Psychology of Trading" by Brett Steenbarger'
+            ];
             
-            // Footer on last page
+            books.forEach((book, index) => {
+                doc.text(`• ${book}`, 25, 70 + (index * 6));
+            });
+            
+            // Online resources
+            doc.setFillColor(...[248, 250, 252]);
+            drawRoundedRect(15, 110, 180, 40, 5);
+            doc.setTextColor(...typeColors.dark);
+            doc.setFontSize(13);
+            doc.setFont(undefined, 'bold');
+            doc.text('🌐 Online Resources:', 20, 120);
+            
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(11);
+            doc.setTextColor(51, 51, 51);
+            doc.text('• Join our waitlist for AI trading tools', 25, 130);
+            doc.text('• Follow @schnicon on Twitter/X', 25, 136);
+            doc.text('• Visit schnitzleinconsulting.com', 25, 142);
+            
+            // Next steps with numbers
+            doc.setTextColor(...typeColors.dark);
+            doc.setFontSize(13);
+            doc.setFont(undefined, 'bold');
+            doc.text('Next Steps:', 20, 165);
+            
+            const nextSteps = [
+                'Implement your 30-day action plan starting tomorrow',
+                'Set up your progress tracking system today',
+                'Schedule weekly review of this report',
+                'Join a trading psychology community',
+                'Retake assessment in 30 days'
+            ];
+            
+            nextSteps.forEach((step, index) => {
+                // Number circle
+                doc.setFillColor(...typeColors.main);
+                doc.circle(25, 175 + (index * 12), 4, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(9);
+                doc.setFont(undefined, 'bold');
+                doc.text(`${index + 1}`, 25, 177 + (index * 12), { align: 'center' });
+                
+                // Step text
+                doc.setTextColor(51, 51, 51);
+                doc.setFontSize(11);
+                doc.setFont(undefined, 'normal');
+                doc.text(step, 35, 177 + (index * 12));
+            });
+            
+            // Final compliance box
+            doc.setFillColor(255, 245, 245);
+            doc.setDrawColor(220, 53, 69);
+            doc.setLineWidth(1);
+            drawRoundedRect(15, 240, 180, 25, 5, 'FD');
+            
+            doc.setTextColor(139, 0, 0);
+            doc.setFontSize(9);
+            doc.setFont(undefined, 'bold');
+            doc.text('DISCLAIMER:', 20, 248);
+            
+            doc.setFont(undefined, 'normal');
+            const disclaimerText = 'This psychological assessment is educational only. Not financial advice. Trading involves substantial risk. Consult qualified advisors for investment decisions.';
+            const disclaimerLines = doc.splitTextToSize(disclaimerText, 170);
+            doc.text(disclaimerLines, 20, 254);
+            
+            // Footer
+            doc.setTextColor(102, 102, 102);
             doc.setFontSize(10);
-            doc.text('© 2025 Schnitzlein Consulting - All Rights Reserved', 105, 280, { align: 'center' });
+            doc.text('For support: info@schnitzleinconsulting.com', 105, 275, { align: 'center' });
+            doc.setFont(undefined, 'bold');
+            doc.text('© 2025 Schnitzlein Consulting - All Rights Reserved', 105, 282, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont(undefined, 'normal');
+            doc.text('Educational Purpose Only - Not Financial Advice', 105, 288, { align: 'center' });
             
             // Save the PDF
             doc.save(`Trading_Psychology_Report_${score}_${traderType.replace(/\s+/g, '_')}.pdf`);
