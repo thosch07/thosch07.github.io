@@ -758,23 +758,47 @@
         let startTime = null;
 
         // ===== DATA MANAGEMENT =====
-        function getStoredData() {
-            const stored = sessionStorage.getItem('tradingPsychologyData');
-            if (stored) {
-                return JSON.parse(stored);
+        // In-memory fallback storage
+        let memoryStorage = {
+            assessments: [],
+            revenue: 0,
+            waitlist: [],
+            purchases: 0,
+            version: CONFIG.version
+        };
+        
+        // Check if storage is available
+        function isStorageAvailable() {
+            try {
+                const test = '__storage_test__';
+                sessionStorage.setItem(test, test);
+                sessionStorage.removeItem(test);
+                return true;
+            } catch (e) {
+                console.log('⚠️ Storage not available, using in-memory storage');
+                return false;
             }
-            return {
-                assessments: [],
-                revenue: 0,
-                waitlist: [],
-                purchases: 0,
-                version: CONFIG.version
-            };
+        }
+        
+        const storageAvailable = isStorageAvailable();
+        
+        function getStoredData() {
+            if (storageAvailable) {
+                const stored = sessionStorage.getItem('tradingPsychologyData');
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+            }
+            return memoryStorage;
         }
 
         function saveData(data) {
             data.lastUpdated = new Date().toISOString();
-            sessionStorage.setItem('tradingPsychologyData', JSON.stringify(data));
+            if (storageAvailable) {
+                sessionStorage.setItem('tradingPsychologyData', JSON.stringify(data));
+            } else {
+                memoryStorage = data;
+            }
         }
 
         function saveAssessment(score, traderType) {
@@ -1640,7 +1664,7 @@
             doc.setTextColor(...typeColors.dark);
             doc.setFontSize(13);
             doc.setFont(undefined, 'bold');
-            doc.text('📚 Recommended Reading:', 20, 60);
+            doc.text('Recommended Reading:', 20, 60);
             
             doc.setFont(undefined, 'normal');
             doc.setFontSize(11);
@@ -1662,7 +1686,7 @@
             doc.setTextColor(...typeColors.dark);
             doc.setFontSize(13);
             doc.setFont(undefined, 'bold');
-            doc.text('🌐 Online Resources:', 20, 120);
+            doc.text('Online Resources:', 20, 120);
             
             doc.setFont(undefined, 'normal');
             doc.setFontSize(11);
@@ -2154,7 +2178,17 @@ Evening Mastery Practice:
             if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
                 const password = prompt('Enter admin password:');
                 if (password === CONFIG.adminPassword) {
-                    sessionStorage.removeItem('tradingPsychologyData');
+                    if (storageAvailable) {
+                        sessionStorage.removeItem('tradingPsychologyData');
+                    } else {
+                        memoryStorage = {
+                            assessments: [],
+                            revenue: 0,
+                            waitlist: [],
+                            purchases: 0,
+                            version: CONFIG.version
+                        };
+                    }
                     updateAdminPanel();
                     alert('All data cleared successfully');
                     trackEvent('data_cleared');
@@ -2168,15 +2202,17 @@ Evening Mastery Practice:
             const data = getStoredData();
             console.log('=== Debug Information ===');
             console.log('Version:', CONFIG.version);
+            console.log('Storage Available:', storageAvailable);
+            console.log('Storage Mode:', storageAvailable ? 'SessionStorage' : 'In-Memory');
             console.log('Data:', data);
             console.log('Current Score:', window.currentScore);
             console.log('Current Trader Type:', window.currentTraderType);
             console.log('PayPal Loaded:', paypalLoaded);
             console.log('User Agent:', navigator.userAgent);
-            console.log('Referrer:', document.referrer);
+            console.log('Referrer:', document.referrer || 'none');
             console.log('URL Parameters:', new URLSearchParams(window.location.search).toString());
             
-            alert('Debug information logged to console (Press F12 to view)');
+            alert('Debug information logged to console (Press F12 to view)\nStorage Mode: ' + (storageAvailable ? 'SessionStorage' : 'In-Memory'));
         }
 
         function showDetailedStats() {
@@ -2256,6 +2292,7 @@ Evening Mastery Practice:
             console.log('🚀 Trading Psychology Assessment v' + CONFIG.version);
             console.log('💳 PayPal Integration: Ready');
             console.log('📧 MailerLite Integration: Ready');
+            console.log('💾 Storage Mode: ' + (storageAvailable ? 'SessionStorage' : 'In-Memory'));
             console.log('📊 Press Ctrl+Shift+A to open Admin Panel');
             console.log('📋 Keyboard Shortcuts:');
             console.log('   Ctrl+Shift+A: Admin Panel');
@@ -2271,7 +2308,11 @@ Evening Mastery Practice:
             if (urlParams.get('admin') === 'true') {
                 toggleAdminPanel();
                 // Remove parameter from URL
-                window.history.replaceState({}, document.title, window.location.pathname);
+                try {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } catch (e) {
+                    console.log('Cannot modify URL history in sandboxed environment');
+                }
             }
             
             // Check if PayPal SDK is already loaded
@@ -2283,31 +2324,43 @@ Evening Mastery Practice:
             }
             
             // Track page view
-            trackEvent('page_view', {
-                referrer: document.referrer,
-                url: window.location.href
-            });
+            try {
+                trackEvent('page_view', {
+                    referrer: document.referrer || 'none',
+                    url: window.location.href || 'unknown'
+                });
+            } catch (e) {
+                console.log('Tracking error:', e);
+            }
         });
 
         // ===== ERROR HANDLING =====
         window.addEventListener('error', function(e) {
             console.error('Global error:', e);
-            trackEvent('javascript_error', {
-                message: e.message,
-                source: e.filename,
-                line: e.lineno,
-                column: e.colno
-            });
+            try {
+                trackEvent('javascript_error', {
+                    message: e.message || 'Unknown error',
+                    source: e.filename || 'Unknown',
+                    line: e.lineno || 0,
+                    column: e.colno || 0
+                });
+            } catch (trackError) {
+                console.error('Error tracking failed:', trackError);
+            }
         });
 
         // ===== PERFORMANCE MONITORING =====
         window.addEventListener('beforeunload', function() {
-            if (startTime && currentQuestion > 0) {
-                const timeSpent = (Date.now() - startTime) / 1000;
-                trackEvent('assessment_abandoned', {
-                    question: currentQuestion,
-                    timeSpent: timeSpent
-                });
+            try {
+                if (startTime && currentQuestion > 0) {
+                    const timeSpent = (Date.now() - startTime) / 1000;
+                    trackEvent('assessment_abandoned', {
+                        question: currentQuestion,
+                        timeSpent: timeSpent
+                    });
+                }
+            } catch (e) {
+                console.log('Performance tracking error:', e);
             }
         });
     </script>
