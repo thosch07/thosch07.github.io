@@ -1181,7 +1181,7 @@
             }
             
             // Helper function for section headers
-            function drawSectionHeader(title, y, icon = '') {
+            function drawSectionHeader(title, y) {
                 // Background gradient
                 drawGradientRect(0, y - 10, 210, 25, typeColors.light, [255, 255, 255]);
                 
@@ -1189,20 +1189,15 @@
                 doc.setFillColor(...typeColors.main);
                 doc.rect(0, y - 10, 3, 25, 'F');
                 
-                // Icon circle
-                if (icon) {
-                    doc.setFillColor(...typeColors.main);
-                    doc.circle(15, y + 2, 8, 'F');
-                    doc.setTextColor(255, 255, 255);
-                    doc.setFontSize(14);
-                    doc.text(icon, 15, y + 6, { align: 'center' });
-                }
+                // Circle without icon
+                doc.setFillColor(...typeColors.main);
+                doc.circle(15, y + 2, 8, 'F');
                 
                 // Title
                 doc.setTextColor(...typeColors.dark);
                 doc.setFontSize(22);
                 doc.setFont(undefined, 'bold');
-                doc.text(title, icon ? 30 : 15, y + 5);
+                doc.text(title, 30, y + 5);
                 doc.setFont(undefined, 'normal');
             }
             
@@ -1357,7 +1352,7 @@
             // ========== PAGE 3 - DETAILED PROFILE ==========
             doc.addPage();
             
-            drawSectionHeader('Your Detailed Profile Analysis', 30, '👤');
+            drawSectionHeader('Your Detailed Profile Analysis', 30);
             
             // Profile card
             doc.setFillColor(...typeColors.light);
@@ -1408,14 +1403,14 @@
             
             // ========== PAGE 4+ - QUESTION ANALYSIS ==========
             doc.addPage();
-            drawSectionHeader('Your Response Analysis', 30, '📊');
+            drawSectionHeader('Your Response Analysis', 30);
             
             let yPos = 50;
             
             answers.forEach((answer, index) => {
                 if (yPos > 240) {
                     doc.addPage();
-                    drawSectionHeader('Response Analysis (cont.)', 30, '📊');
+                    drawSectionHeader('Response Analysis (cont.)', 30);
                     yPos = 50;
                 }
                 
@@ -1449,7 +1444,7 @@
             
             // ========== PAGE 5 - 30-DAY ACTION PLAN ==========
             doc.addPage();
-            drawSectionHeader('Your 30-Day Action Plan', 30, '📅');
+            drawSectionHeader('Your 30-Day Action Plan', 30);
             
             const actionPlan = getActionPlan(traderType);
             yPos = 50;
@@ -1457,7 +1452,7 @@
             actionPlan.forEach((week, index) => {
                 if (yPos > 230) {
                     doc.addPage();
-                    drawSectionHeader('30-Day Action Plan (cont.)', 30, '📅');
+                    drawSectionHeader('30-Day Action Plan (cont.)', 30);
                     yPos = 50;
                 }
                 
@@ -1492,14 +1487,14 @@
             
             // ========== PAGE 6 - RISK MANAGEMENT ==========
             doc.addPage();
-            drawSectionHeader('Risk Management Guidelines', 30, '⚡');
+            drawSectionHeader('Risk Management Guidelines', 30);
             
             const riskGuidelines = getRiskGuidelines(traderType);
             drawInfoBox(15, 45, 180, 220, riskGuidelines, [248, 250, 252]);
             
             // ========== PAGE 7 - EMOTIONAL CONTROL ==========
             doc.addPage();
-            drawSectionHeader('Emotional Control Techniques', 30, '🧠');
+            drawSectionHeader('Emotional Control Techniques', 30);
             
             const emotionalTechniques = getEmotionalTechniques(traderType);
             const emotionalLines = doc.splitTextToSize(emotionalTechniques, 170);
@@ -1511,7 +1506,7 @@
             emotionalLines.forEach((line, index) => {
                 if (yPos > 260) {
                     doc.addPage();
-                    drawSectionHeader('Emotional Techniques (cont.)', 30, '🧠');
+                    drawSectionHeader('Emotional Techniques (cont.)', 30);
                     yPos = 50;
                 }
                 
@@ -1535,7 +1530,7 @@
             
             // ========== PAGE 8 - DAILY ROUTINES ==========
             doc.addPage();
-            drawSectionHeader('Recommended Daily Routines', 30, '📆');
+            drawSectionHeader('Recommended Daily Routines', 30);
             
             const dailyRoutines = getDailyRoutines(traderType);
             const routineLines = doc.splitTextToSize(dailyRoutines, 170);
@@ -1544,7 +1539,7 @@
             routineLines.forEach((line, index) => {
                 if (yPos > 260) {
                     doc.addPage();
-                    drawSectionHeader('Daily Routines (cont.)', 30, '📆');
+                    drawSectionHeader('Daily Routines (cont.)', 30);
                     yPos = 50;
                 }
                 
