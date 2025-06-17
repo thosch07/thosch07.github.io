@@ -600,7 +600,7 @@
         const CONFIG = {
             launchPrice: 35,
             regularPrice: 47,
-            launchEndDate: '2025-06-16T00:00:00',
+            launchEndDate: '2025-06-20T00:00:00',
             paypalEmail: 'th.schnitzlein@gmail.com',
             adminPassword: 'trading123',
             version: '4.1.0',
@@ -1046,7 +1046,10 @@
                         `OFFER ENDS IN: ${days}d ${hours}h ${minutes}m ${seconds}s`;
                 } else {
                     document.getElementById('countdown').textContent = 'OFFER EXPIRED';
-                    document.querySelector('.new-price').textContent = `NOW: $${CONFIG.regularPrice}`;
+                    document.querySelector('.launch-special h3').textContent = '⏰ LAUNCH SPECIAL ENDED';
+                    document.querySelector('.launch-special p').textContent = 'Get your complete 10-page analysis for $47';
+                    document.querySelector('.new-price').textContent = 'NOW: $47';
+                    document.querySelector('.old-price').style.display = 'none';
                     CONFIG.launchPrice = CONFIG.regularPrice;
                 }
             }
