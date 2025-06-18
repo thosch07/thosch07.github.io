@@ -577,6 +577,10 @@
                 <div class="stat-value" id="avgScore">0</div>
             </div>
             <div class="stat-item">
+                <div class="stat-label">Storage Mode</div>
+                <div class="stat-value" id="storageMode">checking...</div>
+            </div>
+            <div class="stat-item">
                 <div class="stat-label">Score Distribution</div>
                 <div id="scoreDistribution" style="font-size: 0.9em; margin-top: 10px;"></div>
             </div>
@@ -757,8 +761,8 @@
         let assessmentData = {};
         let startTime = null;
 
-        // ===== DATA MANAGEMENT =====
-        // In-memory fallback storage
+        // ===== DATA MANAGEMENT WITH PERSISTENT STORAGE =====
+        // Enhanced storage with localStorage support
         let memoryStorage = {
             assessments: [],
             revenue: 0,
@@ -766,90 +770,296 @@
             purchases: 0,
             version: CONFIG.version
         };
-        
-        // Check if storage is available
-        function isStorageAvailable() {
+
+        // Check which storage types are available
+        function getAvailableStorage() {
+            const storageTypes = {
+                local: false,
+                session: false,
+                memory: true
+            };
+            
+            // Test localStorage
+            try {
+                const test = '__storage_test__';
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+                storageTypes.local = true;
+                console.log('✅ localStorage available');
+            } catch (e) {
+                console.log('❌ localStorage not available');
+            }
+            
+            // Test sessionStorage
             try {
                 const test = '__storage_test__';
                 sessionStorage.setItem(test, test);
                 sessionStorage.removeItem(test);
-                return true;
+                storageTypes.session = true;
+                console.log('✅ sessionStorage available');
             } catch (e) {
-                console.log('⚠️ Storage not available, using in-memory storage');
-                return false;
+                console.log('❌ sessionStorage not available');
             }
+            
+            return storageTypes;
         }
-        
-        const storageAvailable = isStorageAvailable();
-        
+
+        const availableStorage = getAvailableStorage();
+
+        // Get best available storage method
+        function getBestStorage() {
+            if (availableStorage.local) return 'local';
+            if (availableStorage.session) return 'session';
+            return 'memory';
+        }
+
+        const storageMode = getBestStorage();
+
+        // Unified storage functions
         function getStoredData() {
-            if (storageAvailable) {
-                const stored = sessionStorage.getItem('tradingPsychologyData');
-                if (stored) {
-                    return JSON.parse(stored);
+            let data = null;
+            
+            // Try localStorage first (persistent)
+            if (availableStorage.local) {
+                try {
+                    const stored = localStorage.getItem('tradingPsychologyData');
+                    if (stored) {
+                        data = JSON.parse(stored);
+                        console.log('📦 Data loaded from localStorage');
+                    }
+                } catch (e) {
+                    console.error('Error reading from localStorage:', e);
                 }
             }
-            return memoryStorage;
+            
+            // Fallback to sessionStorage
+            if (!data && availableStorage.session) {
+                try {
+                    const stored = sessionStorage.getItem('tradingPsychologyData');
+                    if (stored) {
+                        data = JSON.parse(stored);
+                        console.log('📦 Data loaded from sessionStorage');
+                    }
+                } catch (e) {
+                    console.error('Error reading from sessionStorage:', e);
+                }
+            }
+            
+            // Fallback to memory
+            if (!data) {
+                data = memoryStorage;
+                console.log('📦 Using in-memory storage');
+            }
+            
+            // Ensure data structure is complete
+            data = {
+                assessments: data.assessments || [],
+                revenue: data.revenue || 0,
+                waitlist: data.waitlist || [],
+                purchases: data.purchases || 0,
+                purchaseDetails: data.purchaseDetails || [],
+                version: data.version || CONFIG.version,
+                lastUpdated: data.lastUpdated || new Date().toISOString()
+            };
+            
+            return data;
         }
 
         function saveData(data) {
             data.lastUpdated = new Date().toISOString();
-            if (storageAvailable) {
-                sessionStorage.setItem('tradingPsychologyData', JSON.stringify(data));
-            } else {
-                memoryStorage = data;
+            data.version = CONFIG.version;
+            
+            let saved = false;
+            
+            // Try localStorage first (persistent)
+            if (availableStorage.local) {
+                try {
+                    localStorage.setItem('tradingPsychologyData', JSON.stringify(data));
+                    console.log('💾 Data saved to localStorage');
+                    saved = true;
+                } catch (e) {
+                    console.error('Error saving to localStorage:', e);
+                    // If quota exceeded, try to clean up old data
+                    if (e.name === 'QuotaExceededError') {
+                        cleanupOldData(data);
+                    }
+                }
+            }
+            
+            // Also save to sessionStorage as backup
+            if (availableStorage.session) {
+                try {
+                    sessionStorage.setItem('tradingPsychologyData', JSON.stringify(data));
+                    if (!saved) {
+                        console.log('💾 Data saved to sessionStorage');
+                        saved = true;
+                    }
+                } catch (e) {
+                    console.error('Error saving to sessionStorage:', e);
+                }
+            }
+            
+            // Always update memory storage
+            memoryStorage = data;
+            
+            if (!saved) {
+                console.warn('⚠️ Data only saved to memory!');
+            }
+            
+            // Backup to console for emergency recovery
+            console.log('🔒 Backup data:', JSON.stringify(data));
+        }
+
+        // Cleanup function for storage quota issues
+        function cleanupOldData(data) {
+            console.log('🧹 Cleaning up old data...');
+            
+            // Keep only last 1000 assessments
+            if (data.assessments.length > 1000) {
+                data.assessments = data.assessments.slice(-1000);
+            }
+            
+            // Keep only last 500 purchase details
+            if (data.purchaseDetails && data.purchaseDetails.length > 500) {
+                data.purchaseDetails = data.purchaseDetails.slice(-500);
+            }
+            
+            // Remove duplicate emails from waitlist
+            data.waitlist = [...new Set(data.waitlist)];
+            
+            console.log('✅ Cleanup complete');
+        }
+
+        // Migration function for old data
+        function migrateOldData() {
+            // Check if there's data in sessionStorage that needs to be migrated
+            if (availableStorage.session && availableStorage.local) {
+                try {
+                    const sessionData = sessionStorage.getItem('tradingPsychologyData');
+                    const localData = localStorage.getItem('tradingPsychologyData');
+                    
+                    if (sessionData && !localData) {
+                        // Migrate from session to local
+                        localStorage.setItem('tradingPsychologyData', sessionData);
+                        console.log('✅ Data migrated from sessionStorage to localStorage');
+                    }
+                } catch (e) {
+                    console.error('Migration error:', e);
+                }
             }
         }
 
+        // Enhanced save functions with better error handling
         function saveAssessment(score, traderType) {
-            const data = getStoredData();
-            const completionTime = startTime ? (Date.now() - startTime) / 1000 : 0;
-            
-            data.assessments.push({
-                score: score,
-                traderType: traderType,
-                timestamp: new Date().toISOString(),
-                answers: answers,
-                completionTime: completionTime,
-                userAgent: navigator.userAgent,
-                referrer: document.referrer || 'direct'
-            });
-            
-            saveData(data);
-            updateAdminPanel();
-            trackEvent('assessment_completed', { score, traderType, completionTime });
+            try {
+                const data = getStoredData();
+                const completionTime = startTime ? (Date.now() - startTime) / 1000 : 0;
+                
+                const assessment = {
+                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    score: score,
+                    traderType: traderType,
+                    timestamp: new Date().toISOString(),
+                    answers: answers,
+                    completionTime: completionTime,
+                    userAgent: navigator.userAgent,
+                    referrer: document.referrer || 'direct',
+                    source: getTrafficSource()
+                };
+                
+                data.assessments.push(assessment);
+                
+                saveData(data);
+                updateAdminPanel();
+                trackEvent('assessment_completed', { score, traderType, completionTime });
+                
+                console.log('✅ Assessment saved:', assessment.id);
+            } catch (e) {
+                console.error('❌ Error saving assessment:', e);
+                alert('Warning: Assessment data may not have been saved properly.');
+            }
         }
 
         function savePurchase(email, transactionId = null) {
-            const data = getStoredData();
-            data.revenue += CONFIG.launchPrice;
-            data.purchases += 1;
-            
-            if (!data.purchaseDetails) data.purchaseDetails = [];
-            data.purchaseDetails.push({
-                email: email,
-                amount: CONFIG.launchPrice,
-                timestamp: new Date().toISOString(),
-                transactionId: transactionId,
-                score: window.currentScore,
-                traderType: window.currentTraderType
-            });
-            
-            saveData(data);
-            updateAdminPanel();
-            trackEvent('purchase_completed', { amount: CONFIG.launchPrice, score: window.currentScore });
-        }
-
-        function saveWaitlist(email) {
-            const data = getStoredData();
-            if (!data.waitlist.includes(email)) {
-                data.waitlist.push(email);
+            try {
+                const data = getStoredData();
+                data.revenue += CONFIG.launchPrice;
+                data.purchases += 1;
+                
+                const purchase = {
+                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    email: email,
+                    amount: CONFIG.launchPrice,
+                    timestamp: new Date().toISOString(),
+                    transactionId: transactionId,
+                    score: window.currentScore,
+                    traderType: window.currentTraderType,
+                    source: getTrafficSource()
+                };
+                
+                if (!data.purchaseDetails) data.purchaseDetails = [];
+                data.purchaseDetails.push(purchase);
+                
                 saveData(data);
                 updateAdminPanel();
-                trackEvent('waitlist_joined', { score: window.currentScore });
+                trackEvent('purchase_completed', { amount: CONFIG.launchPrice, score: window.currentScore });
+                
+                console.log('✅ Purchase saved:', purchase.id);
+            } catch (e) {
+                console.error('❌ Error saving purchase:', e);
+                alert('Warning: Purchase data may not have been saved properly.');
             }
         }
 
+        function saveWaitlist(email) {
+            try {
+                const data = getStoredData();
+                
+                if (!data.waitlist.includes(email)) {
+                    data.waitlist.push(email);
+                    
+                    // Also save detailed waitlist entry
+                    if (!data.waitlistDetails) data.waitlistDetails = [];
+                    data.waitlistDetails.push({
+                        email: email,
+                        timestamp: new Date().toISOString(),
+                        score: window.currentScore,
+                        traderType: window.currentTraderType,
+                        source: getTrafficSource()
+                    });
+                    
+                    saveData(data);
+                    updateAdminPanel();
+                    trackEvent('waitlist_joined', { score: window.currentScore });
+                    
+                    console.log('✅ Waitlist entry saved:', email);
+                }
+            } catch (e) {
+                console.error('❌ Error saving waitlist:', e);
+            }
+        }
+
+        // Helper function to identify traffic source
+        function getTrafficSource() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referrer = document.referrer;
+            
+            if (urlParams.get('utm_source')) {
+                return urlParams.get('utm_source');
+            } else if (referrer.includes('twitter.com') || referrer.includes('x.com')) {
+                return 'twitter';
+            } else if (referrer.includes('youtube.com')) {
+                return 'youtube';
+            } else if (referrer.includes('google.com')) {
+                return 'google';
+            } else if (referrer) {
+                return 'other';
+            } else {
+                return 'direct';
+            }
+        }
+
+        // Enhanced admin panel update with storage info
         function updateAdminPanel() {
             const data = getStoredData();
             
@@ -869,6 +1079,13 @@
             
             // Score distribution
             updateScoreDistribution(data);
+            
+            // Add storage mode indicator
+            const storageIndicator = document.getElementById('storageMode');
+            if (storageIndicator) {
+                storageIndicator.textContent = `Storage: ${storageMode}`;
+                storageIndicator.style.color = storageMode === 'local' ? '#00ff88' : '#fbbf24';
+            }
         }
 
         function updateScoreDistribution(data) {
@@ -2185,23 +2402,30 @@ Evening Mastery Practice:
             }
         }
 
+        // Enhanced clear data function
         function clearAllData() {
             if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
                 const password = prompt('Enter admin password:');
                 if (password === CONFIG.adminPassword) {
-                    if (storageAvailable) {
-                        sessionStorage.removeItem('tradingPsychologyData');
-                    } else {
-                        memoryStorage = {
-                            assessments: [],
-                            revenue: 0,
-                            waitlist: [],
-                            purchases: 0,
-                            version: CONFIG.version
-                        };
+                    // Clear all storage types
+                    if (availableStorage.local) {
+                        localStorage.removeItem('tradingPsychologyData');
                     }
+                    if (availableStorage.session) {
+                        sessionStorage.removeItem('tradingPsychologyData');
+                    }
+                    
+                    // Reset memory storage
+                    memoryStorage = {
+                        assessments: [],
+                        revenue: 0,
+                        waitlist: [],
+                        purchases: 0,
+                        version: CONFIG.version
+                    };
+                    
                     updateAdminPanel();
-                    alert('All data cleared successfully');
+                    alert('All data cleared successfully from all storage types');
                     trackEvent('data_cleared');
                 } else {
                     alert('Incorrect password');
@@ -2209,13 +2433,20 @@ Evening Mastery Practice:
             }
         }
 
+        // Enhanced debug info
         function debugInfo() {
             const data = getStoredData();
             console.log('=== Debug Information ===');
             console.log('Version:', CONFIG.version);
-            console.log('Storage Available:', storageAvailable);
-            console.log('Storage Mode:', storageAvailable ? 'SessionStorage' : 'In-Memory');
+            console.log('Storage Types Available:', availableStorage);
+            console.log('Current Storage Mode:', storageMode);
+            console.log('Data Location:', {
+                localStorage: availableStorage.local ? (localStorage.getItem('tradingPsychologyData') ? 'Has data' : 'Empty') : 'Not available',
+                sessionStorage: availableStorage.session ? (sessionStorage.getItem('tradingPsychologyData') ? 'Has data' : 'Empty') : 'Not available',
+                memory: 'Always available'
+            });
             console.log('Data:', data);
+            console.log('Data Size:', new Blob([JSON.stringify(data)]).size + ' bytes');
             console.log('Current Score:', window.currentScore);
             console.log('Current Trader Type:', window.currentTraderType);
             console.log('PayPal Loaded:', paypalLoaded);
@@ -2223,7 +2454,7 @@ Evening Mastery Practice:
             console.log('Referrer:', document.referrer || 'none');
             console.log('URL Parameters:', new URLSearchParams(window.location.search).toString());
             
-            alert('Debug information logged to console (Press F12 to view)\nStorage Mode: ' + (storageAvailable ? 'SessionStorage' : 'In-Memory'));
+            alert(`Debug Info:\nStorage: ${storageMode}\nAssessments: ${data.assessments.length}\nRevenue: $${data.revenue}\n\nPress F12 for detailed console logs`);
         }
 
         function showDetailedStats() {
@@ -2303,7 +2534,7 @@ Evening Mastery Practice:
             console.log('🚀 Trading Psychology Assessment v' + CONFIG.version);
             console.log('💳 PayPal Integration: Ready');
             console.log('📧 MailerLite Integration: Ready');
-            console.log('💾 Storage Mode: ' + (storageAvailable ? 'SessionStorage' : 'In-Memory'));
+            console.log('💾 Storage Mode: ' + storageMode);
             console.log('📊 Press Ctrl+Shift+A to open Admin Panel');
             console.log('📋 Keyboard Shortcuts:');
             console.log('   Ctrl+Shift+A: Admin Panel');
@@ -2311,6 +2542,11 @@ Evening Mastery Practice:
             console.log('   Ctrl+Shift+E: Export Data');
             console.log('   Ctrl+Shift+D: Debug Info');
             console.log('   Ctrl+Shift+S: Detailed Stats');
+            
+            // Run migration if available
+            if (typeof migrateOldData === 'function') {
+                migrateOldData();
+            }
             
             updateAdminPanel();
             
