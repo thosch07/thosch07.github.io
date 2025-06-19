@@ -366,7 +366,7 @@
                 <!-- Questions will be inserted here -->
             </div>
             
-            <button class="calculate-button" id="calculateBtn" onclick="calculateRisk()" disabled>
+            <button class="calculate-button" id="calculateBtn" onclick="calculateRisk()" style="display: none;">
                 Calculate My Risk
             </button>
         </div>
@@ -553,8 +553,12 @@
                                id="${question.id}" 
                                placeholder="${question.placeholder}"
                                min="${question.min || 0}"
-                               onchange="handleAnswer('${question.id}', this.value)">
+                               onchange="handleAnswer('${question.id}', this.value)"
+                               onkeypress="if(event.key === 'Enter') { handleAnswer('${question.id}', this.value); nextQuestionManual('${question.id}'); }">
                     </div>
+                    <button class="calculate-button" style="margin-top: 20px;" onclick="nextQuestionManual('${question.id}')">
+                        Next Question →
+                    </button>
                 `;
             } else if (question.type === 'options') {
                 html += '<div class="options">';
@@ -570,12 +574,37 @@
 
             html += '</div>';
             container.innerHTML = html;
+            
+            // Hide the main calculate button until all questions are answered
+            document.getElementById('calculateBtn').style.display = 'none';
+            
             updateProgressBar();
         }
 
         function handleAnswer(questionId, value) {
             answers[questionId] = parseFloat(value);
             checkProgress();
+        }
+
+        function nextQuestionManual(questionId) {
+            const inputElement = document.getElementById(questionId);
+            const value = inputElement ? inputElement.value : null;
+            
+            if (value && value !== '') {
+                answers[questionId] = parseFloat(value);
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    checkProgress();
+                    document.getElementById('calculateBtn').style.display = 'block';
+                    document.getElementById('calculateBtn').scrollIntoView({ behavior: 'smooth' });
+                }
+            } else {
+                inputElement.style.borderColor = '#ff4444';
+                inputElement.focus();
+                alert('Please enter a value before continuing');
+            }
         }
 
         function selectOption(questionId, value, index) {
@@ -593,6 +622,9 @@
                     showQuestion();
                 } else {
                     checkProgress();
+                    // Show the final calculate button
+                    document.getElementById('calculateBtn').style.display = 'block';
+                    document.getElementById('calculateBtn').scrollIntoView({ behavior: 'smooth' });
                 }
             }, 300);
         }
@@ -606,7 +638,12 @@
             const requiredAnswers = questions.map(q => q.id);
             const hasAllAnswers = requiredAnswers.every(id => answers[id] !== undefined);
             
-            document.getElementById('calculateBtn').disabled = !hasAllAnswers;
+            if (hasAllAnswers) {
+                document.getElementById('calculateBtn').style.display = 'block';
+                document.getElementById('calculateBtn').disabled = false;
+            } else {
+                document.getElementById('calculateBtn').style.display = 'none';
+            }
         }
 
         function calculateRisk() {
