@@ -821,11 +821,12 @@
                         email: email,
                         groups: [MAILERLITE_GROUP_ID],
                         fields: {
-                            risk_score: riskScore,
+                            name: email.split('@')[0], // Use email prefix as name
+                            risk_score: riskScore.toString(), // Convert to string
                             tool: 'revenge_calculator',
-                            consent: consentChecked,
-                            calculation_date: new Date().toISOString()
-                        }
+                            consent: consentChecked ? 'yes' : 'no'
+                        },
+                        status: 'active'
                     })
                 });
 
