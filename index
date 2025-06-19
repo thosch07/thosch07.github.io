@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Psychology Tools - Free AI-Powered Analysis</title>
+    <meta name="description" content="Free AI tools for traders: Psychology Assessment, Revenge Trade Calculator, and more. Improve your trading mindset.">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-T09F68TQVW');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .tool-card.featured {
+            border: 3px solid #00ff88;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+
+        .tool-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .tool-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .tool-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .tool-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .tool-button {
+            display: inline-block;
+            width: 100%;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 50px;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .primary-button {
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            color: #000;
+        }
+
+        .secondary-button {
+            background: linear-gradient(135deg, #ff4444 0%, #ff8888 100%);
+            color: #fff;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .coming-soon {
+            opacity: 0.7;
+            position: relative;
+        }
+
+        .coming-soon .tool-button {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .coming-soon-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fbbf24;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            z-index: 10;
+        }
+
+        .features {
+            margin: 80px 0;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature {
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #00ff88;
+        }
+
+        .feature p {
+            color: #a0a0a0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .social-links {
+            margin: 20px 0;
+        }
+
+        .social-links a {
+            color: #00d4ff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 600;
+        }
+
+        .social-links a:hover {
+            color: #00ff88;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .tool-card { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Trading Psychology Tools</h1>
+            <p class="subtitle">Free AI-powered tools to master your trading mindset</p>
+        </div>
+
+        <div class="tools-grid">
+            <!-- Main Assessment -->
+            <div class="tool-card featured">
+                <span class="featured-badge">MOST POPULAR</span>
+                <div class="tool-icon">🧠</div>
+                <h2 class="tool-title">AI Psychology Assessment</h2>
+                <p class="tool-description">
+                    Discover your trader personality type with our comprehensive 8-question assessment. 
+                    Get a detailed score and personalized improvement plan.
+                </p>
+                <div class="tool-stats">
+                    <div class="stat">
+                        <div class="stat-value">2,847+</div>
+                        <div class="stat-label">Assessments</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">2 min</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Free</div>
+                        <div class="stat-label">Forever</div>
+                    </div>
+                </div>
+                <a href="assessment.html" class="tool-button primary-button">
+                    Start Assessment →
+                </a>
+            </div>
+
+            <!-- Revenge Calculator -->
+            <div class="tool-card">
+                <div class="tool-icon">⚠️</div>
+                <h2 class="tool-title">Revenge Trade Calculator</h2>
+                <p class="tool-description">
+                    87% of blown accounts start with revenge trading. Calculate your risk level 
+                    and get a personalized prevention plan.
+                </p>
+                <div class="tool-stats">
+                    <div class="stat">
+                        <div class="stat-value">NEW</div>
+                        <div class="stat-label">Just Launched</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Questions</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Free</div>
+                        <div class="stat-label">No Signup</div>
+                    </div>
+                </div>
+                <a href="revenge-calculator.html" class="tool-button secondary-button">
+                    Check Your Risk →
+                </a>
+            </div>
+
+            <!-- FOMO Detector -->
+            <div class="tool-card coming-soon">
+                <span class="coming-soon-text">COMING THIS WEEK</span>
+                <div class="tool-icon">📈</div>
+                <h2 class="tool-title">FOMO Detector</h2>
+                <p class="tool-description">
+                    Paste any trade idea and our AI will analyze it for FOMO signals. 
+                    Stop chasing trades that aren't part of your plan.
+                </p>
+                <div class="tool-stats">
+                    <div class="stat">
+                        <div class="stat-value">AI</div>
+                        <div class="stat-label">Powered</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Instant</div>
+                        <div class="stat-label">Analysis</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Free</div>
+                        <div class="stat-label">Tool</div>
+                    </div>
+                </div>
+                <button class="tool-button" disabled>
+                    Coming Soon
+                </button>
+            </div>
+
+            <!-- Daily Mood Tracker -->
+            <div class="tool-card coming-soon">
+                <span class="coming-soon-text">COMING SOON</span>
+                <div class="tool-icon">📊</div>
+                <h2 class="tool-title">Daily Mood Tracker</h2>
+                <p class="tool-description">
+                    Track your emotional state vs trading performance. Discover patterns 
+                    between your mood and profitability.
+                </p>
+                <div class="tool-stats">
+                    <div class="stat">
+                        <div class="stat-value">7-Day</div>
+                        <div class="stat-label">Challenge</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Charts</div>
+                        <div class="stat-label">Included</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Free</div>
+                        <div class="stat-label">Forever</div>
+                    </div>
+                </div>
+                <button class="tool-button" disabled>
+                    Coming Soon
+                </button>
+            </div>
+
+            <!-- Stop Loss Calculator -->
+            <div class="tool-card coming-soon">
+                <span class="coming-soon-text">IN DEVELOPMENT</span>
+                <div class="tool-icon">🛡️</div>
+                <h2 class="tool-title">Stop Loss Personality Test</h2>
+                <p class="tool-description">
+                    Find out if you're too tight or too loose with stops. Get personalized 
+                    stop loss strategies for your personality.
+                </p>
+                <div class="tool-stats">
+                    <div class="stat">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Scenarios</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Custom</div>
+                        <div class="stat-label">Strategy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Free</div>
+                        <div class="stat-label">Access</div>
+                    </div>
+                </div>
+                <button class="tool-button" disabled>
+                    In Development
+                </button>
+            </div>
+
+            <!-- Risk Profile Analyzer -->
+            <div class="tool-card coming-soon">
+                <span class="coming-soon-text">PLANNED</span>
+                <div class="tool-icon">💰</div>
+                <h2 class="tool-title">Risk Profile Analyzer</h2>
+                <p class="tool-description">
+                    Advanced position sizing calculator based on your psychology profile. 
+                    Never risk more than you can emotionally handle.
+                </p>
+                <div class="tool-stats">
+                    <div class="stat">
+                        <div class="stat-value">AI</div>
+                        <div class="stat-label">Analysis</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Precise</div>
+                        <div class="stat-label">Sizing</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Free</div>
+                        <div class="stat-label">Tool</div>
+                    </div>
+                </div>
+                <button class="tool-button" disabled>
+                    Planned
+                </button>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features">
+            <h2>Why Traders Choose Our Tools</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Data-Driven Insights</h3>
+                    <p>Based on analysis of thousands of real trader behaviors and patterns</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <h3>100% Private</h3>
+                    <p>No login required. Your data stays on your device unless you choose to share</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Results</h3>
+                    <p>Get actionable insights in minutes, not hours. No waiting, no fluff</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🆓</div>
+                    <h3>Forever Free</h3>
+                    <p>Core tools will always be free. Optional premium reports for deeper analysis</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Built by traders, for traders. Educational purposes only. Not financial advice.</p>
+            <div class="social-links">
+                <a href="https://x.com/whytradersfail" target="_blank">Twitter/X</a>
+                <a href="mailto:info@schnitzleinconsulting.com">Contact</a>
+                <a href="#" onclick="alert('Privacy: We collect anonymous usage data to improve our tools. No personal trading data is stored.')">Privacy</a>
+            </div>
+            <p style="margin-top: 20px; color: #666;">© 2025 Schnitzlein Consulting</p>
+        </div>
+    </div>
+
+    <script>
+        // Track page view
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                page_title: 'Landing Page',
+                page_location: window.location.href
+            });
+        }
+
+        // Add click tracking
+        document.querySelectorAll('.tool-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!this.disabled) {
+                    const toolName = this.closest('.tool-card').querySelector('.tool-title').textContent;
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'tool_clicked', {
+                            tool_name: toolName,
+                            destination: this.href
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
