@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenge Trade Risk Calculator - Stop Account Blowups</title>
+    <meta name="description" content="Free AI tool that calculates your revenge trading risk. 87% of blown accounts start with revenge trading. Check your risk now.">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-T09F68TQVW');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ff4444 0%, #ff8888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+        }
+
+        .warning-stat {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #ff8888;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .question.active {
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            color: #ff4444;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff4444;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #ff4444;
+            background: #fff5f5;
+        }
+
+        .option.selected {
+            background: #fff5f5;
+            border-color: #ff4444;
+            font-weight: 600;
+        }
+
+        .calculate-button {
+            background: linear-gradient(135deg, #ff4444 0%, #ff6666 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.3);
+        }
+
+        .calculate-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 68, 68, 0.4);
+        }
+
+        .calculate-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #ff4444 0%, #ff8888 100%);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+            width: 0%;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .risk-score {
+            font-size: 4em;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .risk-low { color: #00ff88; }
+        .risk-medium { color: #fbbf24; }
+        .risk-high { color: #ff8844; }
+        .risk-extreme { color: #ff4444; }
+
+        .risk-explanation {
+            font-size: 1.3em;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .recommendations {
+            text-align: left;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .recommendations h3 {
+            color: #ff4444;
+            margin-bottom: 15px;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .recommendations li:before {
+            content: "⚠️ ";
+            margin-right: 10px;
+        }
+
+        .email-capture {
+            background: #fff5f5;
+            border: 2px solid #ff4444;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .email-capture h3 {
+            color: #ff4444;
+            margin-bottom: 15px;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .submit-button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-button:hover {
+            background: #ff6666;
+            transform: translateY(-2px);
+        }
+
+        .data-consent {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f8ff;
+            border: 1px solid #00d4ff;
+            border-radius: 10px;
+            font-size: 0.9em;
+        }
+
+        .data-consent label {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .data-consent input[type="checkbox"] {
+            margin-right: 10px;
+            margin-top: 4px;
+        }
+
+        .share-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .share-button {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            background: #1da1f2;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .share-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .container { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Revenge Trade Risk Calculator</h1>
+            <p class="subtitle">87% of blown accounts start with revenge trading</p>
+            <div class="warning-stat">
+                ⚠️ The average revenge trade wipes out 5-10 days of profits in minutes
+            </div>
+        </div>
+
+        <div class="calculator-container" id="calculatorContainer">
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            
+            <div id="questionContainer">
+                <!-- Questions will be inserted here -->
+            </div>
+            
+            <button class="calculate-button" id="calculateBtn" onclick="calculateRisk()" disabled>
+                Calculate My Risk
+            </button>
+        </div>
+
+        <div class="results" id="results">
+            <h2>Your Revenge Trading Risk Score</h2>
+            <div class="risk-score" id="riskScore"></div>
+            <div class="risk-explanation" id="riskExplanation"></div>
+            
+            <div class="recommendations" id="recommendations">
+                <h3>Critical Actions for You:</h3>
+                <ul id="recommendationsList"></ul>
+            </div>
+
+            <div class="email-capture">
+                <h3>Get Your Personalized Revenge Trading Prevention Plan</h3>
+                <p>Based on your risk score, we'll send you a custom action plan to protect your account.</p>
+                <form id="emailForm">
+                    <input type="email" class="email-input" id="emailInput" placeholder="Enter your email" required>
+                    <button type="submit" class="submit-button">Send My Prevention Plan</button>
+                </form>
+                
+                <div class="data-consent">
+                    <label>
+                        <input type="checkbox" id="dataConsent" checked>
+                        <span>I agree to help improve this tool by sharing anonymous usage data. 
+                        <a href="#" onclick="alert('We collect anonymous patterns to help traders avoid revenge trading. No personal trading data is ever shared.')">Learn more</a></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="share-section">
+                <p><strong>Help other traders avoid revenge trading:</strong></p>
+                <a href="#" class="share-button" onclick="shareOnTwitter()">Share on Twitter</a>
+                <a href="#" class="share-button" style="background: #0077b5;" onclick="shareOnLinkedIn()">Share on LinkedIn</a>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Educational Purpose Only:</strong> This tool provides psychological insights for educational purposes. 
+            Not financial advice. Trading involves risk.
+        </div>
+    </div>
+
+    <script>
+        // Question data
+        const questions = [
+            {
+                id: 'account_size',
+                type: 'number',
+                question: 'What is your trading account size?',
+                placeholder: 'Enter amount in USD',
+                min: 100
+            },
+            {
+                id: 'daily_loss',
+                type: 'number',
+                question: 'How much did you lose today (or in your last losing session)?',
+                placeholder: 'Enter loss amount in USD',
+                min: 0
+            },
+            {
+                id: 'loss_reaction',
+                type: 'options',
+                question: 'After your last significant loss, what was your first thought?',
+                options: [
+                    { text: 'I need to make it back immediately', value: 100 },
+                    { text: 'The market owes me this money', value: 90 },
+                    { text: 'Just one more trade to break even', value: 80 },
+                    { text: 'I should take a break but...', value: 50 },
+                    { text: 'Time to review what went wrong', value: 20 }
+                ]
+            },
+            {
+                id: 'emotional_state',
+                type: 'options',
+                question: 'Rate your emotional state after a loss (1-10):',
+                options: [
+                    { text: '9-10: Rage, must trade NOW', value: 100 },
+                    { text: '7-8: Very angry and frustrated', value: 80 },
+                    { text: '5-6: Upset but manageable', value: 50 },
+                    { text: '3-4: Disappointed but calm', value: 30 },
+                    { text: '1-2: Accepting, part of trading', value: 10 }
+                ]
+            },
+            {
+                id: 'position_sizing',
+                type: 'options',
+                question: 'After a loss, your next position size is usually:',
+                options: [
+                    { text: 'Double or triple to recover faster', value: 100 },
+                    { text: '50% larger than normal', value: 80 },
+                    { text: 'Slightly larger than normal', value: 60 },
+                    { text: 'Same as always', value: 30 },
+                    { text: 'Smaller until I calm down', value: 10 }
+                ]
+            },
+            {
+                id: 'loss_limit',
+                type: 'options',
+                question: 'Do you have a daily loss limit?',
+                options: [
+                    { text: 'No, I trade until I recover', value: 100 },
+                    { text: 'Yes, but I often break it', value: 70 },
+                    { text: 'Yes, sometimes I follow it', value: 50 },
+                    { text: 'Yes, I usually stick to it', value: 30 },
+                    { text: 'Yes, I never break it', value: 10 }
+                ]
+            },
+            {
+                id: 'time_pressure',
+                type: 'options',
+                question: 'After a loss, how urgent does recovery feel?',
+                options: [
+                    { text: 'Must recover TODAY', value: 100 },
+                    { text: 'Need to recover this week', value: 70 },
+                    { text: 'Would like to recover soon', value: 50 },
+                    { text: 'No rush, it\'s part of trading', value: 20 },
+                    { text: 'Focus on next good setup only', value: 10 }
+                ]
+            },
+            {
+                id: 'strategy_discipline',
+                type: 'options',
+                question: 'After losses, your trading strategy:',
+                options: [
+                    { text: 'Goes out the window completely', value: 100 },
+                    { text: 'I take trades I normally wouldn\'t', value: 80 },
+                    { text: 'I bend my rules a little', value: 60 },
+                    { text: 'Mostly stays the same', value: 30 },
+                    { text: 'Becomes even more strict', value: 10 }
+                ]
+            },
+            {
+                id: 'physical_symptoms',
+                type: 'options',
+                question: 'Physical symptoms after a loss:',
+                options: [
+                    { text: 'Heart racing, sweating, shaking', value: 100 },
+                    { text: 'Tense, headache, stressed', value: 70 },
+                    { text: 'Mild discomfort', value: 40 },
+                    { text: 'Relatively calm', value: 20 },
+                    { text: 'No physical reaction', value: 10 }
+                ]
+            },
+            {
+                id: 'past_revenge',
+                type: 'options',
+                question: 'Have you blown an account or had a huge loss from revenge trading before?',
+                options: [
+                    { text: 'Yes, multiple times', value: 100 },
+                    { text: 'Yes, once or twice', value: 70 },
+                    { text: 'Close calls but avoided it', value: 40 },
+                    { text: 'No, I\'m careful', value: 20 },
+                    { text: 'Never come close', value: 10 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let startTime = Date.now();
+
+        // Initialize
+        window.onload = function() {
+            showQuestion();
+            trackEvent('revenge_calculator_started');
+        };
+
+        function showQuestion() {
+            const container = document.getElementById('questionContainer');
+            const question = questions[currentQuestion];
+            
+            let html = `
+                <div class="question active">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${questions.length}</div>
+                    <div class="question-text">${question.question}</div>
+            `;
+
+            if (question.type === 'number') {
+                html += `
+                    <div class="input-group">
+                        <input type="number" 
+                               id="${question.id}" 
+                               placeholder="${question.placeholder}"
+                               min="${question.min || 0}"
+                               onchange="handleAnswer('${question.id}', this.value)">
+                    </div>
+                `;
+            } else if (question.type === 'options') {
+                html += '<div class="options">';
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="selectOption('${question.id}', ${option.value}, ${index})">
+                            ${option.text}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+            updateProgressBar();
+        }
+
+        function handleAnswer(questionId, value) {
+            answers[questionId] = parseFloat(value);
+            checkProgress();
+        }
+
+        function selectOption(questionId, value, index) {
+            answers[questionId] = value;
+            
+            // Update visual selection
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            // Auto-advance after selection
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    checkProgress();
+                }
+            }, 300);
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function checkProgress() {
+            const requiredAnswers = questions.map(q => q.id);
+            const hasAllAnswers = requiredAnswers.every(id => answers[id] !== undefined);
+            
+            document.getElementById('calculateBtn').disabled = !hasAllAnswers;
+        }
+
+        function calculateRisk() {
+            // Validate all answers exist
+            if (Object.keys(answers).length < questions.length) {
+                alert('Please answer all questions');
+                return;
+            }
+
+            // Calculate risk score
+            const accountSize = answers.account_size || 1000;
+            const dailyLoss = answers.daily_loss || 0;
+            const lossPercentage = (dailyLoss / accountSize) * 100;
+            
+            // Base risk calculation
+            let riskScore = 0;
+            let weightedSum = 0;
+            let weights = {
+                loss_reaction: 2.0,
+                emotional_state: 2.0,
+                position_sizing: 2.5,
+                loss_limit: 2.0,
+                time_pressure: 1.5,
+                strategy_discipline: 2.0,
+                physical_symptoms: 1.5,
+                past_revenge: 3.0
+            };
+            
+            let totalWeight = 0;
+            for (let key in weights) {
+                if (answers[key] !== undefined) {
+                    weightedSum += answers[key] * weights[key];
+                    totalWeight += weights[key];
+                }
+            }
+            
+            riskScore = Math.round(weightedSum / totalWeight);
+            
+            // Adjust based on loss percentage
+            if (lossPercentage > 5) riskScore = Math.min(100, riskScore + 20);
+            if (lossPercentage > 10) riskScore = Math.min(100, riskScore + 30);
+            
+            // Show results
+            showResults(riskScore, lossPercentage);
+            
+            // Track completion
+            trackEvent('revenge_risk_calculated', {
+                risk_score: riskScore,
+                completion_time: (Date.now() - startTime) / 1000
+            });
+            
+            // Save data
+            saveCalculation(riskScore);
+        }
+
+        function showResults(riskScore, lossPercentage) {
+            document.getElementById('calculatorContainer').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            const scoreElement = document.getElementById('riskScore');
+            scoreElement.textContent = `${riskScore}%`;
+            
+            // Color coding
+            if (riskScore < 30) {
+                scoreElement.className = 'risk-score risk-low';
+            } else if (riskScore < 60) {
+                scoreElement.className = 'risk-score risk-medium';
+            } else if (riskScore < 80) {
+                scoreElement.className = 'risk-score risk-high';
+            } else {
+                scoreElement.className = 'risk-score risk-extreme';
+            }
+            
+            // Explanation
+            const explanations = {
+                low: "Low Risk - You have good emotional control. Stay vigilant.",
+                medium: "Medium Risk - You're vulnerable after losses. Implement safeguards.",
+                high: "High Risk - You're likely to revenge trade. Immediate action needed.",
+                extreme: "EXTREME RISK - Your account is in immediate danger! Stop trading NOW."
+            };
+            
+            let explanation;
+            if (riskScore < 30) explanation = explanations.low;
+            else if (riskScore < 60) explanation = explanations.medium;
+            else if (riskScore < 80) explanation = explanations.high;
+            else explanation = explanations.extreme;
+            
+            document.getElementById('riskExplanation').textContent = explanation;
+            
+            // Recommendations
+            const recommendations = getRecommendations(riskScore, lossPercentage);
+            const recList = document.getElementById('recommendationsList');
+            recList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+        }
+
+        function getRecommendations(riskScore, lossPercentage) {
+            let recs = [];
+            
+            if (riskScore >= 80) {
+                recs.push("STOP TRADING IMMEDIATELY - Close all positions now");
+                recs.push("Set a 24-hour mandatory cooling-off period");
+                recs.push("Remove trading apps from your phone TODAY");
+                recs.push("Call a friend or mentor before any trade");
+            } else if (riskScore >= 60) {
+                recs.push("Implement hard daily loss limit at 2% immediately");
+                recs.push("Reduce position sizes by 50% for next week");
+                recs.push("Take mandatory 2-hour break after any loss");
+                recs.push("Use physical stop losses only (no mental stops)");
+            } else if (riskScore >= 30) {
+                recs.push("Create written rules for post-loss behavior");
+                recs.push("Set up automatic position size limits");
+                recs.push("Practice meditation or breathing exercises daily");
+                recs.push("Keep a detailed emotion journal");
+            } else {
+                recs.push("Maintain your disciplined approach");
+                recs.push("Share your strategies with struggling traders");
+                recs.push("Consider mentoring others");
+                recs.push("Document what works for you");
+            }
+            
+            if (lossPercentage > 5) {
+                recs.unshift(`Today's ${lossPercentage.toFixed(1)}% loss requires a ${(lossPercentage * 1.5).toFixed(1)}% gain to recover - don't chase it!`);
+            }
+            
+            return recs;
+        }
+
+        // Data collection
+        function saveCalculation(riskScore) {
+            try {
+                let data = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": []}');
+                
+                const calculation = {
+                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    timestamp: new Date().toISOString(),
+                    riskScore: riskScore,
+                    answers: answers,
+                    completionTime: (Date.now() - startTime) / 1000,
+                    userAgent: navigator.userAgent,
+                    referrer: document.referrer || 'direct'
+                };
+                
+                data.calculations.push(calculation);
+                localStorage.setItem('revengeCalculatorData', JSON.stringify(data));
+                
+                console.log('Data saved:', calculation);
+            } catch (e) {
+                console.error('Error saving data:', e);
+            }
+        }
+
+        // Email form handling
+        document.getElementById('emailForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const consentChecked = document.getElementById('dataConsent').checked;
+            
+            if (!email) return;
+            
+            // Here you would integrate with your email service
+            // For now, we'll just track it
+            trackEvent('email_captured', {
+                tool: 'revenge_calculator',
+                consent: consentChecked,
+                risk_score: parseInt(document.getElementById('riskScore').textContent)
+            });
+            
+            // Save email to data
+            try {
+                let data = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": [], "emails": []}');
+                if (!data.emails) data.emails = [];
+                data.emails.push({
+                    email: email,
+                    timestamp: new Date().toISOString(),
+                    riskScore: parseInt(document.getElementById('riskScore').textContent),
+                    consent: consentChecked
+                });
+                localStorage.setItem('revengeCalculatorData', JSON.stringify(data));
+            } catch (e) {
+                console.error('Error saving email:', e);
+            }
+            
+            // Show success
+            document.getElementById('emailForm').innerHTML = 
+                '<p style="color: #00ff88; font-weight: 600; padding: 20px;">✓ Check your email! Your prevention plan is on the way.</p>';
+            
+            // Redirect to main assessment after 3 seconds
+            setTimeout(() => {
+                if (confirm('Would you like to take our complete Trading Psychology Assessment?')) {
+                    window.location.href = 'https://thosch07.github.io';
+                }
+            }, 3000);
+        });
+
+        // Social sharing
+        function shareOnTwitter() {
+            const text = `I just checked my revenge trading risk. 87% of blown accounts start with revenge trading. Check yours:`;
+            const url = window.location.href;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        function shareOnLinkedIn() {
+            const url = window.location.href;
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        // Analytics helper
+        function trackEvent(eventName, parameters = {}) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, parameters);
+            }
+            console.log('Event:', eventName, parameters);
+        }
+    </script>
+</body>
+</html>
