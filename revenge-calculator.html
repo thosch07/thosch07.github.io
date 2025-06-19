@@ -795,30 +795,66 @@
             }
         }
 
-        // Email form handling
+        // Email form handling with MailerLite
         document.getElementById('emailForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('emailInput').value;
             const consentChecked = document.getElementById('dataConsent').checked;
+            const riskScore = parseInt(document.getElementById('riskScore').textContent);
             
             if (!email) return;
             
-            // Here you would integrate with your email service
-            // For now, we'll just track it
+            // MailerLite Integration - Using Assessment Integration Token
+            const MAILERLITE_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWI0MDljMDMxZTViNjI5M2EyOWM3MjkzMTA4ZDFmN2M3NmYwMjczNTU3NGI1NmFhYjVjZGY3ZDljOGQ3NGIxNDhjMDI0MTU0ZTcwNTMwNzciLCJpYXQiOjE3NDk3MzI3ODEuMjk1NzcyLCJuYmYiOjE3NDk3MzI3ODEuMjk1Nzc2LCJleHAiOjQ5MDU0MDYzODEuMjg5ODI2LCJzdWIiOiIxNTgxMjY5Iiwic2NvcGVzIjpbXX0.g64vCpQu8KxSIqctKKk03QyBKhgmEF6sfyN6rl68FraHRFRN1VbgCl-EgXXeo6aWUsW3PKotGcdbB0QXoi7Do21z6VQ7YctLspe8kyriSYILMV7k53zXgoxXe24puXA8bclXCsPaIO1uNepwZXNDAWaMHjY6DF9hdwFEh3ZedjnAB535UGzzU37wd-jQod_oVmbQznaRSyoWPz3JKMHgG345TZqgUdfLsrrm4zKdzJWWKfKVgxo7BoTKKrQhcBbRC3uRs3fTOQU9E_2D1HRDXFGhcHBwF5V3W973q8g9ADdXBw6zCIOvRrT88s7RvWUtOaEIn7s-_PqhXk4Y6KklunyFPzTccD6TzdOG5vTJnt3kfVGClTR1JcbnlBSzRsl2fXLoKlNQWKl5ectJvJ33snMlc2xBv4LmnrXKqGJOQB93YTOHuqLE6swJTZLDlVC2TibGOh4MejZDgDUNI8hQo1eCniLJ7JlJ1nbBcZo-6tkBF6PZhDeagQioajoR8nQTQ_kt1TBBn1l9uJbCJnPajDlYamLNfvcD-8JwJltWRIkCkUNqTmPKHmDo4w6-rq97-yww9untRWuFvKU-z59WA1C9_lCldf--X9zBHJj69i7rIgM_Hx9STXCOd5sa4WjsnmXkKE0RcqhKE_oujxzta5NujlgwpZPCCmTzw6GBgWs'; 
+            const MAILERLITE_GROUP_ID = '157609830740133797'; // Revenge Calculator Users group
+            
+            try {
+                // Send to MailerLite
+                const response = await fetch('https://connect.mailerlite.com/api/subscribers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MAILERLITE_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        groups: [MAILERLITE_GROUP_ID],
+                        fields: {
+                            risk_score: riskScore,
+                            tool: 'revenge_calculator',
+                            consent: consentChecked,
+                            calculation_date: new Date().toISOString()
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('MailerLite API error');
+                }
+                
+                console.log('✅ Added to MailerLite successfully');
+                
+            } catch (error) {
+                console.error('MailerLite error:', error);
+                // Continue anyway - don't break the user experience
+            }
+            
+            // Track event
             trackEvent('email_captured', {
                 tool: 'revenge_calculator',
                 consent: consentChecked,
-                risk_score: parseInt(document.getElementById('riskScore').textContent)
+                risk_score: riskScore
             });
             
-            // Save email to data
+            // Save email to local data
             try {
                 let data = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": [], "emails": []}');
                 if (!data.emails) data.emails = [];
                 data.emails.push({
                     email: email,
                     timestamp: new Date().toISOString(),
-                    riskScore: parseInt(document.getElementById('riskScore').textContent),
+                    riskScore: riskScore,
                     consent: consentChecked
                 });
                 localStorage.setItem('revengeCalculatorData', JSON.stringify(data));
@@ -833,7 +869,7 @@
             // Redirect to main assessment after 3 seconds
             setTimeout(() => {
                 if (confirm('Would you like to take our complete Trading Psychology Assessment?')) {
-                    window.location.href = 'https://thosch07.github.io';
+                    window.location.href = '/assessment.html';
                 }
             }, 3000);
         });
