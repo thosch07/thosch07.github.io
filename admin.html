@@ -339,6 +339,42 @@
             font-size: 0.9em;
         }
 
+        /* Modal for detailed data */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            background-color: #1a1f2e;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #333;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #666;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .stats-grid, .tools-grid {
@@ -529,9 +565,18 @@
         </div>
     </div>
 
+    <!-- Modal for detailed data views -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Data Details</h2>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
     <script>
         // Password protection
-        const ADMIN_PASSWORD = 'Tr@d1ng$ecure2025??'; // CHANGE THIS!
+        const ADMIN_PASSWORD = 'Tr@d1ng$ecure2025??'; // Keep your existing password
         
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
@@ -748,12 +793,25 @@
                 ...revengeEmails.map(e => ({...e, source: 'Revenge Calculator'}))
             ];
             
-            let emailList = 'Email List:\n\n';
+            let content = '<h3>Email Subscribers</h3>';
+            content += '<table style="width: 100%; margin-top: 20px;">';
+            content += '<thead><tr><th>Email</th><th>Source</th><th>Date</th></tr></thead><tbody>';
+            
             allEmails.forEach(e => {
-                emailList += `${e.email} - ${e.source} - ${new Date(e.timestamp).toLocaleDateString()}\n`;
+                content += `<tr>
+                    <td>${e.email}</td>
+                    <td>${e.source}</td>
+                    <td>${new Date(e.timestamp).toLocaleDateString()}</td>
+                </tr>`;
             });
             
-            alert(emailList);
+            content += '</tbody></table>';
+            
+            if (allEmails.length === 0) {
+                content = '<p style="text-align: center; color: #666;">No email subscribers yet</p>';
+            }
+            
+            showModal('Email List', content);
             updateActivityFeed('Email list viewed');
         }
 
@@ -774,13 +832,84 @@
             updateActivityFeed('Backup created');
         }
 
-        // View specific tool data
+        // View Assessment Data
         function viewAssessmentData() {
-            window.open('/assessment-admin.html', '_blank');
+            const assessments = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
+            let content = '<h3>Psychology Assessment Details</h3>';
+            
+            if (assessments.length === 0) {
+                content += '<p style="text-align: center; color: #666;">No assessment data yet</p>';
+            } else {
+                content += '<table style="width: 100%; margin-top: 20px;">';
+                content += '<thead><tr><th>Date</th><th>Score</th><th>Profile</th><th>Time</th><th>Email</th></tr></thead><tbody>';
+                
+                assessments.forEach(a => {
+                    content += `<tr>
+                        <td>${new Date(a.timestamp).toLocaleDateString()}</td>
+                        <td>${a.score || '-'}</td>
+                        <td>${a.profile || '-'}</td>
+                        <td>${a.completionTime || '-'}s</td>
+                        <td>${a.emailProvided ? 'Yes' : 'No'}</td>
+                    </tr>`;
+                });
+                
+                content += '</tbody></table>';
+            }
+            
+            showModal('Assessment Data', content);
+            updateActivityFeed('Assessment data viewed');
         }
 
+        // View Revenge Calculator Data
         function viewRevengeData() {
-            window.open('/revenge-admin.html', '_blank');
+            const revengeData = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": []}');
+            const calculations = revengeData.calculations || [];
+            
+            let content = '<h3>Revenge Calculator Details</h3>';
+            
+            if (calculations.length === 0) {
+                content += '<p style="text-align: center; color: #666;">No calculator data yet</p>';
+            } else {
+                content += '<table style="width: 100%; margin-top: 20px;">';
+                content += '<thead><tr><th>Date</th><th>Risk Score</th><th>Category</th><th>Time</th><th>Email</th></tr></thead><tbody>';
+                
+                calculations.forEach(calc => {
+                    const hasEmail = revengeData.emails?.some(e => 
+                        Math.abs(new Date(e.timestamp) - new Date(calc.timestamp)) < 60000
+                    );
+                    content += `<tr>
+                        <td>${new Date(calc.timestamp).toLocaleDateString()}</td>
+                        <td>${calc.riskScore || '-'}%</td>
+                        <td>${calc.riskCategory || '-'}</td>
+                        <td>${calc.completionTime || '-'}s</td>
+                        <td>${hasEmail ? 'Yes' : 'No'}</td>
+                    </tr>`;
+                });
+                
+                content += '</tbody></table>';
+            }
+            
+            showModal('Revenge Calculator Data', content);
+            updateActivityFeed('Revenge calculator data viewed');
+        }
+
+        // Modal functions
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('dataModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('dataModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('dataModal');
+            if (event.target == modal) {
+                closeModal();
+            }
         }
 
         // Enter key support
