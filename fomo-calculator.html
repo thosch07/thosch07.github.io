@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOMO Score Test - Trading Psychology Tool</title>
+    <meta name="description" content="Free educational tool to assess your FOMO (Fear of Missing Out) level in trading. Understand your trading psychology better.">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-T09F68TQVW');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+        }
+
+        .warning-stat {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #00ff88;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .question.active {
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            color: #00d4ff;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #00d4ff;
+            background: #f0f8ff;
+        }
+
+        .option.selected {
+            background: #f0f8ff;
+            border-color: #00d4ff;
+            font-weight: 600;
+        }
+
+        .calculate-button {
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            color: #000;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .calculate-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .calculate-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+            width: 0%;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .risk-score {
+            font-size: 4em;
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        .score-master { color: #00ff88; }
+        .score-fighter { color: #fbbf24; }
+        .score-victim { color: #ff8844; }
+        .score-addict { color: #ff4444; }
+
+        .risk-explanation {
+            font-size: 1.3em;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .recommendations {
+            text-align: left;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .recommendations h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .recommendations li:before {
+            content: "💡 ";
+            margin-right: 10px;
+        }
+
+        .email-capture {
+            background: #f0f8ff;
+            border: 2px solid #00d4ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .email-capture h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .submit-button {
+            background: #00d4ff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-button:hover {
+            background: #00b8e6;
+            transform: translateY(-2px);
+        }
+
+        .data-consent {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f8ff;
+            border: 1px solid #00d4ff;
+            border-radius: 10px;
+            font-size: 0.9em;
+        }
+
+        .data-consent label {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .data-consent input[type="checkbox"] {
+            margin-right: 10px;
+            margin-top: 4px;
+        }
+
+        .share-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .share-button {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            background: #1da1f2;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .share-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+        }
+
+        .compliance-notice {
+            background: #f0f8ff;
+            border: 1px solid #00d4ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .compliance-notice strong {
+            color: #0066cc;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .container { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FOMO Score Test</h1>
+            <p class="subtitle">Discover if Fear of Missing Out is affecting your trading decisions</p>
+            <div class="warning-stat">
+                💡 Understanding your FOMO level is the first step to better trading psychology
+            </div>
+        </div>
+
+        <div class="calculator-container" id="calculatorContainer">
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            
+            <div id="questionContainer">
+                <!-- Questions will be inserted here -->
+            </div>
+            
+            <button class="calculate-button" id="calculateBtn" onclick="calculateScore()" style="display: none;">
+                Calculate My FOMO Score
+            </button>
+        </div>
+
+        <div class="results" id="results">
+            <h2>Your FOMO Score</h2>
+            <div class="risk-score" id="fomoScore"></div>
+            <div class="risk-explanation" id="scoreExplanation"></div>
+            
+            <div class="recommendations" id="recommendations">
+                <h3>Personal Recommendations:</h3>
+                <ul id="recommendationsList"></ul>
+            </div>
+
+            <div class="compliance-notice">
+                <strong>Educational Purpose Only:</strong> This psychological assessment tool is designed for educational and self-awareness purposes only. Results should not be interpreted as financial advice or trading recommendations. Past performance does not guarantee future results. Trading involves substantial risk of loss. Always consult with qualified financial advisors for investment decisions.
+            </div>
+
+            <div class="email-capture">
+                <h3>Get Your Personalized FOMO Management Guide</h3>
+                <p>Based on your score, we'll send you educational strategies to improve your trading psychology.</p>
+                <form id="emailForm">
+                    <input type="email" class="email-input" id="emailInput" placeholder="Enter your email" required>
+                    <button type="submit" class="submit-button">Send My Guide</button>
+                </form>
+                
+                <div class="data-consent">
+                    <label>
+                        <input type="checkbox" id="dataConsent" checked>
+                        <span>I agree to help improve this educational tool by sharing anonymous usage data and accept the 
+                        <a href="https://www.schnitzleinconsulting.com/en/datenschutz" target="_blank" style="color: #00d4ff;">Privacy Policy</a>.</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="share-section">
+                <p><strong>Help others understand their trading psychology:</strong></p>
+                <a href="#" class="share-button" onclick="shareOnTwitter()">Share on Twitter</a>
+                <a href="#" class="share-button" style="background: #0077b5;" onclick="shareOnLinkedIn()">Share on LinkedIn</a>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Educational Content Only:</strong> This tool provides psychological insights for educational purposes based on common behavioral patterns. 
+            Not financial advice. Trading involves risk. Individual results may vary.
+        </div>
+    </div>
+
+    <!-- Legal Footer -->
+    <footer style="background: #0f1419; padding: 20px; text-align: center; border-top: 1px solid #333; margin-top: 40px;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <p style="color: #8899a6; font-size: 14px; margin-bottom: 15px;">
+                Educational Platform by Schnitzlein Consulting
+            </p>
+            <p style="color: #8899a6; font-size: 14px;">
+                <a href="https://schnitzleinconsulting.com/impressum" target="_blank" style="color: #00ff88; text-decoration: none; margin: 0 10px;">Impressum</a>
+                |
+                <a href="https://schnitzleinconsulting.com/datenschutz" target="_blank" style="color: #00ff88; text-decoration: none; margin: 0 10px;">Datenschutz</a>
+                |
+                <a href="https://www.schnitzleinconsulting.com/en/datenschutz" target="_blank" style="color: #00ff88; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+            </p>
+            <p style="color: #666; font-size: 12px; margin-top: 15px;">
+                © 2025 Schnitzlein Consulting - All Rights Reserved
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Question data
+        const questions = [
+            {
+                id: 'market_pump',
+                type: 'options',
+                question: 'You see a stock up 20%. You:',
+                options: [
+                    { text: 'Jump in immediately', value: 25 },
+                    { text: 'Wait for pullback', value: 10 },
+                    { text: 'Check the news first', value: 5 },
+                    { text: 'Skip it completely', value: 0 }
+                ]
+            },
+            {
+                id: 'friend_gains',
+                type: 'options',
+                question: 'Your trading friend made $5k today. You:',
+                options: [
+                    { text: 'Feel angry you missed it', value: 25 },
+                    { text: 'Ask what the trade was', value: 15 },
+                    { text: 'Say congrats and move on', value: 5 },
+                    { text: 'Focus on your own plan', value: 0 }
+                ]
+            },
+            {
+                id: 'premarket',
+                type: 'options',
+                question: 'Pre-market is pumping. You:',
+                options: [
+                    { text: 'Already have orders ready', value: 25 },
+                    { text: 'Frantically scan for entries', value: 20 },
+                    { text: 'Wait for market open', value: 10 },
+                    { text: 'Stick to your watchlist', value: 0 }
+                ]
+            },
+            {
+                id: 'missed_runner',
+                type: 'options',
+                question: 'You miss a 50% runner. Next move:',
+                options: [
+                    { text: 'Chase the next similar stock', value: 25 },
+                    { text: 'Double position size to recover', value: 20 },
+                    { text: 'Feel bad but stay disciplined', value: 10 },
+                    { text: 'Journal why you missed it', value: 0 }
+                ]
+            },
+            {
+                id: 'social_media',
+                type: 'options',
+                question: 'Twitter shows gains everywhere. You:',
+                options: [
+                    { text: 'Feel like a loser', value: 25 },
+                    { text: 'Start overtrading', value: 20 },
+                    { text: 'Question your strategy', value: 15 },
+                    { text: 'Stay off social media', value: 0 }
+                ]
+            },
+            {
+                id: 'gap_up',
+                type: 'options',
+                question: 'Market gaps up huge. You:',
+                options: [
+                    { text: 'Buy everything moving', value: 25 },
+                    { text: 'Enter without stops', value: 20 },
+                    { text: 'Wait 30 minutes first', value: 5 },
+                    { text: 'Trade your plan only', value: 0 }
+                ]
+            },
+            {
+                id: 'fomo_level',
+                type: 'options',
+                question: 'Rate your FOMO level 1-10:',
+                options: [
+                    { text: '8-10', value: 25 },
+                    { text: '6-7', value: 15 },
+                    { text: '4-5', value: 10 },
+                    { text: '1-3', value: 5 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let startTime = Date.now();
+
+        // Initialize
+        window.onload = function() {
+            showQuestion();
+            trackEvent('fomo_calculator_started');
+        };
+
+        function showQuestion() {
+            const container = document.getElementById('questionContainer');
+            const question = questions[currentQuestion];
+            
+            let html = `
+                <div class="question active">
+                    <div class="question-number">Question ${currentQuestion + 1} of ${questions.length}</div>
+                    <div class="question-text">${question.question}</div>
+            `;
+
+            if (question.type === 'options') {
+                html += '<div class="options">';
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="selectOption('${question.id}', ${option.value}, ${index})">
+                            ${option.text}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+            
+            document.getElementById('calculateBtn').style.display = 'none';
+            
+            updateProgressBar();
+        }
+
+        function selectOption(questionId, value, index) {
+            answers[questionId] = value;
+            
+            // Update visual selection
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            // Auto-advance after selection
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    checkProgress();
+                    document.getElementById('calculateBtn').style.display = 'block';
+                    document.getElementById('calculateBtn').scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 300);
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function checkProgress() {
+            const requiredAnswers = questions.map(q => q.id);
+            const hasAllAnswers = requiredAnswers.every(id => answers[id] !== undefined);
+            
+            if (hasAllAnswers) {
+                document.getElementById('calculateBtn').style.display = 'block';
+                document.getElementById('calculateBtn').disabled = false;
+            } else {
+                document.getElementById('calculateBtn').style.display = 'none';
+            }
+        }
+
+        function calculateScore() {
+            // Validate all answers exist
+            if (Object.keys(answers).length < questions.length) {
+                alert('Please answer all questions');
+                return;
+            }
+
+            // Calculate total score
+            let totalScore = 0;
+            for (let key in answers) {
+                totalScore += answers[key];
+            }
+            
+            // Show results
+            showResults(totalScore);
+            
+            // Track completion
+            trackEvent('fomo_score_calculated', {
+                score: totalScore,
+                completion_time: (Date.now() - startTime) / 1000
+            });
+            
+            // Save data
+            saveCalculation(totalScore);
+        }
+
+        function showResults(score) {
+            document.getElementById('calculatorContainer').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            const scoreElement = document.getElementById('fomoScore');
+            let scoreCategory = '';
+            let shareText = '';
+            
+            // Determine category
+            if (score <= 35) {
+                scoreCategory = 'FOMO Master';
+                scoreElement.className = 'risk-score score-master';
+                shareText = "I'm a FOMO Master! My trading decisions are based on logic, not emotions.";
+            } else if (score <= 70) {
+                scoreCategory = 'FOMO Fighter';
+                scoreElement.className = 'risk-score score-fighter';
+                shareText = "I'm fighting FOMO and winning! Working on my trading psychology daily.";
+            } else if (score <= 105) {
+                scoreCategory = 'FOMO Victim';
+                scoreElement.className = 'risk-score score-victim';
+                shareText = "FOMO is affecting my trading. Time to work on my psychology!";
+            } else {
+                scoreCategory = 'FOMO Addict';
+                scoreElement.className = 'risk-score score-addict';
+                shareText = "I'm a FOMO Addict. Got the wake-up call I needed!";
+            }
+            
+            scoreElement.textContent = scoreCategory;
+            window.shareText = shareText;
+            
+            // Explanation
+            const explanations = {
+                'FOMO Master': "Excellent! You have strong emotional control and don't let market movements dictate your decisions. This is a rare trait among traders.",
+                'FOMO Fighter': "Good awareness! You recognize FOMO but still struggle sometimes. You're on the right path to mastering your emotions.",
+                'FOMO Victim': "Warning: FOMO is likely costing you money. Your emotional reactions to market movements need immediate attention.",
+                'FOMO Addict': "Critical: Your trading decisions are heavily influenced by emotions. This pattern often leads to significant losses."
+            };
+            
+            document.getElementById('scoreExplanation').textContent = explanations[scoreCategory];
+            
+            // Recommendations
+            const recommendations = getRecommendations(scoreCategory);
+            const recList = document.getElementById('recommendationsList');
+            recList.innerHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+        }
+
+        function getRecommendations(category) {
+            const recs = {
+                'FOMO Master': [
+                    "Maintain your disciplined approach - it's working",
+                    "Consider mentoring others who struggle with FOMO",
+                    "Document your decision-making process to help others",
+                    "Stay humble - markets can test anyone's discipline"
+                ],
+                'FOMO Fighter': [
+                    "Create a pre-trade checklist to filter emotional decisions",
+                    "Set a '15-minute rule' before entering any trade",
+                    "Limit social media exposure during trading hours",
+                    "Practice meditation or breathing exercises daily"
+                ],
+                'FOMO Victim': [
+                    "Immediately implement position size limits",
+                    "Remove real-time market apps from your phone",
+                    "Create strict entry criteria and stick to them",
+                    "Consider paper trading until emotions stabilize"
+                ],
+                'FOMO Addict': [
+                    "Take a trading break to reset your psychology",
+                    "Work with a trading psychology coach or mentor",
+                    "Start with very small position sizes when returning",
+                    "Join a trading accountability group for support"
+                ]
+            };
+            
+            return recs[category] || [];
+        }
+
+        // Data collection
+        function saveCalculation(score) {
+            try {
+                let data = JSON.parse(localStorage.getItem('fomoCalculatorData') || '{"calculations": []}');
+                
+                const calculation = {
+                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    timestamp: new Date().toISOString(),
+                    score: score,
+                    answers: answers,
+                    completionTime: (Date.now() - startTime) / 1000,
+                    userAgent: navigator.userAgent,
+                    referrer: document.referrer || 'direct'
+                };
+                
+                data.calculations.push(calculation);
+                localStorage.setItem('fomoCalculatorData', JSON.stringify(data));
+                
+                console.log('Data saved:', calculation);
+            } catch (e) {
+                console.error('Error saving data:', e);
+            }
+        }
+
+        // Email form handling with MailerLite
+        document.getElementById('emailForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            const consentChecked = document.getElementById('dataConsent').checked;
+            const scoreText = document.getElementById('fomoScore').textContent;
+            
+            if (!email) return;
+            
+            // MailerLite Integration
+            const MAILERLITE_API_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWI0MDljMDMxZTViNjI5M2EyOWM3MjkzMTA4ZDFmN2M3NmYwMjczNTU3NGI1NmFhYjVjZGY3ZDljOGQ3NGIxNDhjMDI0MTU0ZTcwNTMwNzciLCJpYXQiOjE3NDk3MzI3ODEuMjk1NzcyLCJuYmYiOjE3NDk3MzI3ODEuMjk1Nzc2LCJleHAiOjQ5MDU0MDYzODEuMjg5ODI2LCJzdWIiOiIxNTgxMjY5Iiwic2NvcGVzIjpbXX0.g64vCpQu8KxSIqctKKk03QyBKhgmEF6sfyN6rl68FraHRFRN1VbgCl-EgXXeo6aWUsW3PKotGcdbB0QXoi7Do21z6VQ7YctLspe8kyriSYILMV7k53zXgoxXe24puXA8bclXCsPaIO1uNepwZXNDAWaMHjY6DF9hdwFEh3ZedjnAB535UGzzU37wd-jQod_oVmbQznaRSyoWPz3JKMHgG345TZqgUdfLsrrm4zKdzJWWKfKVgxo7BoTKKrQhcBbRC3uRs3fTOQU9E_2D1HRDXFGhcHBwF5V3W973q8g9ADdXBw6zCIOvRrT88s7RvWUtOaEIn7s-_PqhXk4Y6KklunyFPzTccD6TzdOG5vTJnt3kfVGClTR1JcbnlBSzRsl2fXLoKlNQWKl5ectJvJ33snMlc2xBv4LmnrXKqGJOQB93YTOHuqLE6swJTZLDlVC2TibGOh4MejZDgDUNI8hQo1eCniLJ7JlJ1nbBcZo-6tkBF6PZhDeagQioajoR8nQTQ_kt1TBBn1l9uJbCJnPajDlYamLNfvcD-8JwJltWRIkCkUNqTmPKHmDo4w6-rq97-yww9untRWuFvKU-z59WA1C9_lCldf--X9zBHJj69i7rIgM_Hx9STXCOd5sa4WjsnmXkKE0RcqhKE_oujxzta5NujlgwpZPCCmTzw6GBgWs'; 
+            
+            // Create new group for FOMO Calculator users
+            const MAILERLITE_GROUP_ID = '157609830740133797'; // You may want to create a new group
+            
+            try {
+                // Send to MailerLite
+                const response = await fetch('https://connect.mailerlite.com/api/subscribers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${MAILERLITE_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        groups: [MAILERLITE_GROUP_ID],
+                        fields: {
+                            name: email.split('@')[0],
+                            fomo_score: scoreText,
+                            tool: 'fomo_calculator',
+                            consent: consentChecked ? 'yes' : 'no'
+                        },
+                        status: 'active'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('MailerLite API error');
+                }
+                
+                console.log('✅ Added to MailerLite successfully');
+                
+            } catch (error) {
+                console.error('MailerLite error:', error);
+            }
+            
+            // Track event
+            trackEvent('email_captured', {
+                tool: 'fomo_calculator',
+                consent: consentChecked,
+                score_category: scoreText
+            });
+            
+            // Save email to local data
+            try {
+                let data = JSON.parse(localStorage.getItem('fomoCalculatorData') || '{"calculations": [], "emails": []}');
+                if (!data.emails) data.emails = [];
+                data.emails.push({
+                    email: email,
+                    timestamp: new Date().toISOString(),
+                    scoreCategory: scoreText,
+                    consent: consentChecked
+                });
+                localStorage.setItem('fomoCalculatorData', JSON.stringify(data));
+            } catch (e) {
+                console.error('Error saving email:', e);
+            }
+            
+            // Show success
+            document.getElementById('emailForm').innerHTML = 
+                '<p style="color: #00ff88; font-weight: 600; padding: 20px;">✓ Check your email! Your FOMO management guide is on the way.</p>';
+            
+            // Redirect to main assessment after 3 seconds
+            setTimeout(() => {
+                if (confirm('Would you like to take our complete Trading Psychology Assessment?')) {
+                    window.location.href = '/assessment.html';
+                }
+            }, 3000);
+        });
+
+        // Social sharing
+        function shareOnTwitter() {
+            const text = window.shareText + ' Test your FOMO level:';
+            const url = window.location.href;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        function shareOnLinkedIn() {
+            const url = window.location.href;
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        // Analytics helper
+        function trackEvent(eventName, parameters = {}) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, parameters);
+            }
+            console.log('Event:', eventName, parameters);
+        }
+    </script>
+</body>
+</html>
