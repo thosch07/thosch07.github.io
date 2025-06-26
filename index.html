@@ -6,31 +6,37 @@
     <title>Decision Psychology Tools - Educational Psychology Platform</title>
     <meta name="description" content="Free educational tools for understanding decision-making psychology and behavioral patterns. Academic content for personal development.">
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW"></script>
+    <!-- Google Analytics wird nur geladen, wenn Cookies akzeptiert wurden -->
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-T09F68TQVW');
+        // Cookie-Consent Check
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Google Analytics nur laden wenn Consent gegeben wurde
+        if (getCookie('cookieConsent') === 'accepted') {
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-T09F68TQVW');
+        }
         
         // Custom event tracking for tool clicks
         function trackToolClick(toolName) {
-            gtag('event', 'tool_click', {
-                'tool_name': toolName,
-                'event_category': 'engagement',
-                'event_label': toolName
-            });
-        }
-        
-        // Track page visit source
-        const urlParams = new URLSearchParams(window.location.search);
-        const source = urlParams.get('utm_source') || urlParams.get('source') || 'direct';
-        if (source !== 'direct') {
-            gtag('event', 'page_view_source', {
-                'source': source,
-                'event_category': 'traffic_source'
-            });
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'tool_click', {
+                    'tool_name': toolName,
+                    'event_category': 'engagement',
+                    'event_label': toolName
+                });
+            }
         }
     </script>
     
@@ -46,6 +52,218 @@
             background: #0f1419;
             color: #fff;
             line-height: 1.6;
+        }
+
+        /* Cookie Banner Styles */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1a1f2e;
+            border-top: 2px solid #00ff88;
+            padding: 20px;
+            z-index: 9999;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .cookie-banner.show {
+            display: block;
+        }
+
+        .cookie-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .cookie-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .cookie-text h3 {
+            color: #00ff88;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .cookie-text p {
+            color: #8899a6;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .cookie-text a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        .cookie-text a:hover {
+            text-decoration: underline;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .cookie-accept {
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            color: #000;
+        }
+
+        .cookie-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .cookie-decline {
+            background: transparent;
+            color: #8899a6;
+            border: 1px solid #8899a6;
+        }
+
+        .cookie-decline:hover {
+            background: #8899a6;
+            color: #000;
+        }
+
+        .cookie-settings {
+            background: transparent;
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
+        }
+
+        .cookie-settings:hover {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        /* Cookie Settings Modal */
+        .cookie-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cookie-modal.show {
+            display: flex;
+        }
+
+        .cookie-modal-content {
+            background: #1a1f2e;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #00ff88;
+        }
+
+        .cookie-modal h2 {
+            color: #00ff88;
+            margin-bottom: 20px;
+        }
+
+        .cookie-option {
+            margin: 20px 0;
+            padding: 20px;
+            background: #0f1419;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .cookie-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .cookie-option h3 {
+            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .cookie-option p {
+            color: #8899a6;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .cookie-switch {
+            position: relative;
+            width: 50px;
+            height: 25px;
+        }
+
+        .cookie-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .cookie-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+        .cookie-slider:before {
+            position: absolute;
+            content: "";
+            height: 17px;
+            width: 17px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .cookie-slider {
+            background-color: #00ff88;
+        }
+
+        input:checked + .cookie-slider:before {
+            transform: translateX(25px);
+        }
+
+        input:disabled + .cookie-slider {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         /* Compliance Banner */
@@ -285,10 +503,71 @@
             .tools-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .cookie-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cookie-buttons {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Cookie Banner -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h3>🍪 Cookie-Einstellungen</h3>
+                <p>Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und anonyme Statistiken zu sammeln. 
+                Sie können Ihre Einstellungen jederzeit ändern. 
+                <a href="https://schnitzleinconsulting.com/datenschutz" target="_blank">Mehr erfahren</a></p>
+            </div>
+            <div class="cookie-buttons">
+                <button class="cookie-button cookie-decline" onclick="declineCookies()">Nur Notwendige</button>
+                <button class="cookie-button cookie-settings" onclick="showCookieSettings()">Einstellungen</button>
+                <button class="cookie-button cookie-accept" onclick="acceptAllCookies()">Alle Akzeptieren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Settings Modal -->
+    <div class="cookie-modal" id="cookieModal">
+        <div class="cookie-modal-content">
+            <h2>Cookie-Einstellungen</h2>
+            
+            <div class="cookie-option">
+                <div class="cookie-option-header">
+                    <h3>Notwendige Cookies</h3>
+                    <label class="cookie-switch">
+                        <input type="checkbox" checked disabled>
+                        <span class="cookie-slider"></span>
+                    </label>
+                </div>
+                <p>Diese Cookies sind für die Grundfunktionen der Website erforderlich und können nicht deaktiviert werden.</p>
+            </div>
+
+            <div class="cookie-option">
+                <div class="cookie-option-header">
+                    <h3>Analyse-Cookies</h3>
+                    <label class="cookie-switch">
+                        <input type="checkbox" id="analyticsCookies" checked>
+                        <span class="cookie-slider"></span>
+                    </label>
+                </div>
+                <p>Diese Cookies helfen uns zu verstehen, wie Besucher mit unserer Website interagieren. Wir verwenden Google Analytics für anonyme Statistiken.</p>
+            </div>
+
+            <div class="cookie-buttons" style="margin-top: 30px; justify-content: flex-end;">
+                <button class="cookie-button cookie-decline" onclick="closeCookieSettings()">Abbrechen</button>
+                <button class="cookie-button cookie-accept" onclick="saveCookieSettings()">Einstellungen Speichern</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Compliance Banner -->
     <div class="compliance-banner">
         <strong>Educational Platform</strong> - All content is for educational purposes only. 
@@ -438,38 +717,146 @@
         </div>
     </footer>
     
-    <!-- Additional Analytics Script for scroll depth and time on page -->
+    <!-- Cookie Banner & Analytics Scripts -->
     <script>
-        // Track scroll depth
-        let scrollDepths = [25, 50, 75, 100];
-        let scrolledDepths = [];
-        
-        window.addEventListener('scroll', function() {
-            let scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        // Cookie Banner Functions
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function deleteCookie(name) {
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+        }
+
+        // Check if cookie consent already given
+        window.addEventListener('DOMContentLoaded', function() {
+            const consent = getCookie('cookieConsent');
+            if (!consent) {
+                document.getElementById('cookieBanner').classList.add('show');
+            } else if (consent === 'accepted') {
+                loadGoogleAnalytics();
+            }
+        });
+
+        function acceptAllCookies() {
+            setCookie('cookieConsent', 'accepted', 365);
+            setCookie('analyticsCookies', 'true', 365);
+            document.getElementById('cookieBanner').classList.remove('show');
+            loadGoogleAnalytics();
+        }
+
+        function declineCookies() {
+            setCookie('cookieConsent', 'declined', 365);
+            setCookie('analyticsCookies', 'false', 365);
+            document.getElementById('cookieBanner').classList.remove('show');
+            // Remove any Google Analytics cookies
+            deleteCookie('_ga');
+            deleteCookie('_gid');
+            deleteCookie('_gat');
+        }
+
+        function showCookieSettings() {
+            document.getElementById('cookieModal').classList.add('show');
+        }
+
+        function closeCookieSettings() {
+            document.getElementById('cookieModal').classList.remove('show');
+        }
+
+        function saveCookieSettings() {
+            const analyticsEnabled = document.getElementById('analyticsCookies').checked;
             
-            scrollDepths.forEach(function(depth) {
-                if (scrollPercent >= depth && !scrolledDepths.includes(depth)) {
-                    scrolledDepths.push(depth);
-                    gtag('event', 'scroll_depth', {
-                        'percent_scrolled': depth,
+            if (analyticsEnabled) {
+                setCookie('cookieConsent', 'accepted', 365);
+                setCookie('analyticsCookies', 'true', 365);
+                loadGoogleAnalytics();
+            } else {
+                setCookie('cookieConsent', 'declined', 365);
+                setCookie('analyticsCookies', 'false', 365);
+                // Remove Google Analytics cookies
+                deleteCookie('_ga');
+                deleteCookie('_gid');
+                deleteCookie('_gat');
+            }
+            
+            document.getElementById('cookieBanner').classList.remove('show');
+            document.getElementById('cookieModal').classList.remove('show');
+        }
+
+        function loadGoogleAnalytics() {
+            if (!window.GA_INITIALIZED) {
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
+                document.head.appendChild(script);
+
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-T09F68TQVW');
+                
+                window.GA_INITIALIZED = true;
+
+                // Track page visit source after GA loads
+                const urlParams = new URLSearchParams(window.location.search);
+                const source = urlParams.get('utm_source') || urlParams.get('source') || 'direct';
+                if (source !== 'direct') {
+                    gtag('event', 'page_view_source', {
+                        'source': source,
+                        'event_category': 'traffic_source'
+                    });
+                }
+
+                // Initialize scroll tracking
+                initializeScrollTracking();
+            }
+        }
+
+        // Analytics tracking functions (only work if GA is loaded)
+        function initializeScrollTracking() {
+            let scrollDepths = [25, 50, 75, 100];
+            let scrolledDepths = [];
+            
+            window.addEventListener('scroll', function() {
+                let scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                
+                scrollDepths.forEach(function(depth) {
+                    if (scrollPercent >= depth && !scrolledDepths.includes(depth)) {
+                        scrolledDepths.push(depth);
+                        if (typeof gtag !== 'undefined') {
+                            gtag('event', 'scroll_depth', {
+                                'percent_scrolled': depth,
+                                'event_category': 'engagement'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Track time on page
+            let startTime = new Date().getTime();
+            
+            window.addEventListener('beforeunload', function() {
+                let endTime = new Date().getTime();
+                let timeSpent = Math.round((endTime - startTime) / 1000);
+                
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'time_on_page', {
+                        'time_seconds': timeSpent,
                         'event_category': 'engagement'
                     });
                 }
             });
-        });
-        
-        // Track time on page
-        let startTime = new Date().getTime();
-        
-        window.addEventListener('beforeunload', function() {
-            let endTime = new Date().getTime();
-            let timeSpent = Math.round((endTime - startTime) / 1000);
-            
-            gtag('event', 'time_on_page', {
-                'time_seconds': timeSpent,
-                'event_category': 'engagement'
-            });
-        });
+        }
     </script>
 </body>
 </html>
