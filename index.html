@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decision Psychology Tools - Educational Psychology Platform</title>
-    <meta name="description" content="Free educational tools for understanding decision-making psychology and behavioral patterns. Academic content for personal development.">
+    <title>Decision Psychology Tools - Free Self-Assessment Platform</title>
+    <meta name="description" content="Free tools for understanding your decision-making patterns and behavioral psychology. 100% anonymous, instant results.">
     
     <!-- Google Analytics wird nur geladen, wenn Cookies akzeptiert wurden -->
     <script>
@@ -266,22 +266,9 @@
             cursor: not-allowed;
         }
 
-        /* Compliance Banner */
-        .compliance-banner {
-            background: #1a1f2e;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid #00ff88;
-            font-size: 14px;
-        }
-
-        .compliance-banner strong {
-            color: #00ff88;
-        }
-
         /* Header */
         header {
-            padding: 20px 0;
+            padding: 30px 0;
             text-align: center;
         }
 
@@ -323,18 +310,19 @@
 
         /* Educational Notice */
         .educational-notice {
-            background: #1a1f2e;
-            border: 1px solid #333;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             margin: 20px auto;
             max-width: 600px;
             text-align: center;
+            font-size: 0.9em;
         }
 
-        .educational-notice h3 {
-            color: #00ff88;
-            margin-bottom: 10px;
+        .educational-notice p {
+            color: #8899a6;
+            margin: 0;
         }
 
         /* Tools Section */
@@ -468,30 +456,47 @@
 
         /* Footer */
         footer {
-            background: #1a1f2e;
-            padding: 40px 20px;
+            padding: 40px 20px 20px;
             text-align: center;
             border-top: 1px solid #333;
         }
 
         .footer-disclaimer {
-            max-width: 800px;
-            margin: 0 auto 30px;
-            padding: 20px;
-            background: #0f1419;
-            border-radius: 10px;
-            border: 1px solid #333;
-        }
-
-        .footer-disclaimer h4 {
-            color: #00ff88;
-            margin-bottom: 10px;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            font-size: 0.85em;
+            color: #8899a6;
+            text-align: center;
         }
 
         .footer-disclaimer p {
+            margin: 0;
+        }
+
+        .footer-disclaimer a {
+            color: #00ff88;
+            text-decoration: none;
+        }
+
+        .footer-disclaimer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
             color: #8899a6;
             font-size: 0.9em;
-            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: #00ff88;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
         }
 
         /* Responsive */
@@ -568,114 +573,105 @@
         </div>
     </div>
 
-    <!-- Compliance Banner -->
-    <div class="compliance-banner">
-        <strong>Educational Platform</strong> - All content is for educational purposes only. 
-        This is not financial, medical, or professional advice. 
-        <strong>Academic psychological assessments for personal development.</strong>
-    </div>
-
     <!-- Header -->
     <header>
         <a href="index.html" class="logo">Decision Psychology Platform</a>
-        <p class="tagline">Educational Tools for Understanding Human Behavior</p>
+        <p class="tagline">Free Tools for Understanding Your Mind</p>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
         <h1>Understand Your Decision Patterns</h1>
-        <p class="subtitle">Research-based educational tools for behavioral psychology</p>
+        <p class="subtitle">Quick self-assessments to explore your behavioral psychology</p>
         
         <div class="educational-notice">
-            <h3>📚 Academic Content</h3>
-            <p>Our tools are designed for educational exploration of psychological concepts. 
-            They are not diagnostic instruments or professional assessments.</p>
+            <p>📚 Educational psychology tools for personal development</p>
         </div>
     </section>
 
     <!-- Tools Section -->
     <section class="tools">
-        <h2 class="section-title">Educational Psychology Tools</h2>
-        <p class="section-subtitle">Explore behavioral patterns through interactive learning</p>
+        <h2 class="section-title">Choose Your Assessment</h2>
+        <p class="section-subtitle">Each tool takes just 2-5 minutes to complete</p>
         
         <div class="tools-grid">
             <!-- Psychology Assessment -->
             <div class="tool-card">
                 <div class="tool-icon">🧠</div>
                 <h3>Behavioral Type Assessment</h3>
-                <p>Discover your decision-making patterns through this educational framework based on behavioral psychology research.</p>
+                <p>Discover your decision-making patterns and get personalized insights about your behavioral tendencies.</p>
                 
                 <ul class="tool-features">
-                    <li>8 research-based questions</li>
-                    <li>Immediate educational insights</li>
-                    <li>Personal development focus</li>
-                    <li>No data storage or tracking</li>
+                    <li>8 quick questions</li>
+                    <li>4 personality types</li>
+                    <li>Instant PDF report</li>
+                    <li>Actionable recommendations</li>
                 </ul>
                 
-                <a href="assessment.html" class="cta-button" onclick="trackToolClick('Psychology Assessment')">Start Learning</a>
+                <a href="assessment.html" class="cta-button" onclick="trackToolClick('Psychology Assessment')">Start Assessment</a>
             </div>
 
             <!-- Risk Assessment -->
             <div class="tool-card">
                 <div class="tool-icon">⚖️</div>
-                <h3>Decision Risk Assessment</h3>
-                <p>Educational tool exploring how emotions influence decision-making patterns in high-pressure situations.</p>
+                <h3>Revenge Risk Calculator</h3>
+                <p>Understand how emotions affect your decision-making in high-pressure situations.</p>
                 
                 <ul class="tool-features">
-                    <li>Behavioral pattern analysis</li>
-                    <li>Emotional awareness education</li>
-                    <li>Research-backed methodology</li>
-                    <li>Instant educational feedback</li>
+                    <li>10 scenario questions</li>
+                    <li>Risk score analysis</li>
+                    <li>Prevention strategies</li>
+                    <li>Personalized action plan</li>
                 </ul>
                 
-                <a href="revenge-calculator.html" class="cta-button" onclick="trackToolClick('Risk Assessment')">Explore Patterns</a>
+                <a href="revenge-calculator.html" class="cta-button" onclick="trackToolClick('Risk Assessment')">Check My Risk</a>
             </div>
 
             <!-- FOMO Score Test -->
             <div class="tool-card">
                 <div class="tool-icon">📊</div>
                 <h3>FOMO Score Test</h3>
-                <p>Educational tool to assess how Fear of Missing Out affects your decision-making processes.</p>
+                <p>Measure how Fear of Missing Out impacts your choices and learn to manage it better.</p>
                 
                 <ul class="tool-features">
                     <li>7 quick questions</li>
-                    <li>Instant score analysis</li>
-                    <li>Personalized recommendations</li>
-                    <li>Educational insights</li>
+                    <li>FOMO level analysis</li>
+                    <li>Management techniques</li>
+                    <li>Free guide download</li>
                 </ul>
                 
-                <a href="fomo-calculator.html" class="cta-button" onclick="trackToolClick('FOMO Score Test')">Test Your FOMO Level</a>
+                <a href="fomo-calculator.html" class="cta-button" onclick="trackToolClick('FOMO Score Test')">Test My FOMO</a>
             </div>
         </div>
     </section>
 
     <!-- Features -->
     <section class="features">
-        <h2 class="section-title">Why Use These Educational Tools?</h2>
+        <h2 class="section-title">Why Our Tools?</h2>
         
         <div class="features-grid">
             <div class="feature">
-                <div class="feature-icon">🎓</div>
-                <h3>Academic Foundation</h3>
-                <p>Based on established psychological research and behavioral science principles</p>
-            </div>
-            
-            <div class="feature">
                 <div class="feature-icon">🔒</div>
-                <h3>Privacy Focused</h3>
-                <p>No personal data collection, no accounts required, completely anonymous</p>
+                <h3>100% Anonymous</h3>
+                <p>No registration, no personal data stored, complete privacy guaranteed</p>
             </div>
             
             <div class="feature">
                 <div class="feature-icon">⚡</div>
-                <h3>Instant Insights</h3>
-                <p>Get immediate educational feedback to enhance self-awareness</p>
+                <h3>Instant Results</h3>
+                <p>Get your personalized analysis immediately after completion</p>
             </div>
             
             <div class="feature">
-                <div class="feature-icon">📚</div>
-                <h3>Learning Resource</h3>
-                <p>Designed as educational content for personal development</p>
+                <div class="feature-icon">💡</div>
+                <h3>Self-Discovery</h3>
+                <p>Learn about your patterns and tendencies through guided questions</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Actionable Tips</h3>
+                <p>Receive practical recommendations you can apply right away</p>
             </div>
         </div>
     </section>
@@ -683,38 +679,17 @@
     <!-- Footer -->
     <footer>
         <div class="footer-disclaimer">
-            <h4>Important Educational Notice</h4>
-            <p>This platform provides educational content about behavioral psychology and decision-making patterns. 
-            All assessments are for educational purposes only and should not be considered professional psychological evaluations, 
-            financial advice, or any form of professional consultation. The tools are designed to promote self-awareness 
-            and learning about psychological concepts. Always consult qualified professionals for specific advice 
-            related to mental health, finances, or other professional matters.</p>
+            <p>Educational tools only. Not professional advice. 
+            <a href="https://schnitzleinconsulting.com/datenschutz" target="_blank">Privacy Policy</a></p>
         </div>
         
-        <p style="margin-top: 30px; color: #666;">
-            © 2025 Decision Psychology Platform - Educational Use Only
-        </p>
-    </footer>
-    
-    <!-- Legal Footer -->
-    <footer style="background: #0f1419; padding: 20px; text-align: center; border-top: 1px solid #333;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <p style="color: #8899a6; font-size: 14px; margin-bottom: 15px;">
-                Educational Platform by Schnitzlein Consulting
-            </p>
-            <p style="color: #8899a6; font-size: 14px;">
-                <a href="https://schnitzleinconsulting.com/impressum" target="_blank" style="color: #00ff88; text-decoration: none; margin: 0 10px;">Impressum</a>
-                |
-                <a href="https://schnitzleinconsulting.com/datenschutz" target="_blank" style="color: #00ff88; text-decoration: none; margin: 0 10px;">Datenschutz</a>
-                |
-                <a href="https://www.schnitzleinconsulting.com/en/datenschutz" target="_blank" style="color: #00ff88; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
-                |
-                <a href="mailto:info@schnitzleinconsulting.com" style="color: #00ff88; text-decoration: none; margin: 0 10px;">Contact</a>
-            </p>
-            <p style="color: #666; font-size: 12px; margin-top: 15px;">
-                © 2025 Schnitzlein Consulting - All Rights Reserved
-            </p>
+        <div class="footer-links">
+            <a href="https://schnitzleinconsulting.com/impressum" target="_blank">Impressum</a>
+            |
+            <a href="mailto:info@schnitzleinconsulting.com">Contact</a>
         </div>
+        
+        <p style="color: #666; font-size: 0.8em;">© 2025 Schnitzlein Consulting</p>
     </footer>
     
     <!-- Cookie Banner & Analytics Scripts -->
