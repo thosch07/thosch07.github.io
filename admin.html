@@ -95,6 +95,20 @@
             font-size: 1.2em;
         }
 
+        /* Warning Box */
+        .warning-box {
+            background: #ff4444;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .warning-box h3 {
+            margin-bottom: 10px;
+        }
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -134,6 +148,53 @@
             font-size: 0.9em;
             color: #00d4ff;
             margin-top: 5px;
+        }
+
+        /* External Analytics */
+        .external-analytics {
+            background: #1a1f2e;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 2px solid #00ff88;
+        }
+
+        .external-analytics h2 {
+            color: #00ff88;
+            margin-bottom: 20px;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .analytics-card {
+            background: #0f1419;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .analytics-card h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .analytics-card p {
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .analytics-card a {
+            display: inline-block;
+            background: #00ff88;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
         }
 
         /* Tools Section */
@@ -232,147 +293,27 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
 
-        /* Quick Actions */
-        .quick-actions {
+        /* Debug Section */
+        .debug-section {
             background: #1a1f2e;
             padding: 30px;
             border-radius: 15px;
             margin-bottom: 40px;
+            border: 1px solid #ff4444;
         }
 
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+        .debug-section h2 {
+            color: #ff4444;
+            margin-bottom: 20px;
         }
 
-        .action-btn {
-            padding: 15px;
+        .debug-info {
             background: #0f1419;
-            border: 1px solid #333;
-            border-radius: 10px;
-            color: #fff;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            border-color: #00ff88;
-            background: #1a1f2e;
-        }
-
-        /* Data Table */
-        .data-section {
-            background: #1a1f2e;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 40px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #333;
-        }
-
-        th {
-            background: #0f1419;
-            font-weight: 600;
-            color: #00ff88;
-            text-transform: uppercase;
-            font-size: 0.9em;
-        }
-
-        td {
-            color: #ccc;
-        }
-
-        tr:hover td {
-            background: #0f1419;
-        }
-
-        /* Activity Feed */
-        .activity-feed {
-            background: #1a1f2e;
-            padding: 30px;
-            border-radius: 15px;
-        }
-
-        .activity-item {
-            padding: 15px;
-            border-bottom: 1px solid #333;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            background: #0f1419;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-        }
-
-        .activity-details {
-            flex: 1;
-        }
-
-        .activity-title {
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .activity-time {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        /* Modal for detailed data */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-        }
-
-        .modal-content {
-            background-color: #1a1f2e;
-            margin: 5% auto;
             padding: 20px;
-            border: 1px solid #333;
-            width: 90%;
-            max-width: 800px;
-            border-radius: 15px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .close {
-            color: #666;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #fff;
+            border-radius: 10px;
+            font-family: monospace;
+            color: #ccc;
+            overflow-x: auto;
         }
 
         /* Responsive */
@@ -406,81 +347,98 @@
             <p>Trading Psychology Tools - Complete Overview</p>
         </div>
 
-        <!-- Summary Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Users</h3>
-                <div class="stat-value" id="totalUsers">0</div>
-                <div class="stat-trend">All Tools Combined</div>
-            </div>
-            <div class="stat-card">
-                <h3>Today's Activity</h3>
-                <div class="stat-value" id="todayActivity">0</div>
-                <div class="stat-trend">Last 24 Hours</div>
-            </div>
-            <div class="stat-card">
-                <h3>Email Captures</h3>
-                <div class="stat-value" id="totalEmails">0</div>
-                <div class="stat-trend">Total Subscribers</div>
-            </div>
-            <div class="stat-card">
-                <h3>Conversion Rate</h3>
-                <div class="stat-value" id="conversionRate">0%</div>
-                <div class="stat-trend">Email/User Ratio</div>
-            </div>
-            <div class="stat-card">
-                <h3>Avg Session Time</h3>
-                <div class="stat-value" id="avgTime">0s</div>
-                <div class="stat-trend">All Tools Average</div>
+        <!-- Warning Box -->
+        <div class="warning-box">
+            <h3>⚠️ localStorage Issue Detected</h3>
+            <p>Data storage is not working properly. This may be due to browser restrictions or privacy settings.</p>
+            <p>Use the external analytics links below to track your real data.</p>
+        </div>
+
+        <!-- External Analytics -->
+        <div class="external-analytics">
+            <h2>📊 External Analytics & Tracking</h2>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Google Analytics</h3>
+                    <p>Track real visitor data, page views, and user behavior</p>
+                    <a href="https://analytics.google.com" target="_blank">Open Google Analytics</a>
+                </div>
+                <div class="analytics-card">
+                    <h3>X (Twitter) Ads</h3>
+                    <p>Monitor your ad performance and link clicks</p>
+                    <a href="https://ads.twitter.com" target="_blank">Open X Ads Manager</a>
+                </div>
+                <div class="analytics-card">
+                    <h3>TinyURL Stats</h3>
+                    <p>Check click statistics for your short links</p>
+                    <a href="https://tinyurl.com/app" target="_blank">View TinyURL Stats</a>
+                </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <h2 class="section-title">Quick Actions</h2>
-            <div class="actions-grid">
-                <div class="action-btn" onclick="exportAllData()">
-                    📊 Export All Data
-                </div>
-                <div class="action-btn" onclick="viewEmailList()">
-                    📧 View Email List
-                </div>
-                <div class="action-btn" onclick="clearAllData()">
-                    🗑️ Clear All Data
-                </div>
-                <div class="action-btn" onclick="backupData()">
-                    💾 Backup Data
-                </div>
-                <div class="action-btn" onclick="window.open('/', '_blank')">
-                    🌐 View Live Site
-                </div>
+        <!-- Summary Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>X Ads Clicks</h3>
+                <div class="stat-value">270</div>
+                <div class="stat-trend">From Campaign Data</div>
             </div>
+            <div class="stat-card">
+                <h3>Cost Per Click</h3>
+                <div class="stat-value">€0.09</div>
+                <div class="stat-trend">Excellent Performance</div>
+            </div>
+            <div class="stat-card">
+                <h3>Tracked Users</h3>
+                <div class="stat-value" id="totalUsers">0</div>
+                <div class="stat-trend">Check Google Analytics</div>
+            </div>
+            <div class="stat-card">
+                <h3>Storage Status</h3>
+                <div class="stat-value" style="color: #ff4444;">❌</div>
+                <div class="stat-trend">localStorage Blocked</div>
+            </div>
+            <div class="stat-card">
+                <h3>Data Available</h3>
+                <div class="stat-value" id="dataStatus">N/A</div>
+                <div class="stat-trend">No Local Data</div>
+            </div>
+        </div>
+
+        <!-- Debug Section -->
+        <div class="debug-section">
+            <h2>🔧 Debug Information</h2>
+            <div class="debug-info" id="debugInfo">
+                Checking storage capabilities...
+            </div>
+            <br>
+            <button class="btn btn-secondary" onclick="runDiagnostics()">Run Full Diagnostics</button>
         </div>
 
         <!-- Tools Overview -->
         <div class="tools-section">
-            <h2 class="section-title">Tools Overview</h2>
+            <h2 class="section-title">Tools Status</h2>
             <div class="tools-grid">
                 <!-- Psychology Assessment -->
                 <div class="tool-card">
                     <h3>🧠 Psychology Assessment</h3>
                     <div class="tool-stats">
                         <div class="tool-stat">
-                            <div class="tool-stat-value" id="assessmentCount">0</div>
-                            <div class="tool-stat-label">Completions</div>
+                            <div class="tool-stat-value" id="assessmentCount">N/A</div>
+                            <div class="tool-stat-label">Local Data</div>
                         </div>
                         <div class="tool-stat">
-                            <div class="tool-stat-value" id="assessmentAvg">-</div>
-                            <div class="tool-stat-label">Avg Score</div>
+                            <div class="tool-stat-value">✅</div>
+                            <div class="tool-stat-label">Status</div>
                         </div>
                         <div class="tool-stat">
-                            <div class="tool-stat-value" id="assessmentEmails">0</div>
-                            <div class="tool-stat-label">Emails</div>
+                            <div class="tool-stat-value">GA</div>
+                            <div class="tool-stat-label">Track Via</div>
                         </div>
                     </div>
                     <div class="tool-actions">
                         <a href="/assessment.html" class="btn btn-primary" target="_blank">Open Tool</a>
-                        <button class="btn btn-secondary" onclick="viewAssessmentData()">View Data</button>
+                        <button class="btn btn-secondary" onclick="checkToolData('assessment')">Check Data</button>
                     </div>
                 </div>
 
@@ -489,427 +447,228 @@
                     <h3>⚠️ Revenge Calculator</h3>
                     <div class="tool-stats">
                         <div class="tool-stat">
-                            <div class="tool-stat-value" id="revengeCount">0</div>
-                            <div class="tool-stat-label">Calculations</div>
+                            <div class="tool-stat-value" id="revengeCount">N/A</div>
+                            <div class="tool-stat-label">Local Data</div>
                         </div>
                         <div class="tool-stat">
-                            <div class="tool-stat-value" id="revengeAvg">-</div>
-                            <div class="tool-stat-label">Avg Risk</div>
+                            <div class="tool-stat-value">✅</div>
+                            <div class="tool-stat-label">Status</div>
                         </div>
                         <div class="tool-stat">
-                            <div class="tool-stat-value" id="revengeEmails">0</div>
-                            <div class="tool-stat-label">Emails</div>
+                            <div class="tool-stat-value">GA</div>
+                            <div class="tool-stat-label">Track Via</div>
                         </div>
                     </div>
                     <div class="tool-actions">
                         <a href="/revenge-calculator.html" class="btn btn-primary" target="_blank">Open Tool</a>
-                        <button class="btn btn-secondary" onclick="viewRevengeData()">View Data</button>
+                        <button class="btn btn-secondary" onclick="checkToolData('revenge')">Check Data</button>
                     </div>
                 </div>
 
-                <!-- Coming Soon Tools -->
-                <div class="tool-card" style="opacity: 0.6;">
-                    <h3>📈 FOMO Detector</h3>
+                <!-- FOMO Calculator -->
+                <div class="tool-card">
+                    <h3>📈 FOMO Calculator</h3>
                     <div class="tool-stats">
                         <div class="tool-stat">
-                            <div class="tool-stat-value">-</div>
-                            <div class="tool-stat-label">Coming Soon</div>
+                            <div class="tool-stat-value" id="fomoCount">N/A</div>
+                            <div class="tool-stat-label">Local Data</div>
                         </div>
                         <div class="tool-stat">
-                            <div class="tool-stat-value">-</div>
-                            <div class="tool-stat-label">This Week</div>
+                            <div class="tool-stat-value">✅</div>
+                            <div class="tool-stat-label">Status</div>
                         </div>
                         <div class="tool-stat">
-                            <div class="tool-stat-value">-</div>
-                            <div class="tool-stat-label">Launch Ready</div>
+                            <div class="tool-stat-value">GA</div>
+                            <div class="tool-stat-label">Track Via</div>
                         </div>
                     </div>
                     <div class="tool-actions">
-                        <button class="btn btn-secondary" disabled>In Development</button>
+                        <a href="/fomo-calculator.html" class="btn btn-primary" target="_blank">Open Tool</a>
+                        <button class="btn btn-secondary" onclick="checkToolData('fomo')">Check Data</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Activity -->
-        <div class="data-section">
-            <h2 class="section-title">Recent Activity (Last 10)</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Tool</th>
-                        <th>Action</th>
-                        <th>Score/Risk</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody id="activityTable">
-                    <tr><td colspan="5" style="text-align: center; color: #666;">Loading activity data...</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Activity Feed -->
-        <div class="activity-feed">
-            <h2 class="section-title">Live Activity Feed</h2>
-            <div id="activityFeed">
-                <div class="activity-item">
-                    <div class="activity-icon">📊</div>
-                    <div class="activity-details">
-                        <div class="activity-title">Dashboard loaded</div>
-                        <div class="activity-time">Just now</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for detailed data views -->
-    <div id="dataModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Data Details</h2>
-            <div id="modalContent"></div>
+        <!-- Recommendations -->
+        <div class="external-analytics">
+            <h2>💡 Recommendations</h2>
+            <ol style="color: #ccc; line-height: 1.8;">
+                <li>Use Google Analytics for accurate visitor tracking</li>
+                <li>Check X Ads Manager for link click data (270 clicks recorded)</li>
+                <li>Implement server-side tracking for data persistence</li>
+                <li>Consider using a database instead of localStorage</li>
+                <li>Monitor TinyURL stats for click tracking</li>
+            </ol>
         </div>
     </div>
 
     <script>
         // Password protection
-        const ADMIN_PASSWORD = 'Tr@d1ng$ecure2025??'; // Keep your existing password
+        const ADMIN_PASSWORD = 'Tr@d1ng$ecure2025??';
         
         function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             if (password === ADMIN_PASSWORD) {
                 document.getElementById('passwordOverlay').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
-                loadAllData();
+                loadDashboard();
             } else {
                 alert('Incorrect password');
                 document.getElementById('passwordInput').value = '';
             }
         }
 
-        // Load all data
-        function loadAllData() {
-            loadSummaryStats();
-            loadToolStats();
-            loadRecentActivity();
-            updateActivityFeed('Dashboard loaded successfully');
+        // Load dashboard
+        function loadDashboard() {
+            checkStorageCapabilities();
+            attemptDataLoad();
         }
 
-        // Load summary statistics
-        function loadSummaryStats() {
+        // Check storage capabilities
+        function checkStorageCapabilities() {
+            const debugInfo = document.getElementById('debugInfo');
+            let debugText = 'Storage Diagnostics:\n\n';
+            
+            // Check localStorage
             try {
-                // Assessment data
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                debugText += '✅ localStorage: Available\n';
+            } catch (e) {
+                debugText += '❌ localStorage: ' + e.message + '\n';
+            }
+            
+            // Check sessionStorage
+            try {
+                sessionStorage.setItem('test', 'test');
+                sessionStorage.removeItem('test');
+                debugText += '✅ sessionStorage: Available\n';
+            } catch (e) {
+                debugText += '❌ sessionStorage: ' + e.message + '\n';
+            }
+            
+            // Check cookies
+            try {
+                document.cookie = 'test=test';
+                debugText += '✅ Cookies: Available\n';
+            } catch (e) {
+                debugText += '❌ Cookies: ' + e.message + '\n';
+            }
+            
+            // Browser info
+            debugText += '\nBrowser Info:\n';
+            debugText += 'User Agent: ' + navigator.userAgent + '\n';
+            debugText += 'Platform: ' + navigator.platform + '\n';
+            
+            debugInfo.textContent = debugText;
+        }
+
+        // Attempt to load data
+        function attemptDataLoad() {
+            try {
+                // Try to load assessment data
                 const assessments = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
+                document.getElementById('assessmentCount').textContent = assessments.length || '0';
                 
-                // Revenge data
+                // Try to load revenge data
                 const revengeData = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": []}');
-                const revengeCalcs = revengeData.calculations || [];
+                document.getElementById('revengeCount').textContent = revengeData.calculations?.length || '0';
                 
-                // Email data
-                const assessmentEmails = JSON.parse(localStorage.getItem('emailSubscriptions') || '[]');
-                const revengeEmails = revengeData.emails || [];
-                
-                // Calculate totals
-                const totalUsers = assessments.length + revengeCalcs.length;
-                const totalEmails = assessmentEmails.length + revengeEmails.length;
-                
-                // Today's activity
-                const today = new Date().toDateString();
-                const todayActivity = [...assessments, ...revengeCalcs].filter(item => 
-                    new Date(item.timestamp).toDateString() === today
-                ).length;
-                
-                // Conversion rate
-                const conversionRate = totalUsers > 0 ? ((totalEmails / totalUsers) * 100).toFixed(1) : 0;
-                
-                // Average session time
-                const allTimes = [
-                    ...assessments.map(a => a.completionTime || 0),
-                    ...revengeCalcs.map(r => r.completionTime || 0)
-                ].filter(t => t > 0);
-                const avgTime = allTimes.length > 0 ? 
-                    Math.round(allTimes.reduce((a, b) => a + b, 0) / allTimes.length) : 0;
-                
-                // Update UI
+                // Update total users
+                const totalUsers = assessments.length + (revengeData.calculations?.length || 0);
                 document.getElementById('totalUsers').textContent = totalUsers;
-                document.getElementById('todayActivity').textContent = todayActivity;
-                document.getElementById('totalEmails').textContent = totalEmails;
-                document.getElementById('conversionRate').textContent = conversionRate + '%';
-                document.getElementById('avgTime').textContent = avgTime + 's';
+                
+                // Update data status
+                document.getElementById('dataStatus').textContent = totalUsers > 0 ? 'Found' : 'Empty';
                 
             } catch (e) {
-                console.error('Error loading summary stats:', e);
-                updateActivityFeed('Error loading summary stats', 'error');
+                console.error('Data load error:', e);
+                document.getElementById('dataStatus').textContent = 'Error';
+                
+                // Update debug info
+                const debugInfo = document.getElementById('debugInfo');
+                debugInfo.textContent += '\n\nData Load Error:\n' + e.message;
             }
         }
 
-        // Load individual tool statistics
-        function loadToolStats() {
+        // Run full diagnostics
+        function runDiagnostics() {
+            const debugInfo = document.getElementById('debugInfo');
+            let report = 'Full Diagnostics Report\n' + '='.repeat(50) + '\n\n';
+            
+            // Storage test
+            report += '1. STORAGE TESTS:\n';
+            
+            // localStorage test
             try {
-                // Assessment stats
-                const assessments = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
-                const assessmentEmails = JSON.parse(localStorage.getItem('emailSubscriptions') || '[]');
-                
-                document.getElementById('assessmentCount').textContent = assessments.length;
-                document.getElementById('assessmentEmails').textContent = assessmentEmails.length;
-                
-                if (assessments.length > 0) {
-                    const avgScore = assessments.reduce((sum, a) => sum + (a.score || 0), 0) / assessments.length;
-                    document.getElementById('assessmentAvg').textContent = avgScore.toFixed(1);
-                }
-                
-                // Revenge calculator stats
-                const revengeData = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": [], "emails": []}');
-                const revengeCalcs = revengeData.calculations || [];
-                const revengeEmails = revengeData.emails || [];
-                
-                document.getElementById('revengeCount').textContent = revengeCalcs.length;
-                document.getElementById('revengeEmails').textContent = revengeEmails.length;
-                
-                if (revengeCalcs.length > 0) {
-                    const avgRisk = revengeCalcs.reduce((sum, r) => sum + (r.riskScore || 0), 0) / revengeCalcs.length;
-                    document.getElementById('revengeAvg').textContent = avgRisk.toFixed(1) + '%';
-                }
-                
+                const testData = { test: true, timestamp: new Date().toISOString() };
+                localStorage.setItem('diagnosticTest', JSON.stringify(testData));
+                const retrieved = JSON.parse(localStorage.getItem('diagnosticTest'));
+                localStorage.removeItem('diagnosticTest');
+                report += '✅ localStorage: Read/Write OK\n';
             } catch (e) {
-                console.error('Error loading tool stats:', e);
-                updateActivityFeed('Error loading tool statistics', 'error');
+                report += '❌ localStorage: ' + e.message + '\n';
             }
-        }
-
-        // Load recent activity
-        function loadRecentActivity() {
+            
+            // Check all localStorage keys
+            report += '\n2. LOCALSTORAGE CONTENTS:\n';
             try {
-                const assessments = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
-                const revengeData = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": []}');
-                const revengeCalcs = revengeData.calculations || [];
-                
-                // Combine all activities
-                const allActivities = [
-                    ...assessments.map(a => ({
-                        ...a,
-                        tool: 'Psychology Assessment',
-                        action: 'Completed',
-                        value: a.score,
-                        email: a.emailProvided ? 'Yes' : 'No'
-                    })),
-                    ...revengeCalcs.map(r => ({
-                        ...r,
-                        tool: 'Revenge Calculator',
-                        action: 'Calculated',
-                        value: r.riskScore + '%',
-                        email: revengeData.emails?.some(e => 
-                            Math.abs(new Date(e.timestamp) - new Date(r.timestamp)) < 60000
-                        ) ? 'Yes' : 'No'
-                    }))
-                ];
-                
-                // Sort by timestamp
-                allActivities.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                // Display last 10
-                const tbody = document.getElementById('activityTable');
-                tbody.innerHTML = '';
-                
-                allActivities.slice(0, 10).forEach(activity => {
-                    const row = tbody.insertRow();
-                    row.insertCell(0).textContent = new Date(activity.timestamp).toLocaleString();
-                    row.insertCell(1).textContent = activity.tool;
-                    row.insertCell(2).textContent = activity.action;
-                    row.insertCell(3).textContent = activity.value || '-';
-                    row.insertCell(4).textContent = activity.email;
-                });
-                
-                if (allActivities.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">No activity recorded yet</td></tr>';
+                const keys = Object.keys(localStorage);
+                if (keys.length === 0) {
+                    report += 'No data found in localStorage\n';
+                } else {
+                    keys.forEach(key => {
+                        const size = localStorage.getItem(key)?.length || 0;
+                        report += `- ${key}: ${size} characters\n`;
+                    });
                 }
-                
             } catch (e) {
-                console.error('Error loading activity:', e);
-                updateActivityFeed('Error loading recent activity', 'error');
+                report += 'Error reading localStorage: ' + e.message + '\n';
             }
+            
+            // Network test
+            report += '\n3. NETWORK STATUS:\n';
+            report += 'Online: ' + (navigator.onLine ? 'Yes' : 'No') + '\n';
+            
+            // Google Analytics test
+            report += '\n4. GOOGLE ANALYTICS:\n';
+            report += 'gtag defined: ' + (typeof gtag !== 'undefined' ? 'Yes' : 'No') + '\n';
+            report += 'dataLayer present: ' + (typeof dataLayer !== 'undefined' ? 'Yes' : 'No') + '\n';
+            
+            // Page info
+            report += '\n5. PAGE INFO:\n';
+            report += 'URL: ' + window.location.href + '\n';
+            report += 'Referrer: ' + (document.referrer || 'None') + '\n';
+            
+            debugInfo.textContent = report;
         }
 
-        // Update activity feed
-        function updateActivityFeed(message, type = 'info') {
-            const feed = document.getElementById('activityFeed');
-            const item = document.createElement('div');
-            item.className = 'activity-item';
+        // Check tool data
+        function checkToolData(tool) {
+            let data = 'No data found';
             
-            const icon = type === 'error' ? '❌' : '✅';
-            const time = new Date().toLocaleTimeString();
-            
-            item.innerHTML = `
-                <div class="activity-icon">${icon}</div>
-                <div class="activity-details">
-                    <div class="activity-title">${message}</div>
-                    <div class="activity-time">${time}</div>
-                </div>
-            `;
-            
-            feed.insertBefore(item, feed.firstChild);
-            
-            // Keep only last 10 items
-            while (feed.children.length > 10) {
-                feed.removeChild(feed.lastChild);
-            }
-        }
-
-        // Export all data
-        function exportAllData() {
             try {
-                const allData = {
-                    assessmentResults: JSON.parse(localStorage.getItem('assessmentResults') || '[]'),
-                    revengeCalculatorData: JSON.parse(localStorage.getItem('revengeCalculatorData') || '{}'),
-                    emailSubscriptions: JSON.parse(localStorage.getItem('emailSubscriptions') || '[]'),
-                    exportDate: new Date().toISOString()
-                };
-                
-                const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `trading_psychology_data_${new Date().toISOString().split('T')[0]}.json`;
-                a.click();
-                
-                updateActivityFeed('All data exported successfully');
-            } catch (e) {
-                console.error('Export error:', e);
-                updateActivityFeed('Error exporting data', 'error');
-            }
-        }
-
-        // View email list
-        function viewEmailList() {
-            const assessmentEmails = JSON.parse(localStorage.getItem('emailSubscriptions') || '[]');
-            const revengeData = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"emails": []}');
-            const revengeEmails = revengeData.emails || [];
-            
-            const allEmails = [
-                ...assessmentEmails.map(e => ({...e, source: 'Assessment'})),
-                ...revengeEmails.map(e => ({...e, source: 'Revenge Calculator'}))
-            ];
-            
-            let content = '<h3>Email Subscribers</h3>';
-            content += '<table style="width: 100%; margin-top: 20px;">';
-            content += '<thead><tr><th>Email</th><th>Source</th><th>Date</th></tr></thead><tbody>';
-            
-            allEmails.forEach(e => {
-                content += `<tr>
-                    <td>${e.email}</td>
-                    <td>${e.source}</td>
-                    <td>${new Date(e.timestamp).toLocaleDateString()}</td>
-                </tr>`;
-            });
-            
-            content += '</tbody></table>';
-            
-            if (allEmails.length === 0) {
-                content = '<p style="text-align: center; color: #666;">No email subscribers yet</p>';
-            }
-            
-            showModal('Email List', content);
-            updateActivityFeed('Email list viewed');
-        }
-
-        // Clear all data
-        function clearAllData() {
-            if (confirm('⚠️ WARNING: This will delete ALL data from ALL tools!\n\nAre you absolutely sure?')) {
-                if (confirm('This action cannot be undone. Type "DELETE" to confirm.')) {
-                    localStorage.clear();
-                    updateActivityFeed('All data cleared');
-                    loadAllData();
+                switch(tool) {
+                    case 'assessment':
+                        const assessments = localStorage.getItem('assessmentResults');
+                        data = assessments ? JSON.stringify(JSON.parse(assessments), null, 2) : 'No assessment data';
+                        break;
+                    case 'revenge':
+                        const revenge = localStorage.getItem('revengeCalculatorData');
+                        data = revenge ? JSON.stringify(JSON.parse(revenge), null, 2) : 'No revenge calculator data';
+                        break;
+                    case 'fomo':
+                        const fomo = localStorage.getItem('fomoCalculatorData');
+                        data = fomo ? JSON.stringify(JSON.parse(fomo), null, 2) : 'No FOMO calculator data';
+                        break;
                 }
-            }
-        }
-
-        // Backup data
-        function backupData() {
-            exportAllData();
-            updateActivityFeed('Backup created');
-        }
-
-        // View Assessment Data
-        function viewAssessmentData() {
-            const assessments = JSON.parse(localStorage.getItem('assessmentResults') || '[]');
-            let content = '<h3>Psychology Assessment Details</h3>';
-            
-            if (assessments.length === 0) {
-                content += '<p style="text-align: center; color: #666;">No assessment data yet</p>';
-            } else {
-                content += '<table style="width: 100%; margin-top: 20px;">';
-                content += '<thead><tr><th>Date</th><th>Score</th><th>Profile</th><th>Time</th><th>Email</th></tr></thead><tbody>';
-                
-                assessments.forEach(a => {
-                    content += `<tr>
-                        <td>${new Date(a.timestamp).toLocaleDateString()}</td>
-                        <td>${a.score || '-'}</td>
-                        <td>${a.profile || '-'}</td>
-                        <td>${a.completionTime || '-'}s</td>
-                        <td>${a.emailProvided ? 'Yes' : 'No'}</td>
-                    </tr>`;
-                });
-                
-                content += '</tbody></table>';
+            } catch (e) {
+                data = 'Error reading data: ' + e.message;
             }
             
-            showModal('Assessment Data', content);
-            updateActivityFeed('Assessment data viewed');
-        }
-
-        // View Revenge Calculator Data
-        function viewRevengeData() {
-            const revengeData = JSON.parse(localStorage.getItem('revengeCalculatorData') || '{"calculations": []}');
-            const calculations = revengeData.calculations || [];
-            
-            let content = '<h3>Revenge Calculator Details</h3>';
-            
-            if (calculations.length === 0) {
-                content += '<p style="text-align: center; color: #666;">No calculator data yet</p>';
-            } else {
-                content += '<table style="width: 100%; margin-top: 20px;">';
-                content += '<thead><tr><th>Date</th><th>Risk Score</th><th>Category</th><th>Time</th><th>Email</th></tr></thead><tbody>';
-                
-                calculations.forEach(calc => {
-                    const hasEmail = revengeData.emails?.some(e => 
-                        Math.abs(new Date(e.timestamp) - new Date(calc.timestamp)) < 60000
-                    );
-                    content += `<tr>
-                        <td>${new Date(calc.timestamp).toLocaleDateString()}</td>
-                        <td>${calc.riskScore || '-'}%</td>
-                        <td>${calc.riskCategory || '-'}</td>
-                        <td>${calc.completionTime || '-'}s</td>
-                        <td>${hasEmail ? 'Yes' : 'No'}</td>
-                    </tr>`;
-                });
-                
-                content += '</tbody></table>';
-            }
-            
-            showModal('Revenge Calculator Data', content);
-            updateActivityFeed('Revenge calculator data viewed');
-        }
-
-        // Modal functions
-        function showModal(title, content) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalContent').innerHTML = content;
-            document.getElementById('dataModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('dataModal').style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('dataModal');
-            if (event.target == modal) {
-                closeModal();
-            }
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.textContent = `${tool.toUpperCase()} Tool Data:\n\n${data}`;
         }
 
         // Enter key support
@@ -918,14 +677,6 @@
                 checkPassword();
             }
         });
-
-        // Auto-refresh every 30 seconds
-        setInterval(() => {
-            if (document.getElementById('dashboard').style.display !== 'none') {
-                loadAllData();
-                updateActivityFeed('Data refreshed');
-            }
-        }, 30000);
     </script>
 </body>
 </html>
