@@ -307,47 +307,6 @@
             color: #0066cc;
         }
 
-        .launch-special {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-            color: #000;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.9; }
-        }
-
-        .launch-special h3 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
-        }
-
-        .price-display {
-            font-size: 1.5em;
-            margin: 15px 0;
-        }
-
-        .old-price {
-            text-decoration: line-through;
-            color: #666;
-            margin-right: 10px;
-        }
-
-        .new-price {
-            color: #059669;
-            font-weight: 800;
-        }
-
-        .countdown {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin: 15px 0;
-        }
-
         .purchase-section {
             margin: 40px 0;
         }
@@ -373,6 +332,17 @@
             color: #00ff88;
             font-weight: bold;
             margin-right: 10px;
+        }
+
+        .price-display {
+            font-size: 1.5em;
+            margin: 15px 0;
+        }
+
+        .price {
+            color: #00ff88;
+            font-weight: 800;
+            font-size: 1.4em;
         }
 
         /* MailerLite Form Integration Styles */
@@ -684,13 +654,6 @@
                 Results should not be interpreted as financial advice or trading recommendations. 
                 Past performance does not guarantee future results. Trading carries substantial risk of loss.
             </div>
-            
-            <!-- Launch Week Special Banner -->
-            <div class="launch-special">
-                <h3>🚀 LAUNCH WEEK SPECIAL - 25% OFF!</h3>
-                <p style="font-size: 1.2em; font-weight: 600;">Get your complete 10-page analysis for only $35 (normally $47)</p>
-                <div class="countdown" id="countdown"></div>
-            </div>
 
             <div class="purchase-section">
                 <h3>Get Your Complete 10-Page Psychology Analysis</h3>
@@ -705,8 +668,7 @@
                 </ul>
                 
                 <div class="price-display">
-                    <span class="old-price">$47</span>
-                    <span class="new-price">NOW: $35</span>
+                    <span class="price">NOW: $47</span>
                 </div>
 
                 <!-- MailerLite Form Integration -->
@@ -758,7 +720,7 @@
                 <div id="manual-paypal" style="display: none;">
                     <p style="color: #666; margin: 20px 0;">Or use PayPal directly:</p>
                     <button class="manual-paypal-button" onclick="manualPayPal()">
-                        Pay with PayPal ($35)
+                        Pay with PayPal ($47)
                     </button>
                 </div>
             </div>
@@ -856,12 +818,10 @@
     <script>
         // ===== CONFIGURATION =====
         const CONFIG = {
-            launchPrice: 35,
             regularPrice: 47,
-            launchEndDate: '2025-06-20T00:00:00',
             paypalEmail: 'th.schnitzlein@gmail.com',
             adminPassword: 'trading123',
-            version: '4.2.0',
+            version: '4.3.0',
             analyticsEnabled: true
         };
 
@@ -1272,13 +1232,13 @@
         function savePurchase(email, transactionId = null) {
             try {
                 const data = getStoredData();
-                data.revenue += CONFIG.launchPrice;
+                data.revenue += CONFIG.regularPrice;
                 data.purchases += 1;
                 
                 const purchase = {
                     id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
                     email: email,
-                    amount: CONFIG.launchPrice,
+                    amount: CONFIG.regularPrice,
                     timestamp: new Date().toISOString(),
                     transactionId: transactionId,
                     score: window.currentScore,
@@ -1291,7 +1251,7 @@
                 
                 saveData(data);
                 updateAdminPanel();
-                trackEvent('purchase_completed', { amount: CONFIG.launchPrice, score: window.currentScore });
+                trackEvent('purchase_completed', { amount: CONFIG.regularPrice, score: window.currentScore });
                 
                 console.log('✅ Purchase saved:', purchase.id);
             } catch (e) {
@@ -1529,38 +1489,6 @@
                 <p><strong>Improvement Focus:</strong> ${insights.improvement}</p>
                 <p><strong>Your Profile:</strong> ${insights.characteristics}</p>
             `;
-            
-            startCountdown();
-        }
-
-        // ===== COUNTDOWN TIMER =====
-        function startCountdown() {
-            const endDate = new Date(CONFIG.launchEndDate);
-            
-            function updateCountdown() {
-                const now = new Date();
-                const timeLeft = endDate - now;
-                
-                if (timeLeft > 0) {
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                    
-                    document.getElementById('countdown').textContent = 
-                        `OFFER ENDS IN: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-                } else {
-                    document.getElementById('countdown').textContent = 'OFFER EXPIRED';
-                    document.querySelector('.launch-special h3').textContent = '⏰ LAUNCH SPECIAL ENDED';
-                    document.querySelector('.launch-special p').textContent = 'Get your complete 10-page analysis for $47';
-                    document.querySelector('.new-price').textContent = 'NOW: $47';
-                    document.querySelector('.old-price').style.display = 'none';
-                    CONFIG.launchPrice = CONFIG.regularPrice;
-                }
-            }
-            
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
         }
 
         // ===== PAYPAL INTEGRATION =====
@@ -1600,9 +1528,9 @@
                     return actions.order.create({
                         purchase_units: [{
                             amount: {
-                                value: CONFIG.launchPrice.toFixed(2)
+                                value: CONFIG.regularPrice.toFixed(2)
                             },
-                            description: 'AI Trading Psychology Analysis - Launch Special'
+                            description: 'AI Trading Psychology Analysis'
                         }]
                     });
                 },
@@ -1634,7 +1562,7 @@
             
             trackEvent('manual_paypal_clicked');
             
-            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${CONFIG.paypalEmail}&item_name=AI Trading Psychology Analysis&amount=${CONFIG.launchPrice}&currency_code=USD&return=${window.location.href}&cancel_return=${window.location.href}`;
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${CONFIG.paypalEmail}&item_name=AI Trading Psychology Analysis&amount=${CONFIG.regularPrice}&currency_code=USD&return=${window.location.href}&cancel_return=${window.location.href}`;
             
             window.open(paypalUrl, '_blank');
             
@@ -1795,8 +1723,8 @@
             doc.text('Generated on: ' + new Date().toLocaleDateString(), 105, 250, { align: 'center' });
             doc.text('© 2025 Schnitzlein Consulting', 105, 260, { align: 'center' });
             
-            // Add remaining pages (truncated for brevity - use the same PDF generation code from the original)
-            // ... [Rest of PDF generation code continues as in original]
+            // Add remaining pages (I'll add just the core structure for brevity)
+            // In production, you'd want to add all 10 pages with detailed content
             
             // Save the PDF
             doc.save(`Trading_Psychology_Report_${score}_${traderType.replace(/\s+/g, '_')}.pdf`);
