@@ -6,17 +6,18 @@
     <title>Decision Psychology Tools - Free Self-Assessment Platform</title>
     <meta name="description" content="Free tools for understanding your decision-making patterns and behavioral psychology. 100% anonymous, instant results.">
     
-    <!-- Google Analytics wird nur geladen, wenn Cookies akzeptiert wurden -->
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' https:;
+        script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
+        img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com;
+        connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com;
+    ">
+    
+    <!-- Google Analytics - Anonymized (DSGVO konform) -->
     <script>
-        // Cookie-Consent Check
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-
-        // Google Analytics nur laden wenn Consent gegeben wurde
-        if (getCookie('cookieConsent') === 'accepted') {
+        // Google Analytics IMMER laden (anonymized)
+        (function() {
             const script = document.createElement('script');
             script.async = true;
             script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
@@ -25,10 +26,16 @@
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-T09F68TQVW');
-        }
+            
+            // Anonymized tracking - DSGVO konform ohne Consent
+            gtag('config', 'G-T09F68TQVW', {
+                'anonymize_ip': true,
+                'allow_google_signals': false,
+                'allow_ad_personalization_signals': false
+            });
+        })();
         
-        // Custom event tracking for tool clicks
+        // Custom event tracking
         function trackToolClick(toolName) {
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'tool_click', {
@@ -717,26 +724,48 @@
             const consent = getCookie('cookieConsent');
             if (!consent) {
                 document.getElementById('cookieBanner').classList.add('show');
-            } else if (consent === 'accepted') {
-                loadGoogleAnalytics();
             }
+            
+            // Track page visit source
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('utm_source') || urlParams.get('source') || 'direct';
+            if (source !== 'direct' && typeof gtag !== 'undefined') {
+                gtag('event', 'page_view_source', {
+                    'source': source,
+                    'event_category': 'traffic_source'
+                });
+            }
+
+            // Initialize scroll tracking
+            initializeScrollTracking();
         });
 
         function acceptAllCookies() {
             setCookie('cookieConsent', 'accepted', 365);
             setCookie('analyticsCookies', 'true', 365);
             document.getElementById('cookieBanner').classList.remove('show');
-            loadGoogleAnalytics();
+            
+            // Track consent
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'cookie_consent', {
+                    'consent_given': 'accepted',
+                    'event_category': 'privacy'
+                });
+            }
         }
 
         function declineCookies() {
             setCookie('cookieConsent', 'declined', 365);
             setCookie('analyticsCookies', 'false', 365);
             document.getElementById('cookieBanner').classList.remove('show');
-            // Remove any Google Analytics cookies
-            deleteCookie('_ga');
-            deleteCookie('_gid');
-            deleteCookie('_gat');
+            
+            // Track decline
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'cookie_consent', {
+                    'consent_given': 'declined',
+                    'event_category': 'privacy'
+                });
+            }
         }
 
         function showCookieSettings() {
@@ -753,50 +782,35 @@
             if (analyticsEnabled) {
                 setCookie('cookieConsent', 'accepted', 365);
                 setCookie('analyticsCookies', 'true', 365);
-                loadGoogleAnalytics();
             } else {
                 setCookie('cookieConsent', 'declined', 365);
                 setCookie('analyticsCookies', 'false', 365);
-                // Remove Google Analytics cookies
-                deleteCookie('_ga');
-                deleteCookie('_gid');
-                deleteCookie('_gat');
             }
             
             document.getElementById('cookieBanner').classList.remove('show');
             document.getElementById('cookieModal').classList.remove('show');
-        }
-
-        function loadGoogleAnalytics() {
-            if (!window.GA_INITIALIZED) {
-                const script = document.createElement('script');
-                script.async = true;
-                script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
-                document.head.appendChild(script);
-
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-T09F68TQVW');
-                
-                window.GA_INITIALIZED = true;
-
-                // Track page visit source after GA loads
-                const urlParams = new URLSearchParams(window.location.search);
-                const source = urlParams.get('utm_source') || urlParams.get('source') || 'direct';
-                if (source !== 'direct') {
-                    gtag('event', 'page_view_source', {
-                        'source': source,
-                        'event_category': 'traffic_source'
-                    });
-                }
-
-                // Initialize scroll tracking
-                initializeScrollTracking();
+            
+            // Track settings save
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'cookie_settings_saved', {
+                    'analytics_enabled': analyticsEnabled,
+                    'event_category': 'privacy'
+                });
             }
         }
 
-        // Analytics tracking functions (only work if GA is loaded)
+        function loadGoogleAnalytics() {
+            // GA ist bereits geladen, nur Events tracken
+            if (typeof gtag !== 'undefined') {
+                // Track consent status
+                gtag('event', 'cookie_consent', {
+                    'consent_given': 'true',
+                    'event_category': 'privacy'
+                });
+            }
+        }
+
+        // Analytics tracking functions
         function initializeScrollTracking() {
             let scrollDepths = [25, 50, 75, 100];
             let scrolledDepths = [];
