@@ -703,7 +703,7 @@
                           <input type="hidden" name="ml-submit" value="1">
 
                           <div class="ml-form-embedSubmit">
-                              <button type="submit" class="primary" onclick="return handleMailerLiteSubmit()">Get Your Personalized Report</button>
+                              <button type="submit" class="primary">Get Your Personalized Report</button>
                             <button disabled="disabled" style="display: none;" type="button" class="loading">
                               <div class="ml-form-embedSubmitLoad"></div>
                               <span class="sr-only">Loading...</span>
@@ -859,6 +859,18 @@
         function handleMailerLiteSubmit() {
             const email = document.getElementById('mailerliteEmailInput').value;
             
+            // Get score and trader type from session storage as backup
+            const storedScore = sessionStorage.getItem('currentScore');
+            const storedTraderType = sessionStorage.getItem('currentTraderType');
+            
+            // Use stored values if window values are missing
+            if (!window.currentScore && storedScore) {
+                window.currentScore = parseInt(storedScore);
+            }
+            if (!window.currentTraderType && storedTraderType) {
+                window.currentTraderType = storedTraderType;
+            }
+            
             // Check if assessment has been completed
             if (!window.currentScore || !window.currentTraderType) {
                 // Hide the form and show the notice
@@ -887,6 +899,15 @@
         function checkResultsVisibility() {
             const resultsSection = document.getElementById('results');
             if (resultsSection && resultsSection.style.display !== 'none') {
+                // Try to restore from sessionStorage first
+                const storedScore = sessionStorage.getItem('currentScore');
+                const storedTraderType = sessionStorage.getItem('currentTraderType');
+                
+                if (storedScore && storedTraderType) {
+                    window.currentScore = parseInt(storedScore);
+                    window.currentTraderType = storedTraderType;
+                }
+                
                 if (!window.currentScore || !window.currentTraderType) {
                     // User is viewing results without completing assessment
                     // This could happen if they navigate directly or refresh
@@ -956,6 +977,15 @@
             var $ = ml_jQuery || jQuery;
             $('.ml-subscribe-form-27668853 .row-success').show();
             $('.ml-subscribe-form-27668853 .row-form').hide();
+            
+            // Restore data from sessionStorage
+            const storedScore = sessionStorage.getItem('currentScore');
+            const storedTraderType = sessionStorage.getItem('currentTraderType');
+            const storedEmail = sessionStorage.getItem('currentEmail');
+            
+            if (storedScore) window.currentScore = parseInt(storedScore);
+            if (storedTraderType) window.currentTraderType = storedTraderType;
+            if (storedEmail) window.currentEmail = storedEmail;
             
             // Show PayPal options after successful email submission
             if (window.currentEmail && window.currentScore && window.currentTraderType) {
@@ -1510,6 +1540,15 @@
             window.currentScore = score;
             window.currentTraderType = traderInfo.type;
             
+            // Also store in sessionStorage to survive page reloads
+            try {
+                sessionStorage.setItem('currentScore', score.toString());
+                sessionStorage.setItem('currentTraderType', traderInfo.type);
+                sessionStorage.setItem('assessmentCompleted', 'true');
+            } catch (e) {
+                console.log('Could not save to sessionStorage:', e);
+            }
+            
             assessmentData = {
                 score: score,
                 traderType: traderInfo.type,
@@ -1992,6 +2031,24 @@
             console.log('   Ctrl+Shift+D: Debug Info');
             console.log('   Ctrl+Shift+S: Detailed Stats');
             
+            // Restore assessment data from sessionStorage if available
+            try {
+                const storedScore = sessionStorage.getItem('currentScore');
+                const storedTraderType = sessionStorage.getItem('currentTraderType');
+                const assessmentCompleted = sessionStorage.getItem('assessmentCompleted');
+                
+                if (assessmentCompleted === 'true' && storedScore && storedTraderType) {
+                    window.currentScore = parseInt(storedScore);
+                    window.currentTraderType = storedTraderType;
+                    console.log('✅ Restored assessment data from session:', {
+                        score: window.currentScore,
+                        type: window.currentTraderType
+                    });
+                }
+            } catch (e) {
+                console.log('Could not restore from sessionStorage:', e);
+            }
+            
             // Run migration if available
             if (typeof migrateOldData === 'function') {
                 migrateOldData();
@@ -2033,6 +2090,46 @@
             
             // Initialize MailerLite form
             fetch("https://assets.mailerlite.com/jsonp/1568323/forms/158237970273404824/takel");
+            
+            // Add form submission handler
+            setTimeout(() => {
+                const mlForm = document.querySelector('.ml-block-form');
+                if (mlForm) {
+                    mlForm.addEventListener('submit', function(e) {
+                        const email = document.getElementById('mailerliteEmailInput').value;
+                        
+                        // Get score and trader type from session storage as backup
+                        const storedScore = sessionStorage.getItem('currentScore');
+                        const storedTraderType = sessionStorage.getItem('currentTraderType');
+                        
+                        // Use stored values if window values are missing
+                        if (!window.currentScore && storedScore) {
+                            window.currentScore = parseInt(storedScore);
+                        }
+                        if (!window.currentTraderType && storedTraderType) {
+                            window.currentTraderType = storedTraderType;
+                        }
+                        
+                        // Check if assessment has been completed
+                        if (!window.currentScore || !window.currentTraderType) {
+                            e.preventDefault();
+                            // Hide the form and show the notice
+                            document.getElementById('mlb2-27668853').style.display = 'none';
+                            document.getElementById('assessment-required-notice').style.display = 'block';
+                            
+                            // Track this event
+                            trackEvent('form_submit_without_assessment');
+                            return false;
+                        }
+                        
+                        // Save email for processing
+                        if (email) {
+                            window.currentEmail = email;
+                            sessionStorage.setItem('currentEmail', email);
+                        }
+                    });
+                }
+            }, 2000);
             
             // Check if results are visible on load
             setTimeout(checkResultsVisibility, 1000);
