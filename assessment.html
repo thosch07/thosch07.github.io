@@ -553,19 +553,21 @@
                 </div>
 
                 <!-- Custom Email Form (Replacing MailerLite) -->
-                <div id="email-capture-form" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin: 20px auto;">
+                <div id="email-capture-form" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin: 20px auto; position: relative; z-index: 10;">
                     <h4 style="color: #00ff88; font-size: 24px; margin-bottom: 15px;">Get Your Free Analysis</h4>
                     <p style="color: #a0a0a0; font-size: 16px; margin-bottom: 20px;">Enter your email to receive your personalized results</p>
                     
                     <form id="emailForm" onsubmit="handleEmailSubmit(event); return false;">
                         <input type="email" 
                                id="userEmail" 
+                               name="email"
                                placeholder="Enter your email to receive your report" 
                                required
-                               style="width: 100%; padding: 15px; font-size: 16px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; border-radius: 10px; margin-bottom: 20px;">
+                               autocomplete="email"
+                               style="width: 100%; padding: 15px; font-size: 16px; background: rgba(255, 255, 255, 0.9); border: 2px solid #00d4ff; color: #000; border-radius: 10px; margin-bottom: 20px; outline: none; box-sizing: border-box;">
                         
                         <button type="submit" 
-                                style="background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); color: #000; font-weight: 700; padding: 15px 30px; font-size: 16px; border-radius: 50px; border: none; cursor: pointer; transition: all 0.3s ease; width: 100%;">
+                                style="background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); color: #000; font-weight: 700; padding: 15px 30px; font-size: 16px; border-radius: 50px; border: none; cursor: pointer; transition: all 0.3s ease; width: 100%; box-sizing: border-box;">
                             Get Your Personalized Report
                         </button>
                     </form>
