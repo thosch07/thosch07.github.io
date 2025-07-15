@@ -43,13 +43,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             // Load Google Analytics
             const script = document.createElement('script');
             script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW'; // Dein GA4 Measurement ID
             document.head.appendChild(script);
 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-T09F68TQVW');
+            gtag('config', 'G-T09F68TQVW'); // Dein GA4 Measurement ID
         } else if (!consent) {
             // No consent given yet - show notice
             window.addEventListener('DOMContentLoaded', function() {
@@ -97,6 +97,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </script>
     
     <style>
+        /* Allgemeine Styles für Body und Container */
         * {
             margin: 0;
             padding: 0;
@@ -117,6 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             padding: 20px;
         }
 
+        /* Header-Bereich */
         .header {
             text-align: center;
             padding: 60px 20px 40px;
@@ -177,6 +179,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             text-decoration: none;
         }
 
+        /* Assessment-Container */
         .assessment-container {
             display: none;
             background: rgba(255, 255, 255, 0.95);
@@ -255,6 +258,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             border-radius: 10px;
         }
 
+        /* Ergebnis-Bereich */
         .results {
             display: none;
             text-align: center;
@@ -544,6 +548,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="trader-type" id="traderType"></div>
             <div class="insights" id="insights"></div>
             
+            <!-- Conversion Tracking für assessment_complete - HIER EINGEFÜGT -->
+            <script>
+              if (typeof gtag !== 'undefined') {
+                gtag('event', 'assessment_complete', {
+                  'event_category': 'engagement',
+                  'event_label': 'Result Shown',
+                  'value': window.currentScore // Optional: Score als Wert übergeben
+                });
+              }
+            </script>
+            
             <!-- Compliance Notice in Results -->
             <div class="compliance-notice">
                 <strong>Important Notice:</strong> This psychological assessment is for educational and self-improvement purposes only. 
@@ -693,25 +708,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <button class="admin-button" onclick="showDetailedStats()">Detailed Statistics</button>
     </div>
 
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AQ7d8ZPGOLBz3AC4uVlNgysPHMDEXUvqc2auLwqra9Ou_Wg4qIBNAAcjdAxwgKBIzISotkfcM8x0QgYm&currency=USD"></script>
-    
     <!-- jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
-        // ===== CONFIGURATION =====
+        // ===== KONFIGURATION =====
         const CONFIG = {
             regularPrice: 47,
             paypalEmail: 'th.schnitzlein@gmail.com',
-            adminPassword: 'trading123',
+            adminPassword: 'trading123', // BITTE ÄNDERN SIE DIESES PASSWORT IN EINER PRODUKTIONSUMGEBUNG!
             version: '4.4.0',
             analyticsEnabled: true
         };
 
         // ===== MAILERLITE INTEGRATION =====
         const MAILERLITE_CONFIG = {
-            apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWI0MDljMDMxZTViNjI5M2EyOWM3MjkzMTA4ZDFmN2M3NmYwMjczNTU3NGI1NmFhYjVjZGY3ZDljOGQ3NGIxNDhjMDI0MTU0ZTcwNTMwNzciLCJpYXQiOjE3NDk3MzI3ODEuMjk1NzcyLCJuYmYiOjE3NDk3MzI3ODEuMjk1Nzc2LCJleHAiOjQ5MDU0MDYzODEuMjg5ODI2LCJzdWIiOiIxNTgxMjY5Iiwic2NvcGVzIjpbXX0.g64vCpQu8KxSIqctKKk03QyBKhgmEF6sfyN6rl68FraHRFRN1VbgCl-EgXXeo6aWUsW3PKotGcdbB0QXoi7Do21z6VQ7YctLspe8kyriSYILMV7k53zXgoxXe24puXA8bclXCsPaIO1uNepwZXNDAWaMHjY6DF9hdwFEh3ZedjnAB535UGzzU37wd-jQod_oVmbQznaRSyoWPz3JKMHgG345TZqgUdfLsrrm4zKdzJWWKfKVgxo7BoTKKrQhcBbRC3uRs3fTOQU9E_2D1HRDXFGhcHBwF5V3W973q8g9ADdXBw6zCIOvRrT88s7RvWUtOaEIn7s-_PqhXk4Y6KklunyFPzTccD6TzdOG5vTJnt3kfVGClTR1JcbnlBSzRsl2fXLoKlNQWKl5ectJvJ33snMlc2xBv4LmnrXKqGJOQB93YTOHuqLE6swJTZLDlVC2TibGOh4MejZDgDUNI8hQo1eCniLJ7JlJ1nbBcZo-6tkBF6PZhDeagQioajoR8nQTQ_kt1TBBn1l9uJbCJnPajDlYamLNfvcD-8JwJltWRIkCkUNqTmPKHmDo4w6-rq97-yww9untRWuFvKU-z59WA1C9_lCldf--X9zBHJj69i7rIgM_Hx9STXCOd5sa4WjsnmXkKE0RcqhKE_oujxzta5NujlgwpZPCCmTzw6GBgWs',
+            apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWI0MDljMDMxZTViNjI5M2EyOWM3MjkzMTA4ZDFmN2M3NmYwMjczNTU3NGI1NmFhYjVjZGY3ZDljOGQ3NGIxNDhjMDI0MTU0ZTcwNTMwNzciLCJpYXQiOjE3NDk3MzI3ODEuMjk1NzcyLCJuYmYiOjE3NDk3MzI3ODEuMjk1Nzc2LCJleHAiOjQ5MDU0MDYzODEuMjg5ODI2LCJzdWIiOiIxNTgxMjY5Iiwic2NvcGVzIjpbXX0.g64vCpQu8KxSIqctKKk03QyBKhgmEF6sfyN6rl68FraHRFRN1VbgCl-EgXXeo6aWUsW3PKotGcdbB0QXoi7Do21z6VQ7YctLspe8kyriSYILMV7k53zXgoxXe24puXA8bclXCsPaIO1uNepwZXNDAWaMHjY6DF9hdwFEh3ZedjnAB535UGzzU37wd-jQod_oVmbQznaRSyoWPz3JKMHgG345TZqgUdfLsrrm4zKdzJWWKfKVgxo7BoTKKrQhcBbRC3uRs3fTOQU9E_2D1HRDXFGhcHBwF5V3W973q8g9ADdXBw6zCIOvRrT88s7RvWUtOaEIn7s-_PqhXk4Y6KklunyFPzTccD6TzdOG5vTJnt3kfVGClTR1JcbnlBSzRsl2fXLoKlNQWKl5ectJvJ33snMlc2xBv4LmnrXKjGJOQB93YTOHuqLE6swJTZLDlVC2TibGOh4MejZDgDUNI8hQo1eCniLJ7JlJ1nbBcZo-6tkBF6PZhDeagQioajoR8nQTQ_kt1TBBn1l9uJbCJnPajDlYamLNfvcD-8JwJltWRIkCkUNqTmPKHmDo4w6-rq97-yww9untRWuFvKU-z59WA1C9_lCldf--X9zBHJj69i7rIgM_Hx9STXCOd5sa4WjsnmXkKE0RcqhKE_oujxzta5NujlgwpZPCCmTzw6GBgWs',
             apiUrl: 'https://connect.mailerlite.com/api',
             groups: {
                 vulnerable: '156171765135967438', // 0-39: Risk Seeker
@@ -762,9 +774,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         function showPayPalOptions() {
-            document.getElementById('paypal-button-container').style.display = 'block';
+            // Zeigt nur den manuellen PayPal-Button an
             document.getElementById('manual-paypal').style.display = 'block';
-            initializePayPal();
+            // Entfernt den paypal-button-container, da wir das SDK nicht mehr verwenden
+            document.getElementById('paypal-button-container').style.display = 'none'; 
         }
 
         // Handle email form submission
@@ -955,8 +968,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         let assessmentData = {};
         let startTime = null;
 
-        // ===== DATA MANAGEMENT WITH PERSISTENT STORAGE =====
-        // Enhanced storage with localStorage support
+        // ===== DATENVERWALTUNG MIT PERSISTENTEM SPEICHER =====
+        // Erweiterter Speicher mit localStorage-Unterstützung
         let memoryStorage = {
             assessments: [],
             revenue: 0,
@@ -965,7 +978,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             version: CONFIG.version
         };
 
-        // Check which storage types are available
+        // Prüfen, welche Speichertypen verfügbar sind
         function getAvailableStorage() {
             const storageTypes = {
                 local: false,
@@ -973,26 +986,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 memory: true
             };
             
-            // Test localStorage
+            // Teste localStorage
             try {
                 const test = '__storage_test__';
                 localStorage.setItem(test, test);
                 localStorage.removeItem(test);
                 storageTypes.local = true;
-                console.log('✅ localStorage available');
+                console.log('✅ localStorage verfügbar');
             } catch (e) {
-                console.log('❌ localStorage not available');
+                console.log('❌ localStorage nicht verfügbar');
             }
             
-            // Test sessionStorage
+            // Teste sessionStorage
             try {
                 const test = '__storage_test__';
                 sessionStorage.setItem(test, test);
                 sessionStorage.removeItem(test);
                 storageTypes.session = true;
-                console.log('✅ sessionStorage available');
+                console.log('✅ sessionStorage verfügbar');
             } catch (e) {
-                console.log('❌ sessionStorage not available');
+                console.log('❌ sessionStorage nicht verfügbar');
             }
             
             return storageTypes;
@@ -1000,7 +1013,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         const availableStorage = getAvailableStorage();
 
-        // Get best available storage method
+        // Beste verfügbare Speichermethode ermitteln
         function getBestStorage() {
             if (availableStorage.local) return 'local';
             if (availableStorage.session) return 'session';
@@ -1009,43 +1022,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         const storageMode = getBestStorage();
 
-        // Unified storage functions
+        // Vereinheitlichte Speicherfunktionen
         function getStoredData() {
             let data = null;
             
-            // Try localStorage first (persistent)
+            // Zuerst localStorage versuchen (persistent)
             if (availableStorage.local) {
                 try {
                     const stored = localStorage.getItem('tradingPsychologyData');
                     if (stored) {
                         data = JSON.parse(stored);
-                        console.log('📦 Data loaded from localStorage');
+                        console.log('📦 Daten aus localStorage geladen');
                     }
                 } catch (e) {
-                    console.error('Error reading from localStorage:', e);
+                    console.error('Fehler beim Lesen aus localStorage:', e);
                 }
             }
             
-            // Fallback to sessionStorage
+            // Fallback auf sessionStorage
             if (!data && availableStorage.session) {
                 try {
                     const stored = sessionStorage.getItem('tradingPsychologyData');
                     if (stored) {
                         data = JSON.parse(stored);
-                        console.log('📦 Data loaded from sessionStorage');
+                        console.log('📦 Daten aus sessionStorage geladen');
                     }
                 } catch (e) {
-                    console.error('Error reading from sessionStorage:', e);
+                    console.error('Fehler beim Lesen aus sessionStorage:', e);
                 }
             }
             
-            // Fallback to memory
+            // Fallback auf Speicher (memory)
             if (!data) {
                 data = memoryStorage;
-                console.log('📦 Using in-memory storage');
+                console.log('📦 Verwende In-Memory-Speicher');
             }
             
-            // Ensure data structure is complete
+            // Sicherstellen, dass die Datenstruktur vollständig ist
             data = {
                 assessments: data.assessments || [],
                 revenue: data.revenue || 0,
@@ -1065,85 +1078,85 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             let saved = false;
             
-            // Try localStorage first (persistent)
+            // Zuerst localStorage versuchen (persistent)
             if (availableStorage.local) {
                 try {
                     localStorage.setItem('tradingPsychologyData', JSON.stringify(data));
-                    console.log('💾 Data saved to localStorage');
+                    console.log('💾 Daten in localStorage gespeichert');
                     saved = true;
                 } catch (e) {
-                    console.error('Error saving to localStorage:', e);
-                    // If quota exceeded, try to clean up old data
+                    console.error('Fehler beim Speichern in localStorage:', e);
+                    // Bei Quota-Überschreitung versuchen, alte Daten zu bereinigen
                     if (e.name === 'QuotaExceededError') {
                         cleanupOldData(data);
                     }
                 }
             }
             
-            // Also save to sessionStorage as backup
+            // Auch in sessionStorage als Backup speichern
             if (availableStorage.session) {
                 try {
                     sessionStorage.setItem('tradingPsychologyData', JSON.stringify(data));
                     if (!saved) {
-                        console.log('💾 Data saved to sessionStorage');
+                        console.log('💾 Daten in sessionStorage gespeichert');
                         saved = true;
                     }
                 } catch (e) {
-                    console.error('Error saving to sessionStorage:', e);
+                    console.error('Fehler beim Speichern in sessionStorage:', e);
                 }
             }
             
-            // Always update memory storage
+            // Immer den In-Memory-Speicher aktualisieren
             memoryStorage = data;
             
             if (!saved) {
-                console.warn('⚠️ Data only saved to memory!');
+                console.warn('⚠️ Daten nur im Speicher (memory) gespeichert!');
             }
             
-            // Backup to console for emergency recovery
-            console.log('🔒 Backup data:', JSON.stringify(data));
+            // Backup in die Konsole für Notfallwiederherstellung
+            console.log('🔒 Backup-Daten:', JSON.stringify(data));
         }
 
-        // Cleanup function for storage quota issues
+        // Bereinigungsfunktion für Speicherplatzprobleme
         function cleanupOldData(data) {
-            console.log('🧹 Cleaning up old data...');
+            console.log('🧹 Bereinige alte Daten...');
             
-            // Keep only last 1000 assessments
+            // Nur die letzten 1000 Assessments behalten
             if (data.assessments.length > 1000) {
                 data.assessments = data.assessments.slice(-1000);
             }
             
-            // Keep only last 500 purchase details
+            // Nur die letzten 500 Kaufdetails behalten
             if (data.purchaseDetails && data.purchaseDetails.length > 500) {
                 data.purchaseDetails = data.purchaseDetails.slice(-500);
             }
             
-            // Remove duplicate emails from waitlist
+            // Duplikate aus der Warteliste entfernen
             data.waitlist = [...new Set(data.waitlist)];
             
-            console.log('✅ Cleanup complete');
+            console.log('✅ Bereinigung abgeschlossen');
         }
 
-        // Migration function for old data
+        // Migrationsfunktion für alte Daten
         function migrateOldData() {
-            // Check if there's data in sessionStorage that needs to be migrated
+            // Prüfen, ob Daten in sessionStorage vorhanden sind, die migriert werden müssen
             if (availableStorage.session && availableStorage.local) {
                 try {
                     const sessionData = sessionStorage.getItem('tradingPsychologyData');
                     const localData = localStorage.getItem('tradingPsychologyData');
                     
                     if (sessionData && !localData) {
-                        // Migrate from session to local
+                        // Von Session zu Local migrieren
                         localStorage.setItem('tradingPsychologyData', sessionData);
-                        console.log('✅ Data migrated from sessionStorage to localStorage');
+                        console.log('✅ Daten von sessionStorage nach localStorage migriert');
                     }
                 } catch (e) {
-                    console.error('Migration error:', e);
+                    console.error('Migrationsfehler:', e);
                 }
             }
         }
 
-        // Enhanced save functions with better error handling
+        // Erweiterte Speicherfunktionen mit besserer Fehlerbehandlung
         function saveAssessment(score, traderType) {
             try {
                 const data = getStoredData();
@@ -1167,10 +1180,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 updateAdminPanel();
                 trackEvent('assessment_completed', { score, traderType, completionTime });
                 
-                console.log('✅ Assessment saved:', assessment.id);
+                console.log('✅ Assessment gespeichert:', assessment.id);
             } catch (e) {
-                console.error('❌ Error saving assessment:', e);
-                alert('Warning: Assessment data may not have been saved properly.');
+                console.error('❌ Fehler beim Speichern des Assessments:', e);
+                alert('Warnung: Assessment-Daten wurden möglicherweise nicht korrekt gespeichert.');
             }
         }
 
@@ -1198,10 +1211,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 updateAdminPanel();
                 trackEvent('purchase_completed', { amount: CONFIG.regularPrice, score: window.currentScore });
                 
-                console.log('✅ Purchase saved:', purchase.id);
+                console.log('✅ Kauf gespeichert:', purchase.id);
             } catch (e) {
-                console.error('❌ Error saving purchase:', e);
-                alert('Warning: Purchase data may not have been saved properly.');
+                console.error('❌ Fehler beim Speichern des Kaufs:', e);
+                alert('Warnung: Kaufdaten wurden möglicherweise nicht korrekt gespeichert.');
             }
         }
 
@@ -1212,7 +1225,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 if (!data.waitlist.includes(email)) {
                     data.waitlist.push(email);
                     
-                    // Also save detailed waitlist entry
+                    // Auch detaillierten Wartelisten-Eintrag speichern
                     if (!data.waitlistDetails) data.waitlistDetails = [];
                     data.waitlistDetails.push({
                         email: email,
@@ -1226,14 +1239,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     updateAdminPanel();
                     trackEvent('waitlist_joined', { score: window.currentScore });
                     
-                    console.log('✅ Waitlist entry saved:', email);
+                    console.log('✅ Wartelisten-Eintrag gespeichert:', email);
                 }
             } catch (e) {
-                console.error('❌ Error saving waitlist:', e);
+                console.error('❌ Fehler beim Speichern der Warteliste:', e);
             }
         }
 
-        // Helper function to identify traffic source
+        // Hilfsfunktion zur Identifizierung der Traffic-Quelle
         function getTrafficSource() {
             const urlParams = new URLSearchParams(window.location.search);
             const referrer = document.referrer;
@@ -1253,7 +1266,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
         }
 
-        // Enhanced admin panel update with storage info
+        // Erweiterte Admin-Panel-Aktualisierung mit Speicherinformationen
         function updateAdminPanel() {
             const data = getStoredData();
             
@@ -1271,13 +1284,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 : 0;
             document.getElementById('avgScore').textContent = avgScore;
             
-            // Score distribution
+            // Score-Verteilung
             updateScoreDistribution(data);
             
-            // Add storage mode indicator
+            // Speicher-Modus-Anzeige hinzufügen
             const storageIndicator = document.getElementById('storageMode');
             if (storageIndicator) {
-                storageIndicator.textContent = `Storage: ${storageMode}`;
+                storageIndicator.textContent = `Speicher: ${storageMode}`;
                 storageIndicator.style.color = storageMode === 'local' ? '#00ff88' : '#fbbf24';
             }
         }
@@ -1301,16 +1314,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             document.getElementById('scoreDistribution').innerHTML = html;
         }
 
-        // ===== ASSESSMENT FUNCTIONS =====
+        // ===== ASSESSMENT-FUNKTIONEN =====
         function startAssessment() {
-            // Clear any previous assessment data
+            // Alte Assessment-Daten löschen
             try {
                 sessionStorage.removeItem('currentScore');
                 sessionStorage.removeItem('currentTraderType');
                 sessionStorage.removeItem('assessmentCompleted');
                 sessionStorage.removeItem('currentEmail');
             } catch (e) {
-                console.log('Could not clear sessionStorage:', e);
+                console.log('Konnte sessionStorage nicht leeren:', e);
             }
             
             startTime = Date.now();
@@ -1329,7 +1342,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             container.innerHTML = `
                 <div class="question active">
-                    <h2>Question ${currentQuestion + 1} of ${questions.length}</h2>
+                    <h2>Frage ${currentQuestion + 1} von ${questions.length}</h2>
                     <h3>${question.question}</h3>
                     <div class="options">
                         ${question.options.map((option, index) => `
@@ -1418,17 +1431,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             const traderInfo = getTraderType(score);
             const insights = getInsights(score, traderInfo.type);
             
-            // Store for later use
+            // Daten für spätere Verwendung speichern
             window.currentScore = score;
             window.currentTraderType = traderInfo.type;
             
-            // Also store in sessionStorage to survive page reloads
+            // Auch in sessionStorage speichern, um Seitenneuladungen zu überleben
             try {
                 sessionStorage.setItem('currentScore', score.toString());
                 sessionStorage.setItem('currentTraderType', traderInfo.type);
                 sessionStorage.setItem('assessmentCompleted', 'true');
             } catch (e) {
-                console.log('Could not save to sessionStorage:', e);
+                console.log('Konnte nicht in sessionStorage speichern:', e);
             }
             
             assessmentData = {
@@ -1454,91 +1467,46 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <p><strong>Improvement Focus:</strong> ${insights.improvement}</p>
                 <p><strong>Your Profile:</strong> ${insights.characteristics}</p>
             `;
-        }
-
-        // ===== PAYPAL INTEGRATION =====
-        let paypalLoaded = false;
-        let paypalRetries = 0;
-
-        function initializePayPal() {
-            if (typeof paypal !== 'undefined') {
-                paypalLoaded = true;
-                console.log('✅ PayPal SDK loaded successfully');
-                renderPayPalButtons();
-            } else {
-                paypalRetries++;
-                console.log(`⏳ Waiting for PayPal SDK... (attempt ${paypalRetries})`);
-                
-                if (paypalRetries < 10) {
-                    setTimeout(initializePayPal, 1000);
-                } else {
-                    console.error('❌ PayPal SDK failed to load');
-                    document.getElementById('manual-paypal').style.display = 'block';
-                    trackEvent('paypal_sdk_failed');
-                }
+            
+            // Hier wird das GA4-Event 'assessment_complete' ausgelöst
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'assessment_complete', {
+                  'event_category': 'engagement',
+                  'event_label': 'Result Shown',
+                  'value': score // Optional: Score als Wert übergeben
+                });
             }
         }
 
-        function renderPayPalButtons() {
-            paypal.Buttons({
-                createOrder: function(data, actions) {
-                    const email = window.currentEmail;
-                    if (!email || !validateEmail(email)) {
-                        alert('Please enter a valid email address');
-                        return false;
-                    }
-                    
-                    trackEvent('paypal_checkout_started');
-                    
-                    return actions.order.create({
-                        purchase_units: [{
-                            amount: {
-                                value: CONFIG.regularPrice.toFixed(2)
-                            },
-                            description: 'AI Trading Psychology Analysis'
-                        }]
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(details) {
-                        handleSuccessfulPayment(details);
-                    });
-                },
-                onCancel: function(data) {
-                    console.log('Payment cancelled by user');
-                    trackEvent('paypal_checkout_cancelled');
-                },
-                onError: function(err) {
-                    console.error('PayPal Error:', err);
-                    alert('Payment failed. Please try again or use the manual PayPal option below.');
-                    document.getElementById('manual-paypal').style.display = 'block';
-                    trackEvent('paypal_checkout_error', { error: err.message });
-                }
-            }).render('#paypal-button-container');
-        }
+        // ===== PAYPAL INTEGRATION (VEREINFACHT) =====
+        // Die Funktionen initializePayPal und renderPayPalButtons werden nicht mehr benötigt,
+        // da wir das PayPal SDK nicht mehr direkt im iFrame laden und rendern.
+        // Stattdessen wird direkt die manuelle PayPal-Option genutzt.
 
-        // Manual PayPal fallback
+        // Manueller PayPal-Fallback
         function manualPayPal() {
             const email = window.currentEmail;
             if (!email || !validateEmail(email)) {
-                alert('Please enter a valid email address first');
+                alert('Bitte geben Sie zuerst eine gültige E-Mail-Adresse ein');
                 return;
             }
             
             trackEvent('manual_paypal_clicked');
             
+            // Öffnet PayPal in einem neuen Tab/Fenster
             const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${CONFIG.paypalEmail}&item_name=AI Trading Psychology Analysis&amount=${CONFIG.regularPrice}&currency_code=USD&return=${window.location.href}&cancel_return=${window.location.href}`;
             
             window.open(paypalUrl, '_blank');
             
+            // Nach einer kurzen Pause den Benutzer fragen, ob die Zahlung abgeschlossen wurde
             setTimeout(() => {
-                if (confirm('Did you complete the PayPal payment?')) {
+                if (confirm('Haben Sie die PayPal-Zahlung abgeschlossen?')) {
                     handleSuccessfulPayment({ manual: true });
                 }
-            }, 3000);
+            }, 3000); // 3 Sekunden Wartezeit
         }
 
-        // Handle successful payment
+        // Erfolgreiche Zahlung verarbeiten
         async function handleSuccessfulPayment(details) {
             const email = window.currentEmail;
             const score = window.currentScore || 0;
@@ -1547,16 +1515,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             const transactionId = details.id || 'manual_' + Date.now();
             savePurchase(email, transactionId);
             
-            // Generate PDF
+            // PDF generieren
             generatePDF();
             
-            // Show success message
+            // Erfolgsmeldung anzeigen
             const successHtml = `
                 <div class="success-message">
-                    <h3>✅ Payment Successful!</h3>
-                    <p>Thank you for your purchase! Your personalized 10-page report has been generated and downloaded.</p>
-                    <p>Check your email at <strong>${email}</strong> for additional resources and your welcome sequence.</p>
-                    <p>Transaction ID: ${transactionId}</p>
+                    <h3>✅ Zahlung erfolgreich!</h3>
+                    <p>Vielen Dank für Ihren Kauf! Ihr personalisierter 10-seitiger Bericht wurde generiert und heruntergeladen.</p>
+                    <p>Überprüfen Sie Ihre E-Mails unter <strong>${email}</strong> für zusätzliche Ressourcen und Ihre Willkommenssequenz.</p>
+                    <p>Transaktions-ID: ${transactionId}</p>
                 </div>
             `;
             
@@ -1564,7 +1532,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             trackEvent('purchase_success', { transactionId });
         }
 
-        // ===== ENHANCED PDF GENERATION WITH PREMIUM DESIGN =====
+        // ===== ERWEITERTE PDF-GENERIERUNG MIT PREMIUM-DESIGN =====
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -1573,7 +1541,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             const traderType = window.currentTraderType;
             const insights = getInsights(score, traderType);
             
-            // Custom colors based on trader type
+            // Benutzerdefinierte Farben basierend auf dem Trader-Typ
             const colors = {
                 'Risk Seeker': { main: [239, 68, 68], light: [254, 226, 226], dark: [127, 29, 29] },
                 'Emotional Challenger': { main: [251, 191, 36], light: [254, 243, 199], dark: [146, 64, 14] },
@@ -1583,7 +1551,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             const typeColors = colors[traderType] || colors['Evolving Trader'];
             
-            // Helper function for gradient backgrounds
+            // Hilfsfunktion für Farbverlauf-Hintergründe
             function drawGradientRect(x, y, w, h, color1, color2) {
                 const steps = 20;
                 const stepHeight = h / steps;
@@ -1597,25 +1565,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 }
             }
             
-            // Helper function for rounded rectangles
+            // Hilfsfunktion für abgerundete Rechtecke
             function drawRoundedRect(x, y, w, h, r, style = 'F') {
                 doc.roundedRect(x, y, w, h, r, r, style);
             }
             
-            // Helper function for section headers
+            // Hilfsfunktion für Abschnitts-Überschriften
             function drawSectionHeader(title, y) {
-                // Background gradient
+                // Hintergrund-Farbverlauf
                 drawGradientRect(0, y - 10, 210, 25, typeColors.light, [255, 255, 255]);
                 
-                // Left accent bar
+                // Linker Akzentbalken
                 doc.setFillColor(...typeColors.main);
                 doc.rect(0, y - 10, 3, 25, 'F');
                 
-                // Circle without icon
+                // Kreis ohne Icon
                 doc.setFillColor(...typeColors.main);
                 doc.circle(15, y + 2, 8, 'F');
                 
-                // Title
+                // Titel
                 doc.setTextColor(...typeColors.dark);
                 doc.setFontSize(22);
                 doc.setFont(undefined, 'bold');
@@ -1623,7 +1591,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 doc.setFont(undefined, 'normal');
             }
             
-            // Helper function for info boxes
+            // Hilfsfunktion für Infoboxen
             function drawInfoBox(x, y, w, h, content, bgColor = typeColors.light) {
                 doc.setFillColor(...bgColor);
                 doc.setDrawColor(...typeColors.main);
@@ -1636,22 +1604,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 doc.text(lines, x + 5, y + 8);
             }
             
-            // ========== PAGE 1 - COVER ==========
-            // Full page gradient background
+            // ========== SEITE 1 - COVER ==========
+            // Vollflächiger Farbverlauf-Hintergrund
             drawGradientRect(0, 0, 210, 297, typeColors.dark, typeColors.main);
             
-            // White card in center
+            // Weiße Karte in der Mitte
             doc.setFillColor(255, 255, 255);
             drawRoundedRect(20, 50, 170, 180, 10);
             
-            // Logo area (gradient circle)
+            // Logo-Bereich (Farbverlauf-Kreis)
             doc.setFillColor(...typeColors.main);
             doc.circle(105, 90, 25, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(36);
             doc.text('AI', 105, 98, { align: 'center' });
             
-            // Title
+            // Titel
             doc.setTextColor(51, 51, 51);
             doc.setFontSize(28);
             doc.setFont(undefined, 'bold');
@@ -1660,7 +1628,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             doc.setFont(undefined, 'normal');
             doc.text('Personalized Analysis Report', 105, 145, { align: 'center' });
             
-            // Score display with circular progress
+            // Score-Anzeige mit Kreisfortschritt
             doc.setDrawColor(...typeColors.main);
             doc.setLineWidth(8);
             doc.circle(105, 180, 20, 'S');
@@ -1673,7 +1641,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             doc.setFont(undefined, 'normal');
             doc.text('/100', 105, 195, { align: 'center' });
             
-            // Trader type badge
+            // Trader-Typ-Badge
             doc.setFillColor(...typeColors.main);
             drawRoundedRect(40, 205, 130, 15, 7);
             doc.setTextColor(255, 255, 255);
@@ -1681,50 +1649,50 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             doc.setFont(undefined, 'bold');
             doc.text(traderType, 105, 215, { align: 'center' });
             
-            // Footer
+            // Fußzeile
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(10);
             doc.setFont(undefined, 'normal');
-            doc.text('Generated on: ' + new Date().toLocaleDateString(), 105, 250, { align: 'center' });
+            doc.text('Generiert am: ' + new Date().toLocaleDateString(), 105, 250, { align: 'center' });
             doc.text('© 2025 Schnitzlein Consulting', 105, 260, { align: 'center' });
             
-            // Add remaining pages (I'll add just the core structure for brevity)
-            // In production, you'd want to add all 10 pages with detailed content
+            // Weitere Seiten hinzufügen (hier nur die Kernstruktur zur Kürze)
+            // In der Produktion sollten alle 10 Seiten mit detailliertem Inhalt hinzugefügt werden
             
-            // Save the PDF
+            // PDF speichern
             doc.save(`Trading_Psychology_Report_${score}_${traderType.replace(/\s+/g, '_')}.pdf`);
             trackEvent('pdf_generated', { score, traderType });
         }
 
-        // ===== UTILITY FUNCTIONS =====
+        // ===== HILFSFUNKTIONEN =====
         function validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(email);
         }
 
-        // ===== WAITLIST FUNCTIONALITY =====
+        // ===== WARTELISTEN-FUNKTIONALITÄT =====
         document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('waitlistEmail').value;
             
             if (!validateEmail(email)) {
-                alert('Please enter a valid email address');
+                alert('Bitte geben Sie eine gültige E-Mail-Adresse ein');
                 return;
             }
             
             const score = window.currentScore || 0;
             const traderType = window.currentTraderType || '';
             
-            // Add to MailerLite via API
+            // Zu MailerLite über API hinzufügen
             await addToMailerLiteAPI(email, score, traderType);
             
             saveWaitlist(email);
             
             document.getElementById('waitlistForm').innerHTML = 
-                '<p style="color: #00ff88; font-weight: 600;">✓ Successfully joined waitlist! Check your email for confirmation.</p>';
+                '<p style="color: #00ff88; font-weight: 600;">✓ Erfolgreich der Warteliste beigetreten! Überprüfen Sie Ihre E-Mails zur Bestätigung.</p>';
         });
 
-        // ===== ADMIN PANEL FUNCTIONS =====
+        // ===== ADMIN-PANEL-FUNKTIONEN =====
         function toggleAdminPanel() {
             const panel = document.getElementById('adminPanel');
             panel.classList.toggle('open');
@@ -1733,28 +1701,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         function exportData() {
             const data = getStoredData();
             
-            // Create CSV content
+            // CSV-Inhalt erstellen
             let csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Type,Score,TraderType,Timestamp,CompletionTime,Referrer,Email,Amount\n";
             
-            // Add assessments
+            // Assessments hinzufügen
             data.assessments.forEach(assessment => {
                 csvContent += `Assessment,${assessment.score},"${assessment.traderType}","${assessment.timestamp}",${assessment.completionTime || ''},"${assessment.referrer || ''}","",""\n`;
             });
             
-            // Add purchases
+            // Käufe hinzufügen
             if (data.purchaseDetails) {
                 data.purchaseDetails.forEach(purchase => {
                     csvContent += `Purchase,${purchase.score || ''},"${purchase.traderType || ''}","${purchase.timestamp}","","","${purchase.email}",${purchase.amount}\n`;
                 });
             }
             
-            // Add waitlist
+            // Warteliste hinzufügen
             data.waitlist.forEach(email => {
                 csvContent += `Waitlist,"","","${new Date().toISOString()}","","","${email}",""\n`;
             });
             
-            // Download CSV
+            // CSV herunterladen
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
@@ -1767,17 +1735,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         }
 
         function testPurchase() {
-            if (confirm('This will simulate a purchase for testing. Continue?')) {
+            if (confirm('Dies simuliert einen Kauf zu Testzwecken. Fortfahren?')) {
                 handleSuccessfulPayment({ test: true, id: 'TEST_' + Date.now() });
             }
         }
 
-        // Enhanced clear data function
+        // Erweiterte Funktion zum Löschen von Daten
         function clearAllData() {
-            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
-                const password = prompt('Enter admin password:');
+            if (confirm('Sind Sie sicher, dass Sie alle Daten löschen möchten? Dies kann nicht rückgängig gemacht werden.')) {
+                const password = prompt('Geben Sie das Admin-Passwort ein:');
                 if (password === CONFIG.adminPassword) {
-                    // Clear all storage types
+                    // Alle Speichertypen löschen
                     if (availableStorage.local) {
                         localStorage.removeItem('tradingPsychologyData');
                     }
@@ -1785,7 +1753,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         sessionStorage.removeItem('tradingPsychologyData');
                     }
                     
-                    // Reset memory storage
+                    // In-Memory-Speicher zurücksetzen
                     memoryStorage = {
                         assessments: [],
                         revenue: 0,
@@ -1795,48 +1763,47 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     };
                     
                     updateAdminPanel();
-                    alert('All data cleared successfully from all storage types');
+                    alert('Alle Daten erfolgreich von allen Speichertypen gelöscht');
                     trackEvent('data_cleared');
                 } else {
-                    alert('Incorrect password');
+                    alert('Falsches Passwort');
                 }
             }
         }
 
-        // Enhanced debug info
+        // Erweiterte Debug-Informationen
         function debugInfo() {
             const data = getStoredData();
-            console.log('=== Debug Information ===');
+            console.log('=== Debug-Informationen ===');
             console.log('Version:', CONFIG.version);
-            console.log('Storage Types Available:', availableStorage);
-            console.log('Current Storage Mode:', storageMode);
-            console.log('Data Location:', {
-                localStorage: availableStorage.local ? (localStorage.getItem('tradingPsychologyData') ? 'Has data' : 'Empty') : 'Not available',
-                sessionStorage: availableStorage.session ? (sessionStorage.getItem('tradingPsychologyData') ? 'Has data' : 'Empty') : 'Not available',
-                memory: 'Always available'
+            console.log('Verfügbare Speichertypen:', availableStorage);
+            console.log('Aktueller Speichermodus:', storageMode);
+            console.log('Datenspeicherort:', {
+                localStorage: availableStorage.local ? (localStorage.getItem('tradingPsychologyData') ? 'Hat Daten' : 'Leer') : 'Nicht verfügbar',
+                sessionStorage: availableStorage.session ? (sessionStorage.getItem('tradingPsychologyData') ? 'Hat Daten' : 'Leer') : 'Nicht verfügbar',
+                memory: 'Immer verfügbar'
             });
-            console.log('Data:', data);
-            console.log('Data Size:', new Blob([JSON.stringify(data)]).size + ' bytes');
-            console.log('Current Score:', window.currentScore);
-            console.log('Current Trader Type:', window.currentTraderType);
-            console.log('PayPal Loaded:', paypalLoaded);
+            console.log('Daten:', data);
+            console.log('Datengröße:', new Blob([JSON.stringify(data)]).size + ' Bytes');
+            console.log('Aktueller Score:', window.currentScore);
+            console.log('Aktueller Trader-Typ:', window.currentTraderType);
             console.log('User Agent:', navigator.userAgent);
             console.log('Referrer:', document.referrer || 'none');
-            console.log('URL Parameters:', new URLSearchParams(window.location.search).toString());
+            console.log('URL-Parameter:', new URLSearchParams(window.location.search).toString());
             
-            alert(`Debug Info:\nStorage: ${storageMode}\nAssessments: ${data.assessments.length}\nRevenue: $${data.revenue}\n\nPress F12 for detailed console logs`);
+            alert(`Debug-Info:\nSpeicher: ${storageMode}\nAssessments: ${data.assessments.length}\nUmsatz: $${data.revenue}\n\nDrücken Sie F12 für detaillierte Konsolenprotokolle`);
         }
 
         function showDetailedStats() {
             const data = getStoredData();
             
-            let stats = '=== Detailed Statistics ===\n\n';
-            stats += `Total Assessments: ${data.assessments.length}\n`;
-            stats += `Total Revenue: $${data.revenue}\n`;
-            stats += `Conversion Rate: ${data.assessments.length > 0 ? ((data.purchases / data.assessments.length) * 100).toFixed(1) : 0}%\n`;
-            stats += `Average Score: ${data.assessments.length > 0 ? Math.round(data.assessments.reduce((sum, a) => sum + a.score, 0) / data.assessments.length) : 0}\n\n`;
+            let stats = '=== Detaillierte Statistiken ===\n\n';
+            stats += `Gesamtzahl Assessments: ${data.assessments.length}\n`;
+            stats += `Gesamtumsatz: $${data.revenue}\n`;
+            stats += `Conversion-Rate: ${data.assessments.length > 0 ? ((data.purchases / data.assessments.length) * 100).toFixed(1) : 0}%\n`;
+            stats += `Durchschnittlicher Score: ${data.assessments.length > 0 ? Math.round(data.assessments.reduce((sum, a) => sum + a.score, 0) / data.assessments.length) : 0}\n\n`;
             
-            stats += 'Score Distribution:\n';
+            stats += 'Score-Verteilung:\n';
             const distribution = {
                 'Risk Seeker': 0,
                 'Emotional Challenger': 0,
@@ -1854,39 +1821,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             });
             
             if (data.assessments.length > 0) {
-                stats += '\nAverage Completion Time: ' + 
+                stats += '\nDurchschnittliche Abschlusszeit: ' + 
                     (data.assessments.reduce((sum, a) => sum + (a.completionTime || 0), 0) / 
-                    data.assessments.filter(a => a.completionTime).length).toFixed(1) + ' seconds\n';
+                    data.assessments.filter(a => a.completionTime).length).toFixed(1) + ' Sekunden\n';
             }
             
-            stats += `\nWaitlist Signups: ${data.waitlist.length}\n`;
-            stats += `Unique Purchases: ${data.purchases}\n`;
+            stats += `\nWartelisten-Anmeldungen: ${data.waitlist.length}\n`;
+            stats += `Einzigartige Käufe: ${data.purchases}\n`;
             
             alert(stats);
         }
 
-        // Check if results page should be shown on load
+        // Prüfen, ob die Ergebnisseite beim Laden angezeigt werden soll
         function checkForCompletedAssessment() {
             const assessmentCompleted = sessionStorage.getItem('assessmentCompleted');
             const storedScore = sessionStorage.getItem('currentScore');
             const storedTraderType = sessionStorage.getItem('currentTraderType');
             
             if (assessmentCompleted === 'true' && storedScore && storedTraderType) {
-                // Restore data
+                // Daten wiederherstellen
                 window.currentScore = parseInt(storedScore);
                 window.currentTraderType = storedTraderType;
                 
-                // Show results directly
+                // Ergebnisse direkt anzeigen
                 document.getElementById('header').style.display = 'none';
                 document.getElementById('results').style.display = 'block';
                 
-                // Update display
+                // Anzeige aktualisieren
                 const traderInfo = getTraderType(window.currentScore);
                 document.getElementById('scoreDisplay').textContent = `${window.currentScore}/100`;
                 document.getElementById('scoreDisplay').style.color = traderInfo.color;
                 document.getElementById('traderType').textContent = window.currentTraderType;
                 
-                // Get and display insights
+                // Insights abrufen und anzeigen
                 const insights = getInsights(window.currentScore, window.currentTraderType);
                 document.getElementById('insights').innerHTML = `
                     <h3>Your Psychology Profile:</h3>
@@ -1896,11 +1863,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <p><strong>Your Profile:</strong> ${insights.characteristics}</p>
                 `;
                 
-                console.log('✅ Restored previous assessment results');
+                console.log('✅ Vorherige Assessment-Ergebnisse wiederhergestellt');
             }
         }
 
-        // ===== KEYBOARD SHORTCUTS =====
+        // ===== TASTATURKÜRZEL =====
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey) {
                 switch(e.key) {
@@ -1910,7 +1877,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         break;
                     case 'R':
                         e.preventDefault();
-                        if (confirm('Restart assessment?')) {
+                        if (confirm('Assessment neu starten?')) {
                             location.reload();
                         }
                         break;
@@ -1934,21 +1901,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
         });
 
-        // ===== INITIALIZE ON LOAD =====
+        // ===== INITIALISIERUNG BEIM LADEN =====
         window.addEventListener('load', function() {
             console.log('🚀 Trading Psychology Assessment v' + CONFIG.version);
-            console.log('💳 PayPal Integration: Ready');
-            console.log('📧 MailerLite Integration: Ready (Form + API)');
-            console.log('💾 Storage Mode: ' + storageMode);
-            console.log('📊 Press Ctrl+Shift+A to open Admin Panel');
-            console.log('📋 Keyboard Shortcuts:');
-            console.log('   Ctrl+Shift+A: Admin Panel');
-            console.log('   Ctrl+Shift+R: Restart Assessment');
-            console.log('   Ctrl+Shift+E: Export Data');
-            console.log('   Ctrl+Shift+D: Debug Info');
-            console.log('   Ctrl+Shift+S: Detailed Stats');
+            // console.log('💳 PayPal Integration: Bereit'); // Entfernt, da SDK nicht mehr direkt geladen wird
+            console.log('📧 MailerLite Integration: Bereit (Formular + API)');
+            console.log('💾 Speichermodus: ' + storageMode);
+            console.log('📊 Drücken Sie Strg+Umschalt+A, um das Admin-Panel zu öffnen');
+            console.log('📋 Tastaturkürzel:');
+            console.log('   Strg+Umschalt+A: Admin-Panel');
+            console.log('   Strg+Umschalt+R: Assessment neu starten');
+            console.log('   Strg+Umschalt+E: Daten exportieren');
+            console.log('   Strg+Umschalt+D: Debug-Info anzeigen');
+            console.log('   Strg+Umschalt+S: Detaillierte Statistiken');
             
-            // Restore assessment data from sessionStorage if available
+            // Assessment-Daten aus sessionStorage wiederherstellen, falls verfügbar
             try {
                 const storedScore = sessionStorage.getItem('currentScore');
                 const storedTraderType = sessionStorage.getItem('currentTraderType');
@@ -1957,43 +1924,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 if (assessmentCompleted === 'true' && storedScore && storedTraderType) {
                     window.currentScore = parseInt(storedScore);
                     window.currentTraderType = storedTraderType;
-                    console.log('✅ Restored assessment data from session:', {
+                    console.log('✅ Assessment-Daten aus Session wiederhergestellt:', {
                         score: window.currentScore,
                         type: window.currentTraderType
                     });
                 }
             } catch (e) {
-                console.log('Could not restore from sessionStorage:', e);
+                console.log('Konnte nicht aus sessionStorage wiederherstellen:', e);
             }
             
-            // Run migration if available
+            // Migration ausführen, falls verfügbar
             if (typeof migrateOldData === 'function') {
                 migrateOldData();
             }
             
             updateAdminPanel();
             
-            // Check if admin parameter
+            // Prüfen, ob Admin-Parameter
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('admin') === 'true') {
                 toggleAdminPanel();
-                // Remove parameter from URL
+                // Parameter aus URL entfernen
                 try {
                     window.history.replaceState({}, document.title, window.location.pathname);
                 } catch (e) {
-                    console.log('Cannot modify URL history in sandboxed environment');
+                    console.log('Kann den URL-Verlauf in einer Sandbox-Umgebung nicht ändern');
                 }
             }
             
-            // Check if PayPal SDK is already loaded
-            if (typeof paypal !== 'undefined') {
-                console.log('✅ PayPal SDK already loaded');
-                paypalLoaded = true;
-            } else {
-                console.log('⚠️ PayPal SDK not loaded yet');
-            }
+            // Die initializePayPal() Aufrufe wurden entfernt, da das SDK nicht mehr direkt geladen wird.
+            // Die manuelle PayPal-Option wird direkt angezeigt, wenn nötig.
             
-            // Track page view only if analytics is loaded
+            // Seitenaufruf nur verfolgen, wenn Analytics geladen ist
             if (typeof gtag !== 'undefined') {
                 try {
                     trackEvent('page_view', {
@@ -2001,33 +1963,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         url: window.location.href || 'unknown'
                     });
                 } catch (e) {
-                    console.log('Tracking error:', e);
+                    console.log('Tracking-Fehler:', e);
                 }
             }
             
-            // Initialize MailerLite form (keeping for API key)
-            fetch("https://assets.mailerlite.com/jsonp/1568323/forms/158237970273404824/takel").catch(e => console.log('MailerLite form load skipped'));
+            // MailerLite-Formular initialisieren (für API-Key behalten)
+            fetch("https://assets.mailerlite.com/jsonp/1568323/forms/158237970273404824/takel").catch(e => console.log('MailerLite-Formular-Laden übersprungen'));
             
-            // Check if user has completed assessment before
+            // Prüfen, ob der Benutzer das Assessment zuvor abgeschlossen hat
             checkForCompletedAssessment();
         });
 
-        // ===== ERROR HANDLING =====
+        // ===== FEHLERBEHANDLUNG =====
         window.addEventListener('error', function(e) {
-            console.error('Global error:', e);
+            console.error('Globaler Fehler:', e);
             try {
                 trackEvent('javascript_error', {
-                    message: e.message || 'Unknown error',
-                    source: e.filename || 'Unknown',
+                    message: e.message || 'Unbekannter Fehler',
+                    source: e.filename || 'Unbekannt',
                     line: e.lineno || 0,
                     column: e.colno || 0
                 });
             } catch (trackError) {
-                console.error('Error tracking failed:', trackError);
+                console.error('Fehler beim Tracking fehlgeschlagen:', trackError);
             }
         });
 
-        // ===== PERFORMANCE MONITORING =====
+        // ===== PERFORMANCE-ÜBERWACHUNG =====
         window.addEventListener('beforeunload', function() {
             try {
                 if (startTime && currentQuestion > 0) {
@@ -2038,7 +2000,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     });
                 }
             } catch (e) {
-                console.log('Performance tracking error:', e);
+                console.log('Leistungs-Tracking-Fehler:', e);
             }
         });
     </script>
