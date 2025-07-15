@@ -550,13 +550,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             
             <!-- Conversion Tracking für assessment_complete - HIER EINGEFÜGT -->
             <script>
-              if (typeof gtag !== 'undefined') {
-                gtag('event', 'assessment_complete', {
-                  'event_category': 'engagement',
-                  'event_label': 'Result Shown',
-                  'value': window.currentScore // Optional: Score als Wert übergeben
-                });
-              }
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                event: 'assessment_complete'
+              });
             </script>
             
             <!-- Compliance Notice in Results -->
@@ -1400,7 +1397,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 "Risk Seeker": {
                     strengths: "You're willing to take risks and have high energy for trading. Your enthusiasm and market engagement are assets that, when properly channeled, can lead to significant opportunities.",
                     weaknesses: "Emotional decision-making, revenge trading, and poor risk management are costing you money. You tend to let losses affect your judgment and often trade to 'get even' with the market.",
-                    improvement: "Start with strict position sizing rules (never risk more than 1% per trade) and mandatory cool-down periods after losses. Consider paper trading for a week to practice discipline without financial risk.",
+                    improvement: "Start with strict position sizing rules (never risk more than 1% per trade) and mandatory cool-down periods after losses. Consider paper trading for a week to practice discipline without financial financial risk.",
                     characteristics: "Risk Seekers often experience the highest highs and lowest lows in trading. Your emotional intensity can be both your greatest asset and biggest liability."
                 },
                 "Emotional Challenger": {
@@ -1469,13 +1466,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             `;
             
             // Hier wird das GA4-Event 'assessment_complete' ausgelöst
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'assessment_complete', {
-                  'event_category': 'engagement',
-                  'event_label': 'Result Shown',
-                  'value': score // Optional: Score als Wert übergeben
-                });
-            }
+            // Ersetzt durch das von dir bereitgestellte dataLayer.push Event
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'assessment_complete'
+            });
         }
 
         // ===== PAYPAL INTEGRATION (VEREINFACHT) =====
