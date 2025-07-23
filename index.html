@@ -1,60 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Decision Psychology Tools - Free Self-Assessment Platform</title>
-  <meta name="description" content="Free tools for understanding your decision-making patterns and behavioral psychology. 100% anonymous, instant results.">
-
-  <!-- Google Tag Manager -->
-  <script>
-        // Google Analytics IMMER laden (anonymized)
-        (function() {
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
-            document.head.appendChild(script);
-
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            // Anonymized tracking - DSGVO konform ohne Consent
-            gtag('config', 'G-T09F68TQVW', {
-                'anonymize_ip': true,
-                'allow_google_signals': false,
-                'allow_ad_personalization_signals': false
-            });
-        })();
-        
-        // Custom event tracking
-        function trackToolClick(toolName) {
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'tool_click', {
-                    'tool_name': toolName,
-                    'event_category': 'engagement',
-                    'event_label': toolName
-                });
-            }
-        }
-    </script>
-  <!-- End Google Tag Manager -->
-
-  <!-- dein vorhandener <style> und <script>-Code geht hier weiter -->
-</head>
-
-<body>
-  <!-- Google Tag Manager (noscript) -->
-    <!-- End Google Tag Manager (noscript) -->
-  <!DOCTYPE html>
-<html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decision Psychology Tools - Free Self-Assessment Platform</title>
     <meta name="description" content="Free tools for understanding your decision-making patterns and behavioral psychology. 100% anonymous, instant results.">
     
-    <!-- Google Analytics - Anonymized (DSGVO konform) -->
     <script>
         // Google Analytics IMMER laden (anonymized)
         (function() {
@@ -568,8 +519,8 @@
         }
     </style>
 </head>
+
 <body>
-    <!-- Cookie Banner -->
     <div class="cookie-banner" id="cookieBanner">
         <div class="cookie-content">
             <div class="cookie-text">
@@ -586,7 +537,6 @@
         </div>
     </div>
 
-    <!-- Cookie Settings Modal -->
     <div class="cookie-modal" id="cookieModal">
         <div class="cookie-modal-content">
             <h2>Cookie-Einstellungen</h2>
@@ -620,13 +570,11 @@
         </div>
     </div>
 
-    <!-- Header -->
     <header>
         <a href="index.html" class="logo">Decision Psychology Platform</a>
         <p class="tagline">Free Tools for Understanding Your Mind</p>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <h1>Understand Your Decision Patterns</h1>
         <p class="subtitle">Quick self-assessments to explore your behavioral psychology</p>
@@ -636,13 +584,11 @@
         </div>
     </section>
 
-    <!-- Tools Section -->
     <section class="tools">
         <h2 class="section-title">Choose Your Assessment</h2>
         <p class="section-subtitle">Each tool takes just 2-5 minutes to complete</p>
         
         <div class="tools-grid">
-            <!-- Psychology Assessment -->
             <div class="tool-card">
                 <div class="tool-icon">🧠</div>
                 <h3>Behavioral Type Assessment</h3>
@@ -658,7 +604,6 @@
                 <a href="assessment.html" class="cta-button" onclick="trackToolClick('Psychology Assessment')">Start Assessment</a>
             </div>
 
-            <!-- Risk Assessment -->
             <div class="tool-card">
                 <div class="tool-icon">⚖️</div>
                 <h3>Revenge Risk Calculator</h3>
@@ -674,7 +619,6 @@
                 <a href="revenge-calculator.html" class="cta-button" onclick="trackToolClick('Risk Assessment')">Check My Risk</a>
             </div>
 
-            <!-- FOMO Score Test -->
             <div class="tool-card">
                 <div class="tool-icon">📊</div>
                 <h3>FOMO Score Test</h3>
@@ -692,7 +636,6 @@
         </div>
     </section>
 
-    <!-- Features -->
     <section class="features">
         <h2 class="section-title">Why Our Tools?</h2>
         
@@ -723,7 +666,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-disclaimer">
             <p>Educational tools only. Not professional advice. 
@@ -739,7 +681,6 @@
         <p style="color: #666; font-size: 0.8em;">© 2025 Schnitzlein Consulting</p>
     </footer>
     
-    <!-- Cookie Banner & Analytics Scripts -->
     <script>
         // Cookie Banner Functions
         function setCookie(name, value, days) {
@@ -751,7 +692,7 @@
 
         function getCookie(name) {
             const value =  document.cookie;
-            const parts = value.split(; ${name}=);
+            const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
@@ -859,33 +800,4 @@
                 let scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
                 
                 scrollDepths.forEach(function(depth) {
-                    if (scrollPercent >= depth && !scrolledDepths.includes(depth)) {
-                        scrolledDepths.push(depth);
-                        if (typeof gtag !== 'undefined') {
-                            gtag('event', 'scroll_depth', {
-                                'percent_scrolled': depth,
-                                'event_category': 'engagement'
-                            });
-                        }
-                    }
-                });
-            });
-            
-            // Track time on page
-            let startTime = new Date().getTime();
-            
-            window.addEventListener('beforeunload', function() {
-                let endTime = new Date().getTime();
-                let timeSpent = Math.round((endTime - startTime) / 1000);
-                
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'time_on_page', {
-                        'time_seconds': timeSpent,
-                        'event_category': 'engagement'
-                    });
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+                    if (scrollPercent >= depth && !scrolledDepths.includes(
