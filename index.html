@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Decision Psychology Tools - Free Self-Assessment Platform</title>
     <meta name="description" content="Free tools for understanding your decision-making patterns and behavioral psychology. 100% anonymous, instant results.">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Standardmäßig wird die Zustimmung verweigert
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied'
+      });
+
+      gtag('config', 'AW-XXXXX'); // Ihre Google Ads Conversion ID
+    </script>
     
     <style>
         * {
@@ -530,6 +546,17 @@
                 </div>
                 <p>Diese Cookies helfen uns zu verstehen, wie Besucher mit unserer Website interagieren. Wir verwenden Google Analytics für anonyme Statistiken.</p>
             </div>
+            
+            <div class="cookie-option">
+                <div class="cookie-option-header">
+                    <h3>Werbe-Cookies</h3>
+                    <label class="cookie-switch">
+                        <input type="checkbox" id="adsCookies">
+                        <span class="cookie-slider"></span>
+                    </label>
+                </div>
+                <p>Diese Cookies werden von Google Ads verwendet, um relevante Werbung anzuzeigen und die Effektivität von Marketingkampagnen zu messen.</p>
+            </div>
 
             <div class="cookie-buttons" style="margin-top: 30px; justify-content: flex-end;">
                 <button class="cookie-button cookie-decline" onclick="closeCookieSettings()">Abbrechen</button>
@@ -694,38 +721,50 @@
         window.addEventListener('DOMContentLoaded', function() {
             const consent = getCookie('cookieConsent');
             const analyticsConsent = getCookie('analyticsCookies');
+            const adsConsent = getCookie('adsCookies');
             const cookieBanner = document.getElementById('cookieBanner');
             const analyticsCheckbox = document.getElementById('analyticsCookies');
+            const adsCheckbox = document.getElementById('adsCookies');
             
-            if (consent === 'accepted' && analyticsConsent === 'true') {
-                loadGoogleAnalytics();
-                if (analyticsCheckbox) analyticsCheckbox.checked = true;
+            if (consent === 'accepted') {
+                if (analyticsConsent === 'true') {
+                    loadGoogleAnalytics();
+                    if (analyticsCheckbox) analyticsCheckbox.checked = true;
+                }
+                if (adsConsent === 'true') {
+                    // Update consent for Google Ads
+                    if (typeof gtag !== 'undefined') {
+                        gtag('consent', 'update', {
+                            'ad_storage': 'granted',
+                            'ad_user_data': 'granted',
+                            'ad_personalization': 'granted'
+                        });
+                    }
+                    if (adsCheckbox) adsCheckbox.checked = true;
+                }
             } else if (!consent) {
                 // No consent given yet - show banner
                 cookieBanner.classList.add('show');
             }
-            // If consent is 'declined', no analytics scripts are loaded
-            
-            // Other tracking functions moved here
-            const urlParams = new URLSearchParams(window.location.search);
-            const source = urlParams.get('utm_source') || urlParams.get('source') || 'direct';
-            if (source !== 'direct' && typeof gtag !== 'undefined') {
-                gtag('event', 'page_view_source', {
-                    'source': source,
-                    'event_category': 'traffic_source'
-                });
-            }
-            initializeScrollTracking();
         });
 
         function acceptAllCookies() {
             setCookie('cookieConsent', 'accepted', 365);
             setCookie('analyticsCookies', 'true', 365);
+            setCookie('adsCookies', 'true', 365); // Neues Cookie für Ads
             document.getElementById('cookieBanner').classList.remove('show');
             
             loadGoogleAnalytics();
             
+            // Zustimmung für Google Ads erteilen
             if (typeof gtag !== 'undefined') {
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted'
+                });
+                
+                // Event-Tracking
                 gtag('event', 'cookie_consent', {
                     'consent_given': 'accepted',
                     'event_category': 'privacy'
@@ -736,9 +775,9 @@
         function declineCookies() {
             setCookie('cookieConsent', 'declined', 365);
             setCookie('analyticsCookies', 'false', 365);
+            setCookie('adsCookies', 'false', 365);
             document.getElementById('cookieBanner').classList.remove('show');
             
-            // Analytics script is never loaded, so no need to track decline with gtag
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'cookie_consent', {
                     'consent_given': 'declined',
@@ -757,14 +796,32 @@
 
         function saveCookieSettings() {
             const analyticsEnabled = document.getElementById('analyticsCookies').checked;
+            const adsEnabled = document.getElementById('adsCookies').checked;
             
-            if (analyticsEnabled) {
+            if (analyticsEnabled || adsEnabled) {
                 setCookie('cookieConsent', 'accepted', 365);
+            } else {
+                setCookie('cookieConsent', 'declined', 365);
+            }
+
+            if (analyticsEnabled) {
                 setCookie('analyticsCookies', 'true', 365);
                 loadGoogleAnalytics();
             } else {
-                setCookie('cookieConsent', 'declined', 365);
                 setCookie('analyticsCookies', 'false', 365);
+            }
+            
+            if (adsEnabled) {
+                setCookie('adsCookies', 'true', 365);
+                if (typeof gtag !== 'undefined') {
+                    gtag('consent', 'update', {
+                        'ad_storage': 'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted'
+                    });
+                }
+            } else {
+                setCookie('adsCookies', 'false', 365);
             }
             
             document.getElementById('cookieBanner').classList.remove('show');
@@ -773,6 +830,7 @@
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'cookie_settings_saved', {
                     'analytics_enabled': analyticsEnabled,
+                    'ads_enabled': adsEnabled,
                     'event_category': 'privacy'
                 });
             }
@@ -788,7 +846,7 @@
                 });
             }
         }
-
+        
         // Analytics tracking functions
         function initializeScrollTracking() {
             let scrollDepths = [25, 50, 75, 100];
