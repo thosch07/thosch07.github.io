@@ -6,38 +6,6 @@
     <title>Decision Psychology Tools - Free Self-Assessment Platform</title>
     <meta name="description" content="Free tools for understanding your decision-making patterns and behavioral psychology. 100% anonymous, instant results.">
     
-    <script>
-        // Google Analytics IMMER laden (anonymized)
-        (function() {
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
-            document.head.appendChild(script);
-
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            // Anonymized tracking - DSGVO konform ohne Consent
-            gtag('config', 'G-T09F68TQVW', {
-                'anonymize_ip': true,
-                'allow_google_signals': false,
-                'allow_ad_personalization_signals': false
-            });
-        })();
-        
-        // Custom event tracking
-        function trackToolClick(toolName) {
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'tool_click', {
-                    'tool_name': toolName,
-                    'event_category': 'engagement',
-                    'event_label': toolName
-                });
-            }
-        }
-    </script>
-    
     <style>
         * {
             margin: 0;
@@ -556,7 +524,7 @@
                 <div class="cookie-option-header">
                     <h3>Analyse-Cookies</h3>
                     <label class="cookie-switch">
-                        <input type="checkbox" id="analyticsCookies" checked>
+                        <input type="checkbox" id="analyticsCookies">
                         <span class="cookie-slider"></span>
                     </label>
                 </div>
@@ -691,23 +659,54 @@
         }
 
         function getCookie(name) {
-            const value =  document.cookie;
-            const parts = value.split(`; ${name}=`);
+            const value = document.cookie;
+            const parts = value.split('; ' + name + '=');
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
         function deleteCookie(name) {
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
         }
+        
+        // This function will handle the loading of Google Analytics conditionally
+        function loadGoogleAnalytics() {
+            // Check if GA is already loaded to avoid duplicates
+            if (window.gaLoaded) return;
+            window.gaLoaded = true;
 
-        // Check if cookie consent already given
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            
+            gtag('config', 'G-T09F68TQVW', {
+                'anonymize_ip': true,
+                'allow_google_signals': false,
+                'allow_ad_personalization_signals': false
+            });
+        }
+        
+        // Check if cookie consent already given on page load
         window.addEventListener('DOMContentLoaded', function() {
             const consent = getCookie('cookieConsent');
-            if (!consent) {
-                document.getElementById('cookieBanner').classList.add('show');
-            }
+            const analyticsConsent = getCookie('analyticsCookies');
+            const cookieBanner = document.getElementById('cookieBanner');
+            const analyticsCheckbox = document.getElementById('analyticsCookies');
             
-            // Track page visit source
+            if (consent === 'accepted' && analyticsConsent === 'true') {
+                loadGoogleAnalytics();
+                if (analyticsCheckbox) analyticsCheckbox.checked = true;
+            } else if (!consent) {
+                // No consent given yet - show banner
+                cookieBanner.classList.add('show');
+            }
+            // If consent is 'declined', no analytics scripts are loaded
+            
+            // Other tracking functions moved here
             const urlParams = new URLSearchParams(window.location.search);
             const source = urlParams.get('utm_source') || urlParams.get('source') || 'direct';
             if (source !== 'direct' && typeof gtag !== 'undefined') {
@@ -716,8 +715,6 @@
                     'event_category': 'traffic_source'
                 });
             }
-
-            // Initialize scroll tracking
             initializeScrollTracking();
         });
 
@@ -726,7 +723,8 @@
             setCookie('analyticsCookies', 'true', 365);
             document.getElementById('cookieBanner').classList.remove('show');
             
-            // Track consent
+            loadGoogleAnalytics();
+            
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'cookie_consent', {
                     'consent_given': 'accepted',
@@ -740,7 +738,7 @@
             setCookie('analyticsCookies', 'false', 365);
             document.getElementById('cookieBanner').classList.remove('show');
             
-            // Track decline
+            // Analytics script is never loaded, so no need to track decline with gtag
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'cookie_consent', {
                     'consent_given': 'declined',
@@ -763,6 +761,7 @@
             if (analyticsEnabled) {
                 setCookie('cookieConsent', 'accepted', 365);
                 setCookie('analyticsCookies', 'true', 365);
+                loadGoogleAnalytics();
             } else {
                 setCookie('cookieConsent', 'declined', 365);
                 setCookie('analyticsCookies', 'false', 365);
@@ -771,7 +770,6 @@
             document.getElementById('cookieBanner').classList.remove('show');
             document.getElementById('cookieModal').classList.remove('show');
             
-            // Track settings save
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'cookie_settings_saved', {
                     'analytics_enabled': analyticsEnabled,
@@ -779,14 +777,14 @@
                 });
             }
         }
-
-        function loadGoogleAnalytics() {
-            // GA ist bereits geladen, nur Events tracken
+        
+        // Custom event tracking
+        function trackToolClick(toolName) {
             if (typeof gtag !== 'undefined') {
-                // Track consent status
-                gtag('event', 'cookie_consent', {
-                    'consent_given': 'true',
-                    'event_category': 'privacy'
+                gtag('event', 'tool_click', {
+                    'tool_name': toolName,
+                    'event_category': 'engagement',
+                    'event_label': toolName
                 });
             }
         }
@@ -800,4 +798,31 @@
                 let scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
                 
                 scrollDepths.forEach(function(depth) {
-                    if (scrollPercent >= depth && !scrolledDepths.includes(
+                    if (scrollPercent >= depth && !scrolledDepths.includes(depth) && typeof gtag !== 'undefined') {
+                        scrolledDepths.push(depth);
+                        gtag('event', 'scroll_depth', {
+                            'percent_scrolled': depth,
+                            'event_category': 'engagement'
+                        });
+                    }
+                });
+            });
+            
+            // Track time on page
+            let startTime = new Date().getTime();
+            
+            window.addEventListener('beforeunload', function() {
+                let endTime = new Date().getTime();
+                let timeSpent = Math.round((endTime - startTime) / 1000);
+                
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'time_on_page', {
+                        'time_seconds': timeSpent,
+                        'event_category': 'engagement'
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
