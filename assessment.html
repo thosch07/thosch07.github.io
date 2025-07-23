@@ -21,80 +21,82 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <title>AI Trading Psychology Assessment - Discover Your Trading Personality</title>
     <meta name="description" content="Free AI-powered trading psychology assessment. Discover your trader personality type and emotional patterns in 2 minutes.">
     
-    <!-- Cookie Consent Check - MUSS VOR Google Analytics stehen! -->
-    <script>
-        // Cookie Helper Functions
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
+  <script>
+    // Cookie Helper Functions
+    function getCookie(name) {
+        // Korrigierte Zeile hier
+        const value = '; ' + document.cookie;
+        const parts = value.split('; ' + name + '=');
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
-        function setCookie(name, value, days) {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            const expires = "expires=" + date.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires + ";path=/";
-        }
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
 
-        // Check consent and load GA
-        const consent = getCookie('cookieConsent');
-        if (consent === 'accepted') {
-            // Load Google Analytics
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW'; // Dein GA4 Measurement ID
-            document.head.appendChild(script);
+    // Check consent and load GA
+    const consent = getCookie('cookieConsent');
+    if (consent === 'accepted') {
+        // Load Google Analytics
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T09F68TQVW';
+        document.head.appendChild(script);
 
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-T09F68TQVW'); // Dein GA4 Measurement ID
-        } else if (!consent) {
-            // No consent given yet - show notice
-            window.addEventListener('DOMContentLoaded', function() {
-                const notice = document.createElement('div');
-                notice.style.cssText = `
-                    position: fixed;
-                    bottom: 20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: #1a1f2e;
-                    color: #fff;
-                    padding: 20px;
-                    border-radius: 10px;
-                    border: 2px solid #00ff88;
-                    z-index: 9999;
-                    max-width: 400px;
-                    text-align: center;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                `;
-                notice.innerHTML = `
-                    <p style="margin-bottom: 15px;">Diese Seite verwendet Cookies für Analysen. Bitte besuchen Sie unsere Startseite für Cookie-Einstellungen.</p>
-                    <button onclick="window.location.href='index.html'" style="
-                        background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-                        color: #000;
-                        border: none;
-                        padding: 10px 20px;
-                        border-radius: 50px;
-                        cursor: pointer;
-                        font-weight: 600;
-                        margin-right: 10px;
-                    ">Zur Startseite</button>
-                    <button onclick="this.parentElement.style.display='none'" style="
-                        background: transparent;
-                        color: #8899a6;
-                        border: 1px solid #8899a6;
-                        padding: 10px 20px;
-                        border-radius: 50px;
-                        cursor: pointer;
-                        font-weight: 600;
-                    ">Später</button>
-                `;
-                document.body.appendChild(notice);
-            });
-        }
-    </script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-T09F68TQVW');
+    } else if (!consent) {
+        // No consent given yet - show notice
+        window.addEventListener('DOMContentLoaded', function() {
+            const notice = document.createElement('div');
+            // Die ID hinzufügen, damit das Banner korrekt angesprochen werden kann
+            notice.id = 'cookie-banner'; 
+            notice.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1a1f2e;
+                color: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                border: 2px solid #00ff88;
+                z-index: 9999;
+                max-width: 400px;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            `;
+            notice.innerHTML = `
+                <p style="margin-bottom: 15px;">Diese Seite verwendet Cookies für Analysen. Bitte besuchen Sie unsere Startseite für Cookie-Einstellungen.</p>
+                <button onclick="window.location.href='index.html'" style="
+                    background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+                    color: #000;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 50px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    margin-right: 10px;
+                ">Zur Startseite</button>
+                <button onclick="this.parentElement.style.display='none'" style="
+                    background: transparent;
+                    color: #8899a6;
+                    border: 1px solid #8899a6;
+                    padding: 10px 20px;
+                    border-radius: 50px;
+                    cursor: pointer;
+                    font-weight: 600;
+                ">Später</button>
+            `;
+            document.body.appendChild(notice);
+        });
+    }
+</script>
     
     <style>
         /* Allgemeine Styles für Body und Container */
