@@ -1125,7 +1125,7 @@
                     score: score,
                     traderType: traderType,
                     timestamp: new Date().toISOString(),
-                    answers: answers,
+                    answers: answers, // Komma hier hinzugefügt
                     completionTime: completionTime,
                     userAgent: navigator.userAgent,
                     referrer: document.referrer || 'direct',
@@ -1406,7 +1406,11 @@
                 score: score,
                 traderType: traderInfo.type,
                 timestamp: new Date().toISOString(),
-                answers: answers
+                answers: answers, // Komma hier hinzugefügt
+                completionTime: completionTime,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer || 'direct',
+                source: getTrafficSource()
             };
             
             saveAssessment(score, traderInfo.type);
