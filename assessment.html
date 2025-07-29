@@ -1416,7 +1416,7 @@
                 traderType: traderInfo.type,
                 timestamp: new Date().toISOString(),
                 answers: answers, 
-                completionTime: completionTime,
+                completionTime: startTime ? (Date.now() - startTime) / 1000 : 0, // completionTime hier definieren
                 userAgent: navigator.userAgent,
                 referrer: document.referrer || 'direct',
                 source: getTrafficSource()
