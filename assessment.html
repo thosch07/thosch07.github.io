@@ -677,7 +677,7 @@
 
         // ===== MAILERLITE INTEGRATION =====
         const MAILERLITE_CONFIG = {
-            apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWI0MDljMDMxZTViNjI5M2EyOWM3MjkzMTA4ZDFmN2M3NmYwMjczNTU3NGI1NmFhYjVjZGY3ZDljOGQ3NGIxNDhjMDI0MTU0ZTcwNTMwNzciLCJpYXQiOjE3NDk3MzI3ODEuMjk1NzcyLCJuYmYiOjE3NDk3MzI3ODEuMjk1Nzc2LCJleHAiOjQ5MDU0MDYzODEuMjg5ODI2LCJzdWIiOiIxNTgxMjY5Iiwic2NvcGVlcyI6W119.g64vCpQu8KxSIqctKKk03QyBKhgmEF6sfyN6rl68FraHRFRN1VbgCl-EgXXeo6aWUsW3PKotGcdbB0QXoi7Do21z6VQ7YctLspe8kyriSYILMV7k53zXgoxXe24puXA8bclXCsPaIO1uNepwZXNDAWaMHjY6DF9hdwFEh3ZedjnAB535UGzzU37wd-jQod_oVmbQznaRSyoWPz3JKMHgG345TZqgUdfLsrrm4zKdzJWWKfKVgxo7BoTKKrQhcBbRC3uRs3fTOQU9E_2D1HRDXFGhcHBwF5V3W973q8g9ADdXBw6zCIOvRrT88s7RvWUtOaEIn7s-_PqhXk4Y6KklunyFPzTccD6TzdOG5vTJnt3kfVGClTR1JcbnlBSzRsl2fXLoKlNQWKl5ectJvJ33snMlc2xBv4LmnrXKjGJOQB93YTOHuqLE6swJTZLDlVC2TibGOh4MejZDgDUNI8hQo1eCniLJ7JlJ1nbBcZo-6tkBF6PZhDeagQioajoR8nQTQ_kt1TBBn1l9uJbCJnPajDlYamLNfvcD-8JwJltWRIkCkUNqTmPKHmDo4w6-rq97-yww9untRWuFvKU-z59WA1C9_lCldf--X9zBHJj69i7rIgM_Hx9STXCOd5sa4WjsnmXkKE0RcqhKE_oujxzta5NujlgwpZPCCmTzw6GBgWs',
+            apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiMWI0MDljMDMxZTViNjI5M2EyOWM3MjkzMTA4ZDFmN2M3NmYwMjczNTU3NGI1NmFhYjVjZGY3ZDljOGQ3NGIxNDhjMDI0MTU0ZTcwNTMwNzciLCJpYXQiOjE3NDk3MzI3ODEuMjk1NzcyLCJuYmYiOjE3NDk3MzI3ODEuMjk1Nzc2LCJleHAiOjQ5MDU0MDYzODEuMjg5ODI2LCJzdWIiOiIxNTgxMjY5Iiwic2NvcGVlcyI6W119.g64vCpQu8KxSIqctKKk03QyBKhgmEF6sfyN6rl68FraHRFRN1VbgCl-EgXXeo6aWUsW3PKotGcdbB0QXoi7Do21z6VQ7YctLspe8kyriSYILMV7k53zXgoxXe24puXA8bclXCsPaIO1uNepwZXNDAWaMHjY6DF9hdwFEh3ZedjnAB535UGzzU37wd-jQod_oVmbQznaRSyoWPz3JKMHgG345TZlCVR1JcbnlBSzRsl2fXLoKlNQWKl5ectJvJ33snMlc2xBv4LmnrXKjGJOQB93YTOHuqLE6swJTZLDlVC2TibGOh4MejZDgDUNI8hQo1eCniLJ7JlJ1nbBcZo-6tkBF6PZhDeagQioajoR8nQTQ_kt1TBBn1l9uJbCJnPajDlYamLNfvcD-8JwJltWRIkCkUNqTmPKHmDo4w6-rq97-yww9untRWuFvKU-z59WA1C9_lCldf--X9zBHJj69i7rIgM_Hx9STXCOd5sa4WjsnmXkKE0RcqhKE_oujxzta5NujlgwpZPCCmTzw6GBgWs',
             apiUrl: 'https://connect.mailerlite.com/api',
             groups: {
                 vulnerable: '156171765135967438', // 0-39: Risk Seeker
@@ -1021,7 +1021,7 @@
                 assessments: data.assessments || [],
                 revenue: data.revenue || 0,
                 waitlist: data.waitlist || [],
-                purchases: data.purchases || 0,
+                purchases: 0, // 'purchases' sollte hier initialisiert werden
                 purchaseDetails: data.purchaseDetails || [],
                 version: data.version || CONFIG.version,
                 lastUpdated: data.lastUpdated || new Date().toISOString()
@@ -1125,7 +1125,7 @@
                     score: score,
                     traderType: traderType,
                     timestamp: new Date().toISOString(),
-                    answers: answers, // Komma hier hinzugefügt
+                    answers: answers, 
                     completionTime: completionTime,
                     userAgent: navigator.userAgent,
                     referrer: document.referrer || 'direct',
@@ -1322,14 +1322,23 @@
             
             answers[currentQuestion] = value;
             
-            document.getElementById('nextButton').style.display = 'block';
+            // Sicherstellen, dass der Button vorhanden ist, bevor style gesetzt wird
+            const nextButton = document.getElementById('nextButton');
+            if (nextButton) {
+                nextButton.style.display = 'block';
+            } else {
+                console.warn("Element 'nextButton' nicht gefunden. Kann 'display' nicht setzen.");
+            }
         }
 
         function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
                 showQuestion();
-                document.getElementById('nextButton').style.display = 'none';
+                const nextButton = document.getElementById('nextButton');
+                if (nextButton) { // Auch hier sicherstellen, dass der Button existiert
+                    nextButton.style.display = 'none';
+                }
             } else {
                 showResults();
             }
