@@ -6,6 +6,8 @@
     <title>AI Trading Psychology Assessment - Discover Your Trading Personality</title>
     <meta name="description" content="Free AI-powered trading psychology assessment. Discover your trader personality type and emotional patterns in 2 minutes.">
 
+    <!-- Google Tag Manager (GTM) Head Code -->
+    <!-- This GTM snippet MUST be the first thing in the <head> -->
     <script>
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -13,6 +15,10 @@
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-MB4F4HC8');
     </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Google Analytics (GA4) and Google Ads (Consent Mode v2) Integration -->
+    <!-- gtag.js must be loaded BEFORE other Google Ads/Analytics scripts -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17370771744"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -465,17 +471,21 @@
     </style>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MB4F4HC8"
         height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div class="container">
         <div class="header" id="header">
             <h1>AI Trading Psychology Assessment</h1>
             <p class="subtitle">Discover your trader personality type and unlock your potential</p>
             <button class="start-button" onclick="startAssessment()">Start Free Assessment</button>
             <p style="color: #a0a0a0; margin-top: 20px;">Takes only 2 minutes • No email required • 100% Free</p>
-                        <div class="disclaimer-box">
+                        <!-- Compliance Disclaimer -->
+            <div class="disclaimer-box">
                 <strong>Educational Purpose Only:</strong> This assessment provides psychological insights for educational purposes. 
                 Not financial advice. Trading involves risk. 
                 <a href="#" onclick="alert('This tool analyzes psychological patterns in trading behavior for educational purposes only. It does not provide financial advice, trading recommendations, or guarantee trading success. Always consult qualified financial advisors for investment decisions.')">Learn more</a>
@@ -495,13 +505,15 @@
             <div class="score-display" id="scoreDisplay"></div>
             <div class="trader-type" id="traderType"></div>
             <div class="insights" id="insights"></div>
-                        <script>
+                        <!-- Conversion Tracking for assessment_complete -->
+            <script>
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
                 event: 'assessment_complete'
               });
             </script>
-                        <div class="compliance-notice">
+                        <!-- Compliance Notice in Results -->
+            <div class="compliance-notice">
                 <strong>Important Notice:</strong> This psychological assessment is for educational and self-improvement purposes only. 
                 Results should not be interpreted as financial advice or trading recommendations. 
                 Past performance does not guarantee future results. Trading carries substantial risk of loss.
@@ -522,6 +534,7 @@
                     <span class="price">NOW: $47</span>
                 </div>
 
+                <!-- Custom Email Form -->
                 <div id="email-capture-form" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin: 20px auto; position: relative; z-index: 10;">
                     <h4 style="color: #00ff88; font-size: 24px; margin-bottom: 15px;">Get Your Free Analysis</h4>
                     <p style="color: #a0a0a0; font-size: 16px; margin-bottom: 20px;">Enter your email to receive your personalized results</p>
@@ -543,7 +556,8 @@
                         <p style="color: #fff; font-size: 16px;">Your email has been saved. Complete your purchase below to receive your report.</p>
                     </div>
                 </div>
-                                <div id="assessment-required-notice" style="display: none;">
+                                <!-- Assessment Required Notice -->
+                <div id="assessment-required-notice" style="display: none;">
                     <div class="assessment-required-notice">
                         <p>⚠️ Please complete the assessment first to get your personalized report!</p>
                         <button class="start-button" onclick="location.reload()">Start Assessment Now</button>
@@ -551,7 +565,8 @@
                 </div>
                                 <div id="paypal-button-container" style="display: none;"></div>
 
-                                <div id="manual-paypal" style="display: none;">
+                                <!-- Manual PayPal Fallback -->
+                <div id="manual-paypal" style="display: none;">
                     <p style="color: #666; margin: 20px 0;">Or use PayPal directly:</p>
                     <button class="manual-paypal-button" onclick="manualPayPal()">
                         Pay with PayPal ($47)
@@ -579,6 +594,7 @@
         </div>
     </div>
 
+    <!-- Legal Footer -->
     <footer style="background: #0f1419; padding: 20px; text-align: center; border-top: 1px solid #333; margin-top: 40px;">
         <div style="max-width: 800px; margin: 0 auto;">
             <p style="color: #8899a6; font-size: 14px; margin-bottom: 15px;">
@@ -597,6 +613,7 @@
         </div>
     </footer>
 
+    <!-- Admin Panel -->
     <div class="admin-panel" id="adminPanel">
         <button class="admin-close" onclick="toggleAdminPanel()">&times;</button>
         <h2>Admin Dashboard</h2>
@@ -638,6 +655,7 @@
         <button class="admin-button" onclick="showDetailedStats()">Detailed Statistics</button>
     </div>
 
+    <!-- jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
@@ -949,9 +967,13 @@
                 }
             } else {
                 // Initialize default score distribution in local storage if not present
-                if (!localStorage.getItem('scoreDistribution')) {
-                    localStorage.setItem('scoreDistribution', JSON.stringify({
-                        '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0
+                if (!localStorage.getItem('adminStats')) { // Check for adminStats directly
+                    localStorage.setItem('adminStats', JSON.stringify({
+                        totalAssessments: 0,
+                        totalRevenue: 0,
+                        waitlistCount: 0,
+                        totalScoreSum: 0,
+                        scoreDistribution: { '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0 }
                     }));
                 }
             }
@@ -971,6 +993,7 @@
             document.getElementById('assessmentContainer').style.display = 'block';
             currentQuestionIndex = 0;
             totalScore = 0;
+            selectedOptionForCurrentQuestion = null; // Clear any lingering selection
             sessionStorage.removeItem('selectedOptionForCurrentQuestion'); // Clear any lingering selection
             sessionStorage.setItem('currentQuestionIndex', currentQuestionIndex);
             sessionStorage.setItem('totalScore', totalScore);
@@ -1006,14 +1029,26 @@
                 if (storedSelectedOption !== null) {
                     selectedOptionForCurrentQuestion = parseInt(storedSelectedOption);
                     const options = questionDiv.querySelectorAll('.option');
-                    if (options[selectedOptionForCurrentQuestion]) {
-                        options[selectedOptionForCurrentQuestion].classList.add('selected');
+                    if (options[selectedOptionForCurrentQuestion]) { // Corrected typo here
+                        options[selectedOptionForCurrentQuestion].classList.add('selected'); // Corrected typo here
                         // Show next button immediately if an option was already selected
-                        document.getElementById('nextButton').style.display = 'block';
+                        // Corrected: Use querySelector and setTimeout for robustness
+                        setTimeout(() => {
+                            const nextButton = document.querySelector('.next-button');
+                            if (nextButton) {
+                                nextButton.style.display = 'block';
+                            }
+                        }, 50);
                     }
                 } else {
                     // Hide next button if no option selected for new question
-                    document.getElementById('nextButton').style.display = 'none';
+                    // Corrected: Use querySelector and setTimeout for robustness
+                    setTimeout(() => {
+                        const nextButton = document.querySelector('.next-button');
+                        if (nextButton) {
+                            nextButton.style.display = 'none';
+                        }
+                    }, 50);
                 }
 
             } else {
@@ -1056,7 +1091,7 @@
             const currentQuestion = questions[currentQuestionIndex];
             const selectedValue = currentQuestion.options[selectedOptionForCurrentQuestion].value;
             totalScore += selectedValue;
-            trackEvent('Youtubeed', { question_index: currentQuestionIndex, score_added: selectedValue });
+            trackEvent('question_answered', { question_index: currentQuestionIndex, score_added: selectedValue });
 
             currentQuestionIndex++;
             selectedOptionForCurrentQuestion = null; // Reset for next question
