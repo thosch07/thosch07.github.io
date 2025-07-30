@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Trading Psychology Assessment - Discover Your Trading Personality</title>
     <meta name="description" content="Free AI-powered trading psychology assessment. Discover your trader personality type and emotional patterns in 2 minutes.">
-    
-    <!-- Google Tag Manager (GTM) Head Code -->
-    <!-- This GTM snippet MUST be the first thing in the <head> -->
+
     <script>
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -15,10 +13,6 @@
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-MB4F4HC8');
     </script>
-    <!-- End Google Tag Manager -->
-    
-    <!-- Google Analytics (GA4) and Google Ads (Consent Mode v2) Integration -->
-    <!-- gtag.js must be loaded BEFORE other Google Ads/Analytics scripts -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17370771744"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -45,7 +39,7 @@
             });
         }
     </script>
-    
+
     <style>
         /* General Styles for Body and Container */
         * {
@@ -471,22 +465,17 @@
     </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MB4F4HC8"
         height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <div class="container">
         <div class="header" id="header">
             <h1>AI Trading Psychology Assessment</h1>
             <p class="subtitle">Discover your trader personality type and unlock your potential</p>
             <button class="start-button" onclick="startAssessment()">Start Free Assessment</button>
             <p style="color: #a0a0a0; margin-top: 20px;">Takes only 2 minutes • No email required • 100% Free</p>
-            
-            <!-- Compliance Disclaimer -->
-            <div class="disclaimer-box">
+                        <div class="disclaimer-box">
                 <strong>Educational Purpose Only:</strong> This assessment provides psychological insights for educational purposes. 
                 Not financial advice. Trading involves risk. 
                 <a href="#" onclick="alert('This tool analyzes psychological patterns in trading behavior for educational purposes only. It does not provide financial advice, trading recommendations, or guarantee trading success. Always consult qualified financial advisors for investment decisions.')">Learn more</a>
@@ -506,17 +495,13 @@
             <div class="score-display" id="scoreDisplay"></div>
             <div class="trader-type" id="traderType"></div>
             <div class="insights" id="insights"></div>
-            
-            <!-- Conversion Tracking for assessment_complete -->
-            <script>
+                        <script>
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
                 event: 'assessment_complete'
               });
             </script>
-            
-            <!-- Compliance Notice in Results -->
-            <div class="compliance-notice">
+                        <div class="compliance-notice">
                 <strong>Important Notice:</strong> This psychological assessment is for educational and self-improvement purposes only. 
                 Results should not be interpreted as financial advice or trading recommendations. 
                 Past performance does not guarantee future results. Trading carries substantial risk of loss.
@@ -533,49 +518,40 @@
                     <li>Professional psychology toolkit with daily practices</li>
                     <li>Bonus: Access to future updates and tools</li>
                 </ul>
-                
-                <div class="price-display">
+                                <div class="price-display">
                     <span class="price">NOW: $47</span>
                 </div>
 
-                <!-- Custom Email Form -->
                 <div id="email-capture-form" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; margin: 20px auto; position: relative; z-index: 10;">
                     <h4 style="color: #00ff88; font-size: 24px; margin-bottom: 15px;">Get Your Free Analysis</h4>
                     <p style="color: #a0a0a0; font-size: 16px; margin-bottom: 20px;">Enter your email to receive your personalized results</p>
-                    
-                    <form id="emailForm" onsubmit="handleEmailSubmit(event); return false;">
-                        <input type="email" 
-                               id="userEmail" 
-                               name="email"
-                               placeholder="Enter your email to receive your report" 
-                               required
+                                        <form id="emailForm" onsubmit="handleEmailSubmit(event); return false;">
+                        <input type="email"
+                                id="userEmail"
+                                name="email"
+                               placeholder="Enter your email to receive your report"
+                                required
                                autocomplete="email"
                                style="width: 100%; padding: 15px; font-size: 16px; background: rgba(255, 255, 255, 0.9); border: 2px solid #00d4ff; color: #000; border-radius: 10px; margin-bottom: 20px; outline: none; box-sizing: border-box;">
-                        
-                        <button type="submit" 
-                                style="background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); color: #000; font-weight: 700; padding: 15px 30px; font-size: 16px; border-radius: 50px; border: none; cursor: pointer; transition: all 0.3s ease; width: 100%; box-sizing: border-box;">
+                                                <button type="submit"
+                                 style="background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%); color: #000; font-weight: 700; padding: 15px 30px; font-size: 16px; border-radius: 50px; border: none; cursor: pointer; transition: all 0.3s ease; width: 100%; box-sizing: border-box;">
                             Get Your Personalized Report
                         </button>
                     </form>
-                    
-                    <div id="email-success" style="display: none; margin-top: 20px;">
+                                        <div id="email-success" style="display: none; margin-top: 20px;">
                         <h4 style="color: #00ff88; font-size: 24px; margin-bottom: 15px;">Thank you!</h4>
                         <p style="color: #fff; font-size: 16px;">Your email has been saved. Complete your purchase below to receive your report.</p>
                     </div>
                 </div>
-                
-                <!-- Assessment Required Notice -->
-                <div id="assessment-required-notice" style="display: none;">
+                                <div id="assessment-required-notice" style="display: none;">
                     <div class="assessment-required-notice">
                         <p>⚠️ Please complete the assessment first to get your personalized report!</p>
                         <button class="start-button" onclick="location.reload()">Start Assessment Now</button>
                     </div>
                 </div>
-                
-                <div id="paypal-button-container" style="display: none;"></div>
-                
-                <!-- Manual PayPal Fallback -->
-                <div id="manual-paypal" style="display: none;">
+                                <div id="paypal-button-container" style="display: none;"></div>
+
+                                <div id="manual-paypal" style="display: none;">
                     <p style="color: #666; margin: 20px 0;">Or use PayPal directly:</p>
                     <button class="manual-paypal-button" onclick="manualPayPal()">
                         Pay with PayPal ($47)
@@ -592,18 +568,17 @@
                     <li>Advanced Risk Calculator - Based on your psychology profile</li>
                 </ul>
                 <form id="waitlistForm">
-                    <input type="email" 
-                           id="waitlistEmail" 
-                           class="email-input" 
-                           placeholder="Enter your email for early access" 
-                           required>
+                    <input type="email"
+                            id="waitlistEmail"
+                            class="email-input"
+                            placeholder="Enter your email for early access"
+                            required>
                     <button type="submit" class="purchase-button">Join Waitlist</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Legal Footer -->
     <footer style="background: #0f1419; padding: 20px; text-align: center; border-top: 1px solid #333; margin-top: 40px;">
         <div style="max-width: 800px; margin: 0 auto;">
             <p style="color: #8899a6; font-size: 14px; margin-bottom: 15px;">
@@ -622,7 +597,6 @@
         </div>
     </footer>
 
-    <!-- Admin Panel -->
     <div class="admin-panel" id="adminPanel">
         <button class="admin-close" onclick="toggleAdminPanel()">&times;</button>
         <h2>Admin Dashboard</h2>
@@ -664,7 +638,6 @@
         <button class="admin-button" onclick="showDetailedStats()">Detailed Statistics</button>
     </div>
 
-    <!-- jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
@@ -692,11 +665,10 @@
         // Fixed Function to handle MailerLite form submission
         function handleMailerLiteSubmit() {
             const email = document.getElementById('mailerliteEmailInput').value;
-            
-            // Get score and trader type from session storage as backup
+                        // Get score and trader type from session storage as backup
             const storedScore = sessionStorage.getItem('currentScore');
             const storedTraderType = sessionStorage.getItem('currentTraderType');
-            
+
             // Use stored values if window values are missing
             if (!window.currentScore && storedScore) {
                 window.currentScore = parseInt(storedScore);
@@ -704,19 +676,18 @@
             if (!window.currentTraderType && storedTraderType) {
                 window.currentTraderType = storedTraderType;
             }
-            
+
             // Check if assessment has been completed
             if (!window.currentScore || !window.currentTraderType) {
                 // Hide the form and show the notice
                 document.getElementById('mlb2-27668853').style.display = 'none';
                 document.getElementById('assessment-required-notice').style.display = 'block';
-                
-                // Track this event
+                                // Track this event
                 trackEvent('form_submit_without_assessment');
-                
+
                 return false; // Prevent form submission
             }
-            
+
             if (email) {
                 // Save email for later processing
                 window.currentEmail = email;
@@ -733,21 +704,20 @@
             // Displays only the manual PayPal button
             document.getElementById('manual-paypal').style.display = 'block';
             // Removes the paypal-button-container as we no longer use the SDK directly
-            document.getElementById('paypal-button-container').style.display = 'none'; 
-        }
+            document.getElementById('paypal-button-container').style.display = 'none';         }
 
         // Handles email form submission
         function handleEmailSubmit(event) {
             event.preventDefault();
-            
+
             const email = document.getElementById('userEmail').value;
-            
+
             // Check if assessment has been completed
             if (!window.currentScore || !window.currentTraderType) {
                 // Try to restore from sessionStorage
                 const storedScore = sessionStorage.getItem('currentScore');
                 const storedTraderType = sessionStorage.getItem('currentTraderType');
-                
+
                 if (storedScore && storedTraderType) {
                     window.currentScore = parseInt(storedScore);
                     window.currentTraderType = storedTraderType;
@@ -759,32 +729,32 @@
                     return false;
                 }
             }
-            
+
             if (email && validateEmail(email)) {
                 // Save email
                 window.currentEmail = email;
                 sessionStorage.setItem('currentEmail', email);
-                
+
                 // Hide form, show success
                 document.getElementById('emailForm').style.display = 'none';
                 document.getElementById('email-success').style.display = 'block';
-                
+
                 // Add to MailerLite via API in background
                 addToMailerLiteAPI(email, window.currentScore, window.currentTraderType); // window.currentScore is passed here
-                
+
                 // Show PayPal options
                 showPayPalOptions();
-                
+
                 trackEvent('email_captured', { score: window.currentScore });
             }
-            
+
             return false;
         }
 
         // Function to add subscriber to MailerLite API
         async function addToMailerLiteAPI(email, score, traderType) { // 'score' is the value of window.currentScore here
             console.log('Adding to MailerLite via API:', email, score, traderType);
-            
+
             // Determine which group based on score
             let groupId;
             if (score < 40) {
@@ -855,1124 +825,598 @@
                 ]
             },
             {
-                question: "When you see others making profits on a trade you missed:",
+                question: "When you see others making profits on a trade you missed, you feel:",
                 options: [
-                    { text: "Jump in immediately, fearing you'll miss more", value: 10 },
-                    { text: "Feel frustrated but wait for your own setup", value: 30 },
-                    { text: "Analyze why you missed it for future improvement", value: 40 },
-                    { text: "Stay focused on your own trading plan", value: 50 }
+                    { text: "Strong regret and a urge to jump into the next hot tip", value: 10 },
+                    { text: "Slight frustration, but you stick to your own strategy", value: 30 },
+                    { text: "Curiosity to learn, but no desire to chase the trade", value: 40 },
+                    { text: "Indifferent, focusing only on your own disciplined process", value: 50 }
                 ]
             },
             {
-                question: "Your position sizing is determined by:",
+                question: "How do you react to unexpected market volatility?",
                 options: [
-                    { text: "How confident I feel about the trade", value: 10 },
-                    { text: "Recent wins or losses", value: 20 },
-                    { text: "A fixed percentage, but I sometimes adjust", value: 35 },
-                    { text: "Strict risk management rules, no exceptions", value: 50 }
+                    { text: "Panic and close positions or over-trade to react", value: 10 },
+                    { text: "Feel nervous, but try to find opportunities within your plan", value: 30 },
+                    { text: "Remain calm and observe, waiting for clarity", value: 40 },
+                    { text: "See it as a normal market event and stick to your predefined risk management", value: 50 }
                 ]
             },
             {
-                question: "When a trade moves against you:",
+                question: "When your trading strategy has a drawdown phase, you:",
                 options: [
-                    { text: "Move your stop loss to avoid taking the loss", value: 10 },
-                    { text: "Add to the position to average down", value: 15 },
-                    { text: "Exit if it hits your stop, but it's painful", value: 35 },
-                    { text: "Execute your exit plan without emotion", value: 50 }
+                    { text: "Abandon it quickly and search for a new 'holy grail' strategy", value: 10 },
+                    { text: "Feel anxious and consider making changes, even if your rules say otherwise", value: 30 },
+                    { text: "Review your strategy to ensure it's still valid, but stick with it if it is", value: 40 },
+                    { text: "Trust your backtesting and continue executing your strategy without emotional interference", value: 50 }
                 ]
             },
             {
-                question: "Your trading journal includes:",
+                question: "Before placing a trade, you typically:",
                 options: [
-                    { text: "I don't keep a trading journal", value: 10 },
-                    { text: "Basic trade entries and exits", value: 25 },
-                    { text: "Trades, results, and occasional notes", value: 35 },
-                    { text: "Detailed analysis including emotional state", value: 50 }
+                    { text: "Act on a gut feeling or a quick tip from social media", value: 10 },
+                    { text: "Have a basic idea, but sometimes deviate if an opportunity arises quickly", value: 30 },
+                    { text: "Conduct a thorough analysis, but might occasionally second-guess yourself", value: 40 },
+                    { text: "Follow a strict checklist of criteria, entering only when all conditions are met", value: 50 }
                 ]
             },
             {
-                question: "After three winning trades in a row:",
+                question: "How do you handle a significant winning streak?",
                 options: [
-                    { text: "Increase position size - I'm on a hot streak", value: 10 },
-                    { text: "Feel invincible and trade more frequently", value: 20 },
-                    { text: "Stay cautious but feel more confident", value: 35 },
-                    { text: "Maintain discipline - past results don't affect future trades", value: 50 }
+                    { text: "Increase position sizes aggressively, feeling invincible", value: 10 },
+                    { text: "Feel confident, but occasionally take on slightly more risk than usual", value: 30 },
+                    { text: "Appreciate the success, but remain cautious and stick to your risk management", value: 40 },
+                    { text: "Maintain discipline and continue executing your strategy as planned, understanding streaks are temporary", value: 50 }
                 ]
             },
             {
-                question: "Weekend planning consists of:",
+                question: "Your approach to setting stop-loss orders is:",
                 options: [
-                    { text: "No planning - I react to the market", value: 10 },
-                    { text: "Quick look at charts Sunday night", value: 25 },
-                    { text: "Review last week and identify key levels", value: 35 },
-                    { text : "Comprehensive analysis, journaling, and strategy review", value: 50 }
+                    { text: "Rarely use them, hoping the market will turn around", value: 10 },
+                    { text: "Set them, but sometimes move them further away if the price is close", value: 30 },
+                    { text: "Set them according to your plan, but it's hard to accept a loss when hit", value: 40 },
+                    { text: "Strictly adhere to predefined stop-loss levels, accepting them as part of the trading cost", value: 50 }
                 ]
             },
             {
-                question: "When you break your trading rules:",
+                question: "When confronted with conflicting news or analysis, you:",
                 options: [
-                    { text: "Justify it based on market conditions", value: 10 },
-                    { text: "Feel guilty but do it anyway sometimes", value: 25 },
-                    { text: "Rarely happens, but I document when it does", value: 40 },
-                    { text: "Almost never - rules are non-negotiable", value: 50 }
+                    { text: "Become confused and indecisive, leading to missed opportunities or bad trades", value: 10 },
+                    { text: "Feel a bit overwhelmed, but try to find a consensus or dominant view", value: 30 },
+                    { text: "Refer back to your own analysis and strategy to form your judgment", value: 40 },
+                    { text: "Filter out the noise and rely solely on your established trading system and rules", value: 50 }
+                ]
+            },
+            {
+                question: "How often do you review your past trades (both winners and losers)?",
+                options: [
+                    { text: "Almost never, I prefer to focus on the next trade", value: 10 },
+                    { text: "Occasionally, mainly looking at big wins or losses", value: 30 },
+                    { text: "Regularly, trying to identify patterns and areas for improvement", value: 40 },
+                    { text: "Diligently, maintaining a trading journal and analyzing every trade for lessons and statistical insights", value: 50 }
+                ]
+            },
+            {
+                question: "What drives your decision to enter a trade?",
+                options: [
+                    { text: "Fear of missing out (FOMO) or excitement about quick profits", value: 10 },
+                    { text: "A mix of strategy signals and market sentiment", value: 30 },
+                    { text: "Primarily your strategy signals, with a minor influence from overall market conditions", value: 40 },
+                    { text: "Solely the objective entry criteria defined by your trading system", value: 50 }
                 ]
             }
         ];
 
-        let currentQuestion = 0;
-        let answers = [];
-        let assessmentData = {};
-        let startTime = null;
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+        let selectedOptionForCurrentQuestion = null; // Track selected option for the current question
+        window.currentScore = 0; // Global score for MailerLite
+        window.currentTraderType = ''; // Global trader type for MailerLite
+        window.currentEmail = ''; // Global email for MailerLite
 
-        // ===== DATA MANAGEMENT WITH PERSISTENT STORAGE =====
-        // Extended storage with localStorage support
-        let memoryStorage = {
-            assessments: [],
-            revenue: 0,
-            waitlist: [],
-            purchases: 0,
-            version: CONFIG.version
-        };
+        // Load data from session storage on page load
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const storedIndex = sessionStorage.getItem('currentQuestionIndex');
+            const storedScore = sessionStorage.getItem('totalScore');
+            const storedEmail = sessionStorage.getItem('currentEmail');
+            const storedCurrentScore = sessionStorage.getItem('currentScore'); // For the global window.currentScore
+            const storedCurrentTraderType = sessionStorage.getItem('currentTraderType'); // For the global window.currentTraderType
 
-        // Check which storage types are available
-        function getAvailableStorage() {
-            const storageTypes = {
-                local: false,
-                session: false,
-                memory: true
-            };
-            
-            // Test localStorage
-            try {
-                const test = '__storage_test__';
-                localStorage.setItem(test, test);
-                localStorage.removeItem(test);
-                storageTypes.local = true;
-                console.log('✅ localStorage available');
-            } catch (e) {
-                console.log('❌ localStorage not available');
-            }
-            
-            // Test sessionStorage
-            try {
-                const test = '__storage_test__';
-                sessionStorage.setItem(test, test);
-                sessionStorage.removeItem(test);
-                storageTypes.session = true;
-                console.log('✅ sessionStorage available');
-            } catch (e) {
-                console.log('❌ sessionStorage not available');
-            }
-            
-            return storageTypes;
-        }
+            if (storedIndex !== null && storedScore !== null) {
+                currentQuestionIndex = parseInt(storedIndex);
+                totalScore = parseInt(storedScore);
+                
+                // Restore global window variables if they exist in session storage
+                if (storedCurrentScore) {
+                    window.currentScore = parseInt(storedCurrentScore);
+                }
+                if (storedCurrentTraderType) {
+                    window.currentTraderType = storedCurrentTraderType;
+                }
+                if (storedEmail) {
+                    window.currentEmail = storedEmail;
+                }
 
-        const availableStorage = getAvailableStorage();
-
-        // Determine best available storage method
-        function getBestStorage() {
-            if (availableStorage.local) return 'local';
-            if (availableStorage.session) return 'session';
-            return 'memory';
-        }
-
-        const storageMode = getBestStorage();
-
-        // Unified storage functions
-        function getStoredData() {
-            let data = null;
-            
-            // First try localStorage (persistent)
-            if (availableStorage.local) {
-                try {
-                    const stored = localStorage.getItem('tradingPsychologyData');
-                    if (stored) {
-                        data = JSON.parse(stored);
-                        console.log('📦 Data loaded from localStorage');
-                    }
-                } catch (e) {
-                    console.error('Error reading from localStorage:', e);
-                    // If quota exceeded, try cleaning up old data
-                    if (e.name === 'QuotaExceededError') {
-                        cleanupOldData(data);
+                // If assessment started, show it
+                if (currentQuestionIndex > 0 || totalScore > 0) {
+                    document.getElementById('header').style.display = 'none';
+                    document.getElementById('assessmentContainer').style.display = 'block';
+                    showQuestion(); // Show the current question based on loaded index
+                    // If results are already calculated, show results
+                    if (currentQuestionIndex >= questions.length) {
+                         displayResults(); // Re-display results if assessment is complete
                     }
                 }
-            }
-            
-            // Fallback to sessionStorage
-            if (!data && availableStorage.session) {
-                try {
-                    const stored = sessionStorage.getItem('tradingPsychologyData');
-                    if (stored) {
-                        data = JSON.parse(stored);
-                        console.log('📦 Data loaded from sessionStorage');
-                    }
-                } catch (e) {
-                    console.error('Error reading from sessionStorage:', e);
-                }
-            }
-            
-            // Fallback to memory storage
-            if (!data) {
-                data = memoryStorage;
-                console.log('📦 Using in-memory storage');
-            }
-            
-            // Ensure data structure is complete
-            data = {
-                assessments: data.assessments || [],
-                revenue: data.revenue || 0,
-                waitlist: data.waitlist || [],
-                purchases: 0, // 'purchases' should be initialized here
-                purchaseDetails: data.purchaseDetails || [],
-                version: data.version || CONFIG.version,
-                lastUpdated: data.lastUpdated || new Date().toISOString()
-            };
-            
-            return data;
-        }
-
-        function saveData(data) {
-            data.lastUpdated = new Date().toISOString();
-            data.version = CONFIG.version;
-            
-            let saved = false;
-            
-            // First try localStorage (persistent)
-            if (availableStorage.local) {
-                try {
-                    localStorage.setItem('tradingPsychologyData', JSON.stringify(data));
-                    console.log('💾 Data saved to localStorage');
-                    saved = true;
-                } catch (e) {
-                    console.error('Error saving to localStorage:', e);
-                    // If quota exceeded, try cleaning up old data
-                    if (e.name === 'QuotaExceededError') {
-                        cleanupOldData(data);
-                    }
-                }
-            }
-            
-            // Also save to sessionStorage as backup
-            if (availableStorage.session) {
-                try {
-                    sessionStorage.setItem('tradingPsychologyData', JSON.stringify(data));
-                    if (!saved) {
-                        console.log('💾 Data saved to sessionStorage');
-                        saved = true;
-                    }
-                } catch (e) {
-                    console.error('Error saving to sessionStorage:', e);
-                }
-            }
-            
-            // Always update in-memory storage
-            memoryStorage = data;
-            
-            if (!saved) {
-                console.warn('⚠️ Data saved to memory only!');
-            }
-            
-            // Backup to console for emergency recovery
-            console.log('🔒 Backup data:', JSON.stringify(data));
-        }
-
-        // Cleanup function for storage space issues
-        function cleanupOldData(data) {
-            console.log('🧹 Cleaning up old data...');
-            
-            // Keep only the last 1000 assessments
-            if (data.assessments.length > 1000) {
-                data.assessments = data.assessments.slice(-1000);
-            }
-            
-            // Keep only the last 500 purchase details
-            if (data.purchaseDetails && data.purchaseDetails.length > 500) {
-                data.purchaseDetails = data.purchaseDetails.slice(-500);
-            }
-            
-            // Remove duplicates from waitlist
-            data.waitlist = [...new Set(data.waitlist)];
-            
-            console.log('✅ Cleanup complete');
-        }
-
-        // Migration function for old data
-        function migrateOldData() {
-            // Check if data exists in sessionStorage that needs to be migrated
-            if (availableStorage.session && availableStorage.local) {
-                try {
-                    const sessionData = sessionStorage.getItem('tradingPsychologyData');
-                    const localData = localStorage.getItem('tradingPsychologyData');
-                    
-                    if (sessionData && !localData) {
-                        // Migrate from Session to Local
-                        localStorage.setItem('tradingPsychologyData', sessionData);
-                        console.log('✅ Data migrated from sessionStorage to localStorage');
-                    }
-                } catch (e) {
-                    console.error('Migration error:', e);
-                }
-            }
-        }
-
-        // Extended storage functions with better error handling
-        function saveAssessment(score, traderType) {
-            try {
-                const data = getStoredData();
-                const completionTime = startTime ? (Date.now() - startTime) / 1000 : 0;
-                
-                const assessment = {
-                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                    score: score,
-                    traderType: traderType,
-                    timestamp: new Date().toISOString(),
-                    answers: answers, 
-                    completionTime: completionTime,
-                    userAgent: navigator.userAgent,
-                    referrer: document.referrer || 'direct',
-                    source: getTrafficSource()
-                };
-                
-                data.assessments.push(assessment);
-                
-                saveData(data);
-                updateAdminPanel();
-                trackEvent('assessment_completed', { score, traderType, completionTime });
-                
-                console.log('✅ Assessment saved:', assessment.id);
-            } catch (e) {
-                console.error('❌ Error saving assessment:', e);
-                alert('Warning: Assessment data may not have been saved correctly.');
-            }
-        }
-
-        function savePurchase(email, transactionId = null) {
-            try {
-                const data = getStoredData();
-                data.revenue += CONFIG.regularPrice;
-                data.purchases += 1;
-                
-                const purchase = {
-                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                    email: email,
-                    amount: CONFIG.regularPrice,
-                    timestamp: new Date().toISOString(),
-                    transactionId: transactionId,
-                    score: window.currentScore,
-                    traderType: window.currentTraderType,
-                    source: getTrafficSource()
-                };
-                
-                if (!data.purchaseDetails) data.purchaseDetails = [];
-                data.purchaseDetails.push(purchase);
-                
-                saveData(data);
-                updateAdminPanel();
-                trackEvent('purchase_completed', { amount: CONFIG.regularPrice, score: window.currentScore });
-                
-                console.log('✅ Purchase saved:', purchase.id);
-            } catch (e) {
-                console.error('❌ Error saving purchase:', e);
-                alert('Warning: Purchase data may not have been saved correctly.');
-            }
-        }
-
-        function saveWaitlist(email) {
-            try {
-                const data = getStoredData();
-                
-                if (!data.waitlist.includes(email)) {
-                    data.waitlist.push(email);
-                    
-                    // Also save detailed waitlist entry
-                    if (!data.waitlistDetails) data.waitlistDetails = [];
-                    data.waitlistDetails.push({
-                        email: email,
-                        timestamp: new Date().toISOString(),
-                        score: window.currentScore,
-                        traderType: window.currentTraderType,
-                        source: getTrafficSource()
-                    });
-                    
-                    saveData(data);
-                    updateAdminPanel();
-                    trackEvent('waitlist_joined', { score: window.currentScore });
-                    
-                    console.log('✅ Waitlist entry saved:', email);
-                }
-            } catch (e) {
-                console.error('❌ Error saving waitlist:', e);
-            }
-        }
-
-        // Helper function to identify traffic source
-        function getTrafficSource() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const referrer = document.referrer;
-            
-            if (urlParams.get('utm_source')) {
-                return urlParams.get('utm_source');
-            } else if (referrer.includes('twitter.com') || referrer.includes('x.com')) {
-                return 'twitter';
-            } else if (referrer.includes('youtube.com')) {
-                return 'youtube';
-            } else if (referrer.includes('google.com')) {
-                return 'google';
-            } else if (referrer) {
-                return 'other';
             } else {
-                return 'direct';
+                // Initialize default score distribution in local storage if not present
+                if (!localStorage.getItem('scoreDistribution')) {
+                    localStorage.setItem('scoreDistribution', JSON.stringify({
+                        '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0
+                    }));
+                }
             }
-        }
 
-        // Extended Admin Panel update with storage information
-        function updateAdminPanel() {
-            const data = getStoredData();
-            
-            document.getElementById('totalAssessments').textContent = data.assessments.length;
-            document.getElementById('totalRevenue').textContent = `$${data.revenue}`;
-            document.getElementById('waitlistCount').textContent = data.waitlist.length;
-            
-            const convRate = data.assessments.length > 0 
-                ? ((data.purchases / data.assessments.length) * 100).toFixed(1) 
-                : 0;
-            document.getElementById('conversionRate').textContent = `${convRate}%`;
-            
-            const avgScore = data.assessments.length > 0
-                ? Math.round(data.assessments.reduce((sum, a) => sum + a.score, 0) / data.assessments.length)
-                : 0;
-            document.getElementById('avgScore').textContent = avgScore;
-            
-            // Score Distribution
-            updateScoreDistribution(data);
-            
-            // Add storage mode display
-            const storageIndicator = document.getElementById('storageMode');
-            if (storageIndicator) {
-                storageIndicator.textContent = `Storage: ${storageMode}`; // Text in German
-                storageIndicator.style.color = storageMode === 'local' ? '#00ff88' : '#fbbf24';
+            // Check for admin login
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === CONFIG.adminPassword) {
+                toggleAdminPanel();
             }
-        }
 
-        function updateScoreDistribution(data) {
-            const distribution = {
-                'Risk Seeker': 0,
-                'Emotional Challenger': 0,
-                'Evolving Trader': 0,
-                'Disciplined Strategist': 0
-            };
-            
-            data.assessments.forEach(assessment => {
-                distribution[assessment.traderType]++;
-            });
-            
-            const html = Object.entries(distribution)
-                .map(([type, count]) => `${type}: ${count}`)
-                .join('<br>');
-                
-            document.getElementById('scoreDistribution').innerHTML = html;
-        }
+            // Bind waitlist form submission
+            document.getElementById('waitlistForm').addEventListener('submit', handleWaitlistSubmit);
+        });
 
-        // ===== ASSESSMENT FUNCTIONS =====
         function startAssessment() {
-            // Clear old assessment data
-            try {
-                sessionStorage.removeItem('currentScore');
-                sessionStorage.removeItem('currentTraderType');
-                sessionStorage.removeItem('assessmentCompleted');
-                sessionStorage.removeItem('currentEmail');
-            } catch (e) {
-                console.log('Could not clear sessionStorage:', e);
-            }
-            
-            startTime = Date.now();
             document.getElementById('header').style.display = 'none';
-            document.getElementById('results').style.display = 'none';
             document.getElementById('assessmentContainer').style.display = 'block';
-            currentQuestion = 0;
-            answers = [];
-            showQuestion();
+            currentQuestionIndex = 0;
+            totalScore = 0;
+            sessionStorage.removeItem('selectedOptionForCurrentQuestion'); // Clear any lingering selection
+            sessionStorage.setItem('currentQuestionIndex', currentQuestionIndex);
+            sessionStorage.setItem('totalScore', totalScore);
             trackEvent('assessment_started');
+            showQuestion();
         }
 
         function showQuestion() {
-            const container = document.getElementById('questionContainer');
-            const question = questions[currentQuestion];
-            
-            container.innerHTML = `
-                <div class="question active">
-                    <h2>Question ${currentQuestion + 1} of ${questions.length}</h2>
-                    <h3>${question.question}</h3>
+            const questionContainer = document.getElementById('questionContainer');
+            questionContainer.innerHTML = ''; // Clear previous question
+
+            if (currentQuestionIndex < questions.length) {
+                const q = questions[currentQuestionIndex];
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question active';
+                questionDiv.innerHTML = `
+                    <h2>Question ${currentQuestionIndex + 1} of ${questions.length}</h2>
+                    <h3>${q.question}</h3>
                     <div class="options">
-                        ${question.options.map((option, index) => `
-                            <div class="option" onclick="selectOption(${index}, ${option.value})">
+                        ${q.options.map((option, index) => `
+                            <div class="option" data-value="${option.value}" onclick="selectOption(${index})">
                                 ${option.text}
                             </div>
                         `).join('')}
                     </div>
-                </div>
-            `;
-            
-            updateProgressBar();
-        }
+                `;
+                questionContainer.appendChild(questionDiv);
 
-        function selectOption(index, value) {
-            const options = document.querySelectorAll('.option');
-            options.forEach(opt => opt.classList.remove('selected'));
-            options[index].classList.add('selected');
-            
-            answers[currentQuestion] = value;
-            
-            // Ensure button exists before setting style
-            const nextButton = document.getElementById('nextButton');
-            if (nextButton) {
-                nextButton.style.display = 'block';
+                updateProgressBar();
+
+                // Restore selected option if returning to question
+                const storedSelectedOption = sessionStorage.getItem('selectedOptionForCurrentQuestion');
+                if (storedSelectedOption !== null) {
+                    selectedOptionForCurrentQuestion = parseInt(storedSelectedOption);
+                    const options = questionDiv.querySelectorAll('.option');
+                    if (options[selectedOptionForCurrentQuestion]) {
+                        options[selectedOptionForCurrentQuestion].classList.add('selected');
+                        // Show next button immediately if an option was already selected
+                        document.getElementById('nextButton').style.display = 'block';
+                    }
+                } else {
+                    // Hide next button if no option selected for new question
+                    document.getElementById('nextButton').style.display = 'none';
+                }
+
             } else {
-                console.warn("Element 'nextButton' not found. Cannot set 'display'.");
+                displayResults();
             }
         }
 
-        function nextQuestion() {
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                showQuestion();
-                const nextButton = document.getElementById('nextButton');
-                if (nextButton) { // Also ensure button exists here
-                    nextButton.style.display = 'none';
+        function selectOption(optionIndex) {
+            const currentQuestionDiv = document.querySelector('.question.active');
+            const options = currentQuestionDiv.querySelectorAll('.option');
+
+            // Remove 'selected' class from all options
+            options.forEach((option) => {
+                option.classList.remove('selected');
+            });
+
+            // Add 'selected' class to the clicked option
+            options[optionIndex].classList.add('selected');
+            selectedOptionForCurrentQuestion = optionIndex;
+            sessionStorage.setItem('selectedOptionForCurrentQuestion', optionIndex); // Save selected option
+
+            // Show next button
+            // Using setTimeout to ensure the element is rendered and accessible after innerHTML changes
+            setTimeout(() => {
+                const nextButton = document.querySelector('.next-button'); // Use querySelector as it's a class
+                if (nextButton) {
+                    nextButton.style.display = 'block';
+                } else {
+                    console.warn("Element '.next-button' not found. Cannot set 'display'.");
                 }
+            }, 50); // Small delay
+        }
+
+        function nextQuestion() {
+            if (selectedOptionForCurrentQuestion === null) {
+                alert('Please select an option before proceeding.');
+                return;
+            }
+
+            const currentQuestion = questions[currentQuestionIndex];
+            const selectedValue = currentQuestion.options[selectedOptionForCurrentQuestion].value;
+            totalScore += selectedValue;
+            trackEvent('Youtubeed', { question_index: currentQuestionIndex, score_added: selectedValue });
+
+            currentQuestionIndex++;
+            selectedOptionForCurrentQuestion = null; // Reset for next question
+            sessionStorage.removeItem('selectedOptionForCurrentQuestion'); // Clear stored selection
+
+            sessionStorage.setItem('currentQuestionIndex', currentQuestionIndex);
+            sessionStorage.setItem('totalScore', totalScore);
+
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
             } else {
-                showResults();
+                displayResults();
             }
         }
 
         function updateProgressBar() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progressBar').style.width = `${progress}%`;
-        }
-
-        function calculateScore() {
-            const sum = answers.reduce((a, b) => a + b, 0);
-            const maxPossible = questions.length * 50;
-            return Math.round((sum / maxPossible) * 100);
+            const progressBar = document.getElementById('progressBar');
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
         }
 
         function getTraderType(score) {
-            if (score >= 80) return { type: "Disciplined Strategist", color: "#00ff88" };
-            if (score >= 60) return { type: "Evolving Trader", color: "#00d4ff" };
-            if (score >= 40) return { type: "Emotional Challenger", color: "#fbbf24" };
-            return { type: "Risk Seeker", color: "#ef4444" };
+            if (score >= 0 && score < 40) return "Risk Seeker (Vulnerable)";
+            if (score >= 40 && score < 60) return "Emotional Challenger (Developing)";
+            if (score >= 60 && score < 80) return "Evolving Trader (Solid)";
+            if (score >= 80 && score <= 100) return "Disciplined Strategist (Champion)";
+            return "Undefined";
         }
 
-        function getInsights(score, traderType) {
-            const insights = {
-                "Risk Seeker": {
-                    strengths: "You're willing to take risks and have high energy for trading. Your enthusiasm and market engagement are assets that, when properly channeled, can lead to significant opportunities.",
-                    weaknesses: "Emotional decision-making, revenge trading, and poor risk management are costing you money. You tend to let losses affect your judgment and often trade to 'get even' with the market.",
-                    improvement: "Start with strict position sizing rules (never risk more than 1% per trade) and mandatory cool-down periods after losses. Consider paper trading for a week to practice discipline without financial financial risk.",
-                    characteristics: "Risk Seekers often experience the highest highs and lowest lows in trading. Your emotional intensity can be both your greatest asset and biggest liability."
-                },
-                "Emotional Challenger": {
-                    strengths: "You recognize that psychology matters and are working on improvement. This self-awareness puts you ahead of many traders who blame external factors for their losses.",
-                    weaknesses: "Inconsistent discipline and emotional reactions still impact your results. You know the rules but struggle to follow them when emotions run high.",
-                    improvement: "Implement a detailed trading journal including emotional states before, during, and after trades. Create a pre-market routine that includes meditation or breathing exercises.",
-                    characteristics: "Emotional Challengers are in a transition phase. You're aware of your psychological challenges but haven't yet developed consistent habits to overcome them."
-                },
-                "Evolving Trader": {
-                    strengths: "You have solid fundamentals and good awareness of trading psychology. Your discipline is improving, and you're beginning to see consistent results.",
-                    weaknesses: "Occasional lapses in discipline during high-stress market conditions. You may still overtrade during volatile periods or hold onto losing positions too long.",
-                    improvement: "Focus on advanced risk management techniques like portfolio heat and correlation analysis. Consider implementing a tier system for trade confidence levels.",
-                    characteristics: "Evolving Traders are on the cusp of professional-level performance. Your main challenge is maintaining consistency across all market conditions."
-                },
-                "Disciplined Strategist": {
-                    strengths: "Exceptional emotional control and consistent execution of your trading plan. You've mastered the psychological aspects that derail most traders.",
-                    weaknesses: "May miss opportunities due to over-cautiousness. Sometimes your discipline can turn into rigidity, preventing adaptation to changing market conditions.",
-                    improvement: "Consider gradually expanding your strategy repertoire while maintaining discipline. Explore systematic ways to identify and capitalize on higher-probability setups.",
-                    characteristics: "Disciplined Strategists represent the top tier of trading psychology. Your challenge now is optimizing and scaling your approach."
-                }
-            };
-            
-            return insights[traderType];
-        }
-
-        function showResults() {
-            const score = calculateScore();
-            const traderInfo = getTraderType(score);
-            const insights = getInsights(score, traderInfo.type);
-            
-            // Store data for later use (window.currentScore is set here)
-            window.currentScore = score;
-            window.currentTraderType = traderInfo.type;
-            
-            // Also store in sessionStorage to survive page reloads
-            try {
-                sessionStorage.setItem('currentScore', score.toString());
-                sessionStorage.setItem('currentTraderType', traderInfo.type);
-                sessionStorage.setItem('assessmentCompleted', 'true');
-            } catch (e) {
-                console.log('Could not save to sessionStorage:', e);
+        function getInsights(score) {
+            if (score >= 0 && score < 40) {
+                return `
+                    <h3>Your Trading Psychology: Risk Seeker (Vulnerable)</h3>
+                    <p><strong>Overview:</strong> Your assessment suggests a trading style heavily influenced by emotion, impulsivity, and a tendency towards high-risk behavior. You might often chase quick profits, struggle with losses, and deviate from plans.</p>
+                    <p><strong>Strengths:</strong> You may have a high tolerance for risk, which *could* be channeled effectively with discipline, and a willingness to act quickly. However, without control, these can be liabilities.</p>
+                    <p><strong>Challenges:</strong> This score indicates significant challenges with discipline, emotional control, and adherence to risk management. You likely experience frequent large drawdowns, overtrading, and frustration.</p>
+                    <p><strong>Recommendations:</strong> Focus intensely on foundational trading psychology. Develop strict rules for entry, exit, and risk management, and *adhere* to them. Practice emotional regulation, mindfulness, and rigorous trade journaling. Consider starting with very small positions or paper trading until consistent discipline is established.</p>
+                `;
+            } else if (score >= 40 && score < 60) {
+                return `
+                    <h3>Your Trading Psychology: Emotional Challenger (Developing)</h3>
+                    <p><strong>Overview:</strong> You are likely aware of the importance of trading psychology but still struggle with emotional consistency. You might have a basic plan but find it hard to follow during volatile market conditions or after a series of wins/losses.</p>
+                    <p><strong>Strengths:</strong> You have a foundation of understanding and a desire to improve. You're likely capable of analysis but sometimes let emotions override your logic.</p>
+                    <p><strong>Challenges:</strong> Inconsistent discipline, occasional impulsive decisions (FOMO, revenge trading), difficulty accepting small losses, and managing greed/fear. You might oscillate between periods of good discipline and emotional setbacks.</p>
+                    <p><strong>Recommendations:</strong> Work on strengthening your emotional resilience. Develop a robust trading plan that includes detailed rules for every scenario (entry, exit, risk, position sizing, emotional triggers). Practice self-awareness and pause before making impulsive trades. Focus on process consistency over immediate results.</p>
+                `;
+            } else if (score >= 60 && score < 80) {
+                return `
+                    <h3>Your Trading Psychology: Evolving Trader (Solid)</h3>
+                    <p><strong>Overview:</strong> You demonstrate a solid understanding and application of trading psychology principles. You are generally disciplined, adhere to your plan, and manage emotions well, but still have areas for refinement.</p>
+                    <p><strong>Strengths:</strong> Consistent discipline, good risk management, ability to learn from mistakes, and a generally rational approach to the market. You understand that trading is a marathon, not a sprint.</p>
+                    <p><strong>Challenges:</strong> Occasional bouts of overconfidence after wins, slight hesitation during high-conviction setups, or minor emotional reactions to unexpected market events. You're good, but not perfect.</p>
+                    <p><strong>Recommendations:</strong> Continue to refine your emotional control and decision-making processes. Focus on identifying your specific psychological "blind spots" (e.g., overconfidence, impatience) and creating targeted strategies to address them. Maintain detailed trade journals to track not just results but also your emotional state during trades. Seek continuous learning and mentorship.</p>
+                `;
+            } else if (score >= 80 && score <= 100) {
+                return `
+                    <h3>Your Trading Psychology: Disciplined Strategist (Champion)</h3>
+                    <p><strong>Overview:</strong> You exhibit an exceptional level of emotional control, discipline, and systematic thinking in your trading. You consistently execute your plan, manage risk effectively, and are largely immune to common psychological pitfalls.</p>
+                    <p><strong>Strengths:</strong> High emotional intelligence, unwavering discipline, robust risk management, systematic approach, resilience to drawdowns, and objective decision-making. You embody the qualities of a professional trader.</p>
+                    <p><strong>Challenges:</strong> While highly disciplined, even champions face challenges. Your challenges might be subtle, such as complacency, or adapting to extreme, unprecedented market conditions. The key is continuous self-assessment to maintain your edge.</p>
+                    <p><strong>Recommendations:</strong> Continue to iterate and optimize your trading system. Mentor others, as teaching reinforces your own understanding. Explore advanced psychological techniques for peak performance and sustained focus. Your primary goal is to maintain your high level of consistent execution and psychological resilience.</p>
+                `;
             }
-            
-            assessmentData = {
-                score: score,
-                traderType: traderInfo.type,
-                timestamp: new Date().toISOString(),
-                answers: answers, 
-                completionTime: startTime ? (Date.now() - startTime) / 1000 : 0, // define completionTime here
-                userAgent: navigator.userAgent,
-                referrer: document.referrer || 'direct',
-                source: getTrafficSource()
-            };
-            
-            saveAssessment(score, traderInfo.type);
-            
+            return "No insights available for this score range.";
+        }
+
+        function displayResults() {
             document.getElementById('assessmentContainer').style.display = 'none';
             document.getElementById('results').style.display = 'block';
-            
-            document.getElementById('scoreDisplay').textContent = `${score}/100`;
-            document.getElementById('scoreDisplay').style.color = traderInfo.color;
-            document.getElementById('traderType').textContent = traderInfo.type;
-            
-            document.getElementById('insights').innerHTML = `
-                <h3>Your Psychology Profile:</h3>
-                <p><strong>Strengths:</strong> ${insights.strengths}</p>
-                <p><strong>Weaknesses:</strong> ${insights.weaknesses}</p>
-                <p><strong>Improvement Focus:</strong> ${insights.improvement}</p>
-                <p><strong>Your Profile:</strong> ${insights.characteristics}</p>
-            `;
-            
-            // The GA4 event 'assessment_complete' is triggered here
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                event: 'assessment_complete'
-            });
+
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const traderTypeDisplay = document.getElementById('traderType');
+            const insightsDisplay = document.getElementById('insights');
+
+            const finalScore = Math.round((totalScore / (questions.length * 50)) * 100);
+            const traderType = getTraderType(finalScore);
+            const insights = getInsights(finalScore);
+
+            scoreDisplay.textContent = `${finalScore}%`;
+            traderTypeDisplay.textContent = traderType;
+            insightsDisplay.innerHTML = insights;
+
+            window.currentScore = finalScore; // Set global score
+            window.currentTraderType = traderType; // Set global trader type
+
+            // Save final score and type to session storage for persistence
+            sessionStorage.setItem('currentScore', finalScore);
+            sessionStorage.setItem('currentTraderType', traderType);
+
+            trackEvent('assessment_results_displayed', { final_score: finalScore, trader_type: traderType });
+
+            updateAdminPanelStats(finalScore, traderType);
         }
-
-        // ===== PAYPAL INTEGRATION (SIMPLIFIED) =====
-        // The initializePayPal and renderPayPalButtons functions are no longer needed,
-        // as we no longer load and render the PayPal SDK directly in the iFrame.
-        // Instead, the manual PayPal option is used directly.
-
-        // Manual PayPal fallback
-        function manualPayPal() {
-            const email = window.currentEmail;
-            if (!email || !validateEmail(email)) {
-                alert('Please enter a valid email address first');
-                return;
-            }
-            
-            trackEvent('manual_paypal_clicked');
-            
-            // Opens PayPal in a new tab/window
-            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${CONFIG.paypalEmail}&item_name=AI Trading Psychology Analysis&amount=${CONFIG.regularPrice}&currency_code=USD&return=${window.location.href}&cancel_return=${window.location.href}`;
-            
-            window.open(paypalUrl, '_blank');
-            
-            // After a short pause, ask the user if payment was completed
-            setTimeout(() => {
-                if (confirm('Have you completed the PayPal payment?')) {
-                    handleSuccessfulPayment({ manual: true });
-                }
-            }, 3000); // 3 second wait time
-        }
-
-        // Process successful payment
-        async function handleSuccessfulPayment(details) {
-            const email = window.currentEmail;
-            const score = window.currentScore || 0;
-            const traderType = window.currentTraderType || '';
-            
-            const transactionId = details.id || 'manual_' + Date.now();
-            savePurchase(email, transactionId);
-            
-            // Generate PDF
-            generatePDF();
-            
-            // Display success message
-            const successHtml = `
-                <div class="success-message">
-                    <h3>✅ Payment successful!</h3>
-                    <p>Thank you for your purchase! Your personalized 10-page report has been generated and downloaded.</p>
-                    <p>Check your email at <strong>${email}</strong> for additional resources and your welcome sequence.</p>
-                    <p>Transaction ID: ${transactionId}</p>
-                </div>
-            `;
-            
-            document.querySelector('.purchase-section').innerHTML = successHtml;
-            trackEvent('purchase_success', { transactionId });
-        }
-
-        // ===== EXTENDED PDF GENERATION WITH PREMIUM DESIGN =====
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            const score = window.currentScore;
-            const traderType = window.currentTraderType;
-            const insights = getInsights(score, traderType);
-            
-            // Custom colors based on trader type
-            const colors = {
-                'Risk Seeker': { main: [239, 68, 68], light: [254, 226, 226], dark: [127, 29, 29] },
-                'Emotional Challenger': { main: [251, 191, 36], light: [254, 243, 199], dark: [146, 64, 14] },
-                'Evolving Trader': { main: [0, 212, 255], light: [224, 242, 254], dark: [7, 89, 133] },
-                'Disciplined Strategist': { main: [0, 255, 136], light: [220, 252, 231], dark: [5, 150, 105] }
-            };
-            
-            const typeColors = colors[traderType] || colors['Evolving Trader'];
-            
-            // Helper function for gradient backgrounds
-            function drawGradientRect(x, y, w, h, color1, color2) {
-                const steps = 20;
-                const stepHeight = h / steps;
-                for (let i = 0; i < steps; i++) {
-                    const ratio = i / steps;
-                    const r = Math.round(color1[0] + (color2[0] - color1[0]) * ratio);
-                    const g = Math.round(color1[1] + (color2[1] - color1[1]) * ratio);
-                    const b = Math.round(color1[2] + (color2[2] - color1[2]) * ratio);
-                    doc.setFillColor(r, g, b);
-                    doc.rect(x, y + (i * stepHeight), w, stepHeight, 'F');
-                }
-            }
-            
-            // Helper function for rounded rectangles
-            function drawRoundedRect(x, y, w, h, r, style = 'F') {
-                doc.roundedRect(x, y, w, h, r, r, style);
-            }
-            
-            // Helper function for section headers
-            function drawSectionHeader(title, y) {
-                // Background gradient
-                drawGradientRect(0, y - 10, 210, 25, typeColors.light, [255, 255, 255]);
-                
-                // Left accent bar
-                doc.setFillColor(...typeColors.main);
-                doc.rect(0, y - 10, 3, 25, 'F');
-                
-                // Circle without icon
-                doc.setFillColor(...typeColors.main);
-                doc.circle(15, y + 2, 8, 'F');
-                
-                // Title
-                doc.setTextColor(...typeColors.dark);
-                doc.setFontSize(22);
-                doc.setFont(undefined, 'bold');
-                doc.text(title, 30, y + 5);
-                doc.setFont(undefined, 'normal');
-            }
-            
-            // Helper function for info boxes
-            function drawInfoBox(x, y, w, h, content, bgColor = typeColors.light) {
-                doc.setFillColor(...bgColor);
-                doc.setDrawColor(...typeColors.main);
-                doc.setLineWidth(0.5);
-                drawRoundedRect(x, y, w, h, 5, 'FD');
-                
-                doc.setTextColor(51, 51, 51);
-                doc.setFontSize(11);
-                const lines = doc.splitTextToSize(content, w - 10);
-                doc.text(lines, x + 5, y + 8);
-            }
-            
-            // ========== PAGE 1 - COVER ==========
-            // Full-page gradient background
-            drawGradientRect(0, 0, 210, 297, typeColors.dark, typeColors.main);
-            
-            // White card in the center
-            doc.setFillColor(255, 255, 255);
-            drawRoundedRect(20, 50, 170, 180, 10);
-            
-            // Logo area (gradient circle)
-            doc.setFillColor(...typeColors.main);
-            doc.circle(105, 90, 25, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(36);
-            doc.text('AI', 105, 98, { align: 'center' });
-            
-            // Title
-            doc.setTextColor(51, 51, 51);
-            doc.setFontSize(28);
-            doc.setFont(undefined, 'bold');
-            doc.text('Trading Psychology', 105, 130, { align: 'center' });
-            doc.setFontSize(18);
-            doc.setFont(undefined, 'normal');
-            doc.text('Personalized Analysis Report', 105, 145, { align: 'center' });
-            
-            // Score display with circle progress
-            doc.setDrawColor(...typeColors.main);
-            doc.setLineWidth(8);
-            doc.circle(105, 180, 20, 'S');
-            
-            doc.setTextColor(...typeColors.main);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text(`${score}`, 105, 185, { align: 'center' });
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
-            doc.text('/100', 105, 195, { align: 'center' });
-            
-            // Trader Type Badge
-            doc.setFillColor(...typeColors.main);
-            drawRoundedRect(40, 205, 130, 15, 7);
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(14);
-            doc.setFont(undefined, 'bold');
-            doc.text(traderType, 105, 215, { align: 'center' });
-            
-            // Footer
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text('Generated on: ' + new Date().toLocaleDateString(), 105, 250, { align: 'center' });
-            doc.text('© 2025 Schnitzlein Consulting', 105, 260, { align: 'center' });
-            
-            // Add more pages (only core structure for brevity)
-            // In production, all 10 pages with detailed content should be added
-            
-            // Save PDF
-            doc.save(`Trading_Psychology_Report_${score}_${traderType.replace(/\s+/g, '_')}.pdf`);
-            trackEvent('pdf_generated', { score, traderType });
-        }
-
-        // ===== HELPER FUNCTIONS =====
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        // ===== WAITLIST FUNCTIONALITY =====
-        document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('waitlistEmail').value;
-            
-            if (!validateEmail(email)) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            
-            const score = window.currentScore || 0;
-            const traderType = window.currentTraderType || '';
-            
-            // Add to MailerLite via API
-            await addToMailerLiteAPI(email, score, traderType);
-            
-            saveWaitlist(email);
-            
-            document.getElementById('waitlistForm').innerHTML = 
-                '<p style="color: #00ff88; font-weight: 600;">✓ Successfully joined the waitlist! Check your email for confirmation.</p>';
-        });
 
         // ===== ADMIN PANEL FUNCTIONS =====
+        let adminPanelOpen = false;
+
         function toggleAdminPanel() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('open');
+            const adminPanel = document.getElementById('adminPanel');
+            adminPanelOpen = !adminPanelOpen;
+            adminPanel.classList.toggle('open', adminPanelOpen);
+            if (adminPanelOpen) {
+                loadAdminStats();
+            }
         }
 
-        function exportData() {
-            const data = getStoredData();
-            
-            // Create CSV content
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Type,Score,TraderType,Timestamp,CompletionTime,Referrer,Email,Amount\n";
-            
-            // Add assessments
-            data.assessments.forEach(assessment => {
-                csvContent += `Assessment,${assessment.score},"${assessment.traderType}","${assessment.timestamp}",${assessment.completionTime || ''},"${assessment.referrer || ''}","",""\n`;
-            });
-            
-            // Add purchases
-            if (data.purchaseDetails) {
-                data.purchaseDetails.forEach(purchase => {
-                    csvContent += `Purchase,${purchase.score || ''},"${purchase.traderType || ''}","${purchase.timestamp}","","","${purchase.email}",${purchase.amount}\n`;
-                });
+        function loadAdminStats() {
+            const stats = JSON.parse(localStorage.getItem('adminStats')) || {
+                totalAssessments: 0,
+                totalRevenue: 0,
+                waitlistCount: 0,
+                totalScoreSum: 0, // Sum of all scores to calculate average
+                scoreDistribution: { '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0 }
+            };
+
+            document.getElementById('totalAssessments').textContent = stats.totalAssessments;
+            document.getElementById('totalRevenue').textContent = `$${stats.totalRevenue.toFixed(2)}`;
+            document.getElementById('waitlistCount').textContent = stats.waitlistCount;
+            document.getElementById('avgScore').textContent = stats.totalAssessments > 0 ? (stats.totalScoreSum / stats.totalAssessments).toFixed(1) : '0';
+            document.getElementById('storageMode').textContent = typeof localStorage !== 'undefined' ? 'LocalStorage Enabled' : 'LocalStorage Disabled';
+
+            const scoreDistDiv = document.getElementById('scoreDistribution');
+            scoreDistDiv.innerHTML = '';
+            for (const range in stats.scoreDistribution) {
+                scoreDistDiv.innerHTML += `<div>${range}: ${stats.scoreDistribution[range]}</div>`;
             }
-            
-            // Add waitlist
-            data.waitlist.forEach(email => {
-                csvContent += `Waitlist,"","","${new Date().toISOString()}","","","${email}",""\n`;
-            });
-            
-            // Download CSV
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `trading_assessments_${new Date().toISOString().split('T')[0]}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            trackEvent('data_exported');
+        }
+
+        function updateAdminPanelStats(score, traderType) {
+            let stats = JSON.parse(localStorage.getItem('adminStats')) || {
+                totalAssessments: 0,
+                totalRevenue: 0,
+                waitlistCount: 0,
+                totalScoreSum: 0,
+                scoreDistribution: { '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0 }
+            };
+
+            stats.totalAssessments += 1;
+            stats.totalScoreSum += score;
+
+            // Update score distribution
+            if (score < 40) stats.scoreDistribution['0-39']++;
+            else if (score < 60) stats.scoreDistribution['40-59']++;
+            else if (score < 80) stats.scoreDistribution['60-79']++;
+            else stats.scoreDistribution['80-100']++;
+
+            localStorage.setItem('adminStats', JSON.stringify(stats));
+            if (adminPanelOpen) {
+                loadAdminStats();
+            }
         }
 
         function testPurchase() {
-            if (confirm('This simulates a test purchase. Continue?')) {
-                handleSuccessfulPayment({ test: true, id: 'TEST_' + Date.now() });
+            if (confirm('This will simulate a purchase for $47. Continue?')) {
+                updateRevenue(CONFIG.regularPrice);
+                alert('Test purchase recorded!');
+                trackEvent('test_purchase_recorded');
             }
         }
 
-        // Extended function to clear data
+        function updateRevenue(amount) {
+            let stats = JSON.parse(localStorage.getItem('adminStats')) || {
+                totalAssessments: 0,
+                totalRevenue: 0,
+                waitlistCount: 0,
+                totalScoreSum: 0,
+                scoreDistribution: { '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0 }
+            };
+            stats.totalRevenue += amount;
+            localStorage.setItem('adminStats', JSON.stringify(stats));
+            if (adminPanelOpen) {
+                loadAdminStats();
+            }
+        }
+
         function clearAllData() {
-            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
-                const password = prompt('Enter admin password:');
-                if (password === CONFIG.adminPassword) {
-                    // Clear all storage types
-                    if (availableStorage.local) {
-                        localStorage.removeItem('tradingPsychologyData');
-                    }
-                    if (availableStorage.session) {
-                        sessionStorage.removeItem('tradingPsychologyData');
-                    }
-                    
-                    // Reset in-memory storage
-                    memoryStorage = {
-                        assessments: [],
-                        revenue: 0,
-                        waitlist: [],
-                        purchases: 0,
-                        version: CONFIG.version
-                    };
-                    
-                    updateAdminPanel();
-                    alert('All data successfully cleared from all storage types');
-                    trackEvent('data_cleared');
-                } else {
-                    alert('Wrong password');
-                }
+            if (confirm('Are you sure you want to clear ALL data (assessments, revenue, waitlist)? This cannot be undone.')) {
+                localStorage.removeItem('adminStats');
+                sessionStorage.clear(); // Clear session data as well
+                alert('All data cleared!');
+                trackEvent('all_data_cleared');
+                loadAdminStats(); // Reload stats to show zeros
             }
         }
 
-        // Extended debug information
         function debugInfo() {
-            const data = getStoredData();
-            console.log('=== Debug Information ===');
-            console.log('Version:', CONFIG.version);
-            console.log('Available storage types:', availableStorage);
-            console.log('Current storage mode:', storageMode);
-            console.log('Data storage location:', {
-                localStorage: availableStorage.local ? (localStorage.getItem('tradingPsychologyData') ? 'Has data' : 'Empty') : 'Not available',
-                sessionStorage: availableStorage.session ? (sessionStorage.getItem('tradingPsychologyData') ? 'Has data' : 'Empty') : 'Not available',
-                memory: 'Always available'
-            });
-            console.log('Data:', data);
-            console.log('Data size:', new Blob([JSON.stringify(data)]).size + ' Bytes');
-            console.log('Current Score:', window.currentScore);
-            console.log('Current Trader Type:', window.currentTraderType);
-            console.log('User Agent:', navigator.userAgent);
-            console.log('Referrer:', document.referrer || 'none');
-            console.log('URL Parameters:', new URLSearchParams(window.location.search).toString());
-            
-            alert(`Debug Info:\nStorage: ${storageMode}\nAssessments: ${data.assessments.length}\nRevenue: $${data.revenue}\n\nPress F12 for detailed console logs`);
+            let debug = {
+                localStorageData: localStorage.getItem('adminStats'),
+                sessionStorageData: {
+                    currentQuestionIndex: sessionStorage.getItem('currentQuestionIndex'),
+                    totalScore: sessionStorage.getItem('totalScore'),
+                    selectedOptionForCurrentQuestion: sessionStorage.getItem('selectedOptionForCurrentQuestion'),
+                    currentScore: sessionStorage.getItem('currentScore'),
+                    currentTraderType: sessionStorage.getItem('currentTraderType'),
+                    currentEmail: sessionStorage.getItem('currentEmail')
+                },
+                globalVars: {
+                    currentQuestionIndex: currentQuestionIndex,
+                    totalScore: totalScore,
+                    selectedOptionForCurrentQuestion: selectedOptionForCurrentQuestion,
+                    windowCurrentScore: window.currentScore,
+                    windowCurrentTraderType: window.currentTraderType,
+                    windowCurrentEmail: window.currentEmail
+                },
+                config: CONFIG,
+                mailerliteConfig: MAILERLITE_CONFIG,
+                browserInfo: {
+                    userAgent: navigator.userAgent,
+                    language: navigator.language
+                }
+            };
+            console.log("Debug Info:", debug);
+            alert("Debug info logged to console. Open developer tools (F12) to view.");
+            trackEvent('debug_info_accessed');
         }
 
         function showDetailedStats() {
-            const data = getStoredData();
-            
-            let stats = '=== Detailed Statistics ===\n\n';
-            stats += `Total Assessments: ${data.assessments.length}\n`;
-            stats += `Total Revenue: $${data.revenue}\n`;
-            stats += `Conversion Rate: ${data.assessments.length > 0 ? ((data.purchases / data.assessments.length) * 100).toFixed(1) : 0}%\n`;
-            stats += `Average Score: ${data.assessments.length > 0 ? Math.round(data.assessments.reduce((sum, a) => sum + a.score, 0) / data.assessments.length) : 0}\n\n`;
-            
-            stats += 'Score Distribution:\n';
-            const distribution = {
-                'Risk Seeker': 0,
-                'Emotional Challenger': 0,
-                'Evolving Trader': 0,
-                'Disciplined Strategist': 0
+            const stats = JSON.parse(localStorage.getItem('adminStats')) || {
+                totalAssessments: 0,
+                totalRevenue: 0,
+                waitlistCount: 0,
+                totalScoreSum: 0,
+                scoreDistribution: { '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0 }
             };
-            
-            data.assessments.forEach(assessment => {
-                distribution[assessment.traderType]++;
-            });
-            
-            Object.entries(distribution).forEach(([type, count]) => {
-                const percentage = data.assessments.length > 0 ? ((count / data.assessments.length) * 100).toFixed(1) : 0;
-                stats += `${type}: ${count} (${percentage}%)\n`;
-            });
-            
-            if (data.assessments.length > 0) {
-                stats += '\nAverage completion time: ' + 
-                    (data.assessments.reduce((sum, a) => sum + (a.completionTime || 0), 0) / 
-                    data.assessments.filter(a => a.completionTime).length).toFixed(1) + ' seconds\n';
+
+            let detailedMessage = `
+                Detailed Statistics:
+                Total Assessments: ${stats.totalAssessments}
+                Total Revenue: $${stats.totalRevenue.toFixed(2)}
+                Waitlist Signups: ${stats.waitlistCount}
+                Average Score: ${stats.totalAssessments > 0 ? (stats.totalScoreSum / stats.totalAssessments).toFixed(1) : '0'}
+
+                Score Distribution:
+            `;
+            for (const range in stats.scoreDistribution) {
+                detailedMessage += `    ${range}: ${stats.scoreDistribution[range]} (${(stats.scoreDistribution[range] / stats.totalAssessments * 100 || 0).toFixed(1)}%)\n`;
             }
-            
-            stats += `\nWaitlist Signups: ${data.waitlist.length}\n`;
-            stats += `Unique Purchases: ${data.purchases}\n`;
-            
-            alert(stats);
+
+            alert(detailedMessage);
+            trackEvent('detailed_stats_viewed');
         }
 
-        // Check if results page should be displayed on load
-        function checkForCompletedAssessment() {
-            const assessmentCompleted = sessionStorage.getItem('assessmentCompleted');
-            const storedScore = sessionStorage.getItem('currentScore');
-            const storedTraderType = sessionStorage.getItem('currentTraderType');
-            
-            if (assessmentCompleted === 'true' && storedScore && storedTraderType) {
-                // Restore data
-                window.currentScore = parseInt(storedScore);
-                window.currentTraderType = storedTraderType;
-                
-                // Display results directly
-                document.getElementById('header').style.display = 'none';
-                document.getElementById('results').style.display = 'block';
-                
-                // Update display
-                const traderInfo = getTraderType(window.currentScore);
-                document.getElementById('scoreDisplay').textContent = `${window.currentScore}/100`;
-                document.getElementById('scoreDisplay').style.color = traderInfo.color;
-                document.getElementById('traderType').textContent = window.currentTraderType;
-                
-                // Fetch and display insights
-                const insights = getInsights(window.currentScore, window.currentTraderType);
-                document.getElementById('insights').innerHTML = `
-                    <h3>Your Psychology Profile:</h3>
-                    <p><strong>Strengths:</strong> ${insights.strengths}</p>
-                    <p><strong>Weaknesses:</strong> ${insights.weaknesses}</p>
-                    <p><strong>Improvement Focus:</strong> ${insights.improvement}</p>
-                    <p><strong>Your Profile:</strong> ${insights.characteristics}</p>
-                `;
-                
-                console.log('✅ Previous assessment results restored');
+
+        // ===== Waitlist Submission (using Fetch API for MailerLite) =====
+        async function handleWaitlistSubmit(event) {
+            event.preventDefault(); // Prevent default form submission
+            const emailInput = document.getElementById('waitlistEmail');
+            const email = emailInput.value;
+
+            if (!validateEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            // Optional: Save email to session/local storage if needed for other purposes
+            // sessionStorage.setItem('waitlistEmail', email);
+
+            // Update admin panel waitlist count immediately
+            let stats = JSON.parse(localStorage.getItem('adminStats')) || {
+                totalAssessments: 0,
+                totalRevenue: 0,
+                waitlistCount: 0,
+                totalScoreSum: 0,
+                scoreDistribution: { '0-39': 0, '40-59': 0, '60-79': 0, '80-100': 0 }
+            };
+            stats.waitlistCount += 1;
+            localStorage.setItem('adminStats', JSON.stringify(stats));
+            if (adminPanelOpen) {
+                loadAdminStats();
+            }
+
+            // Add to MailerLite via API (assuming a specific group for waitlist)
+            const waitlistGroupId = 'YOUR_MAILERLITE_WAITLIST_GROUP_ID'; // REPLACE THIS WITH YOUR ACTUAL WAITLIST GROUP ID
+            if (MAILERLITE_CONFIG.apiKey && MAILERLITE_CONFIG.apiUrl && waitlistGroupId !== 'YOUR_MAILERLITE_WAITLIST_GROUP_ID') {
+                try {
+                    const response = await fetch(`${MAILERLITE_CONFIG.apiUrl}/subscribers`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Authorization': `Bearer ${MAILERLITE_CONFIG.apiKey}`
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            groups: [waitlistGroupId],
+                            status: 'active' // Set status to active
+                        })
+                    });
+
+                    if (response.ok) {
+                        alert('Thank you for joining the waitlist! You will receive updates.');
+                        trackEvent('waitlist_signup_success');
+                        emailInput.value = ''; // Clear email field
+                    } else {
+                        const errorData = await response.json(); // Get more detailed error from JSON
+                        console.error('MailerLite API waitlist error:', response.status, errorData);
+                        alert('There was an error joining the waitlist. Please try again or contact support.');
+                        trackEvent('waitlist_signup_error', { status: response.status, message: errorData.message || 'unknown' });
+                    }
+                } catch (error) {
+                    console.error('MailerLite API waitlist integration error:', error);
+                    alert('There was a technical issue. Please try again later.');
+                    trackEvent('waitlist_signup_exception', { error: error.message });
+                }
+            } else {
+                alert('Thank you for joining the waitlist! (MailerLite API not configured or waitlist group ID missing)');
+                trackEvent('waitlist_signup_success_no_api');
+                emailInput.value = ''; // Clear email field
             }
         }
 
-        // ===== KEYBOARD SHORTCUTS =====
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.shiftKey) {
-                switch(e.key) {
-                    case 'A':
-                        e.preventDefault();
-                        toggleAdminPanel();
-                        break;
-                    case 'R':
-                        e.preventDefault();
-                        if (confirm('Restart assessment?')) {
-                            location.reload();
-                        }
-                        break;
-                    case 'C':
-                        e.preventDefault();
-                        clearAllData();
-                        break;
-                    case 'E':
-                        e.preventDefault();
-                        exportData();
-                        break;
-                    case 'D':
-                        e.preventDefault();
-                        debugInfo();
-                        break;
-                    case 'S':
-                        e.preventDefault();
-                        showDetailedStats();
-                        break;
-                }
-            }
-        });
+        function validateEmail(email) {
+            const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
 
-        // ===== INITIALIZATION ON LOAD =====
-        window.addEventListener('load', function() {
-            console.log('🚀 Trading Psychology Assessment v' + CONFIG.version);
-            // console.log('💳 PayPal Integration: Ready'); // Removed, as SDK is no longer loaded directly
-            console.log('📧 MailerLite Integration: Ready (Form + API)');
-            console.log('💾 Storage Mode: ' + storageMode); // Text in German
-            console.log('📊 Press Ctrl+Shift+A to open Admin Panel'); // Text in German
-            console.log('📋 Keyboard Shortcuts:'); // Text in German
-            console.log('   Ctrl+Shift+A: Admin Panel'); // Text in German
-            console.log('   Ctrl+Shift+R: Restart Assessment'); // Text in German
-            console.log('   Ctrl+Shift+E: Export Data'); // Text in German
-            console.log('   Ctrl+Shift+D: Show Debug Info'); // Text in German
-            console.log('   Ctrl+Shift+S: Show Detailed Statistics'); // Text in German
-            
-            // Restore assessment data from sessionStorage if available
-            try {
-                const storedScore = sessionStorage.getItem('currentScore');
-                const storedTraderType = sessionStorage.getItem('currentTraderType');
-                const assessmentCompleted = sessionStorage.getItem('assessmentCompleted');
-                
-                if (assessmentCompleted === 'true' && storedScore && storedTraderType) {
-                    window.currentScore = parseInt(storedScore);
-                    window.currentTraderType = storedTraderType;
-                    console.log('✅ Assessment data restored from session:', {
-                        score: window.currentScore,
-                        type: window.currentTraderType
-                    });
-                }
-            } catch (e) {
-                console.log('Could not restore from sessionStorage:', e);
-            }
-            
-            // Execute migration if available
-            if (typeof migrateOldData === 'function') {
-                migrateOldData();
-            }
-            
-            updateAdminPanel();
-            
-            // Check for Admin parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'true') {
-                toggleAdminPanel();
-                // Remove parameter from URL
-                try {
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                } catch (e) {
-                    console.log('Cannot change URL history in a sandbox environment');
-                }
-            }
-            
-            // The initializePayPal() calls have been removed, as the SDK is no longer loaded directly.
-            // The manual PayPal option is displayed directly when needed.
-            
-            // Track page view only if Analytics is loaded
-            if (typeof gtag !== 'undefined') {
-                try {
-                    trackEvent('page_view', {
-                        referrer: document.referrer || 'none',
-                        url: window.location.href || 'unknown'
-                    });
-                } catch (e) {
-                    console.log('Tracking error:', e);
-                }
-            }
-            
-            // Initialize MailerLite form (keep for API key)
-            fetch("https://assets.mailerlite.com/jsonp/1568323/forms/158237970273404824/takel").catch(e => console.log('MailerLite form loading skipped'));
-            
-            // Check if user has completed assessment before
-            checkForCompletedAssessment();
-        });
 
-        // ===== ERROR HANDLING =====
-        window.addEventListener('error', function(e) {
-            console.error('Global error:', e);
-            try {
-                trackEvent('javascript_error', {
-                    message: e.message || 'Unknown error',
-                    source: e.filename || 'Unknown',
-                    line: e.lineno || 0,
-                    column: e.colno || 0
-                });
-            } catch (trackError) {
-                console.error('Error tracking failed:', trackError);
-            }
-        });
+        // ===== PayPal Integration (manual fallback only) =====
+        function manualPayPal() {
+            const email = window.currentEmail; // Use the email captured earlier
 
-        // ===== PERFORMANCE MONITORING =====
-        window.addEventListener('beforeunload', function() {
-            try {
-                if (startTime && currentQuestion > 0) {
-                    const timeSpent = (Date.now() - startTime) / 1000;
-                    trackEvent('assessment_abandoned', {
-                        question: currentQuestion,
-                        timeSpent: timeSpent
-                    });
+            if (!email) {
+                // If email wasn't captured for some reason, try from session storage
+                const storedEmail = sessionStorage.getItem('currentEmail');
+                if (storedEmail) {
+                    window.currentEmail = storedEmail;
+                } else {
+                    alert("Please enter your email address above before proceeding to purchase.");
+                    // Ensure the email capture form is visible
+                    document.getElementById('email-capture-form').style.display = 'block';
+                    document.getElementById('assessment-required-notice').style.display = 'none';
+                    return;
                 }
-            } catch (e) {
-                    console.log('Performance tracking error:', e);
-                }
-            });
-        </script>
+            }
+
+            if (window.currentScore === 0 && !sessionStorage.getItem('currentScore')) {
+                alert("Please complete the assessment first to get your personalized report before purchasing.");
+                document.getElementById('results').style.display = 'none'; // Hide results
+                document.getElementById('header').style.display = 'block'; // Show start screen
+                return;
+            }
+
+            // Prepare custom fields for PayPal
+            const customFields = {
+                email: email,
+                score: window.currentScore,
+                trader_type: window.currentTraderType,
+                assessment_version: CONFIG.version
+            };
+
+            // Construct PayPal URL for a fixed price product
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(CONFIG.paypalEmail)}&item_name=${encodeURIComponent('AI Trading Psychology Analysis Report')}&amount=${CONFIG.regularPrice}&currency_code=USD&custom=${encodeURIComponent(JSON.stringify(customFields))}&no_shipping=1&no_note=1&return=YOUR_SUCCESS_URL&cancel_return=YOUR_CANCEL_URL`;
+            
+            // IMPORTANT: Replace YOUR_SUCCESS_URL and YOUR_CANCEL_URL with actual URLs on your site.
+            // Example:
+            // const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(CONFIG.paypalEmail)}&item_name=${encodeURIComponent('AI Trading Psychology Analysis Report')}&amount=${CONFIG.regularPrice}&currency_code=USD&custom=${encodeURIComponent(JSON.stringify(customFields))}&no_shipping=1&no_note=1&return=${encodeURIComponent('https://thosch07.github.io/thank-you.html')}&cancel_return=${encodeURIComponent('https://thosch07.github.io/assessment.html')}`;
+
+            window.open(paypalUrl, '_blank');
+            trackEvent('manual_paypal_clicked', { email: email, score: window.currentScore });
+        }
+    </script>
 </body>
 </html>
